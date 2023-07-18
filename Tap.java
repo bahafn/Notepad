@@ -7,10 +7,6 @@ public class Tap {
     private String name = "Untitled";
     private String text = "";
 
-    public void undo() {
-        // TODO: write function
-    }
-
     public void find() {
         // TODO: write function
     }

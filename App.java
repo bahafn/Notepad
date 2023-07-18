@@ -4,6 +4,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.undo.UndoManager;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -16,6 +17,7 @@ public class App extends JFrame {
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
     private JTextArea textArea = new JTextArea();
+    private UndoManager undoManager = new UndoManager();
 
     public App() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -28,6 +30,9 @@ public class App extends JFrame {
     }
 
     private void showGUI() {
+        // Add undo manger to textArea
+        textArea.getDocument().addUndoableEditListener(undoManager);
+
         newTap(); // Create first tap
 
         // Add main text area
@@ -50,13 +55,14 @@ public class App extends JFrame {
         menus[0] = UICreator.createJMenu("File", fileItems); // Create File menu
 
         // Create Edit menu items
-        JMenuItem[] editItems = new JMenuItem[5];
+        JMenuItem[] editItems = new JMenuItem[6];
 
-        editItems[0] = UICreator.createJMenuItem("Undo", e -> taps.get(activeTap).undo());
-        editItems[1] = UICreator.createJMenuItem("Find", e -> taps.get(activeTap).find());
-        editItems[2] = UICreator.createJMenuItem("Replace", e -> taps.get(activeTap).replace());
-        editItems[3] = UICreator.createJMenuItem("Go to", null);
-        editItems[4] = UICreator.createJMenuItem("Font", e -> newFontWindow());
+        editItems[0] = UICreator.createJMenuItem("Undo", e -> undoManager.undo());
+        editItems[1] = UICreator.createJMenuItem("Redo", e -> undoManager.redo());
+        editItems[2] = UICreator.createJMenuItem("Find", e -> taps.get(activeTap).find());
+        editItems[3] = UICreator.createJMenuItem("Replace", e -> taps.get(activeTap).replace());
+        editItems[4] = UICreator.createJMenuItem("Go to", null);
+        editItems[5] = UICreator.createJMenuItem("Font", e -> newFontWindow());
 
         menus[1] = UICreator.createJMenu("Edit", editItems);
 
