@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -42,9 +43,15 @@ public class FindWindow extends JFrame {
         panel.add(UICreator.createJButton("<", e -> findAndSelect(selectedIndex - 1, textArea.getText(), false), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
         panel.add(UICreator.createJButton(">", e -> findAndSelect(selectedIndex + 1, textArea.getText(), true), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
 
+        // This is used so the check boxes are on top of each other
+        JPanel checkBoxPanel = new JPanel(new GridLayout(2, 1, 0, 0));
+        checkBoxPanel.setPreferredSize(new Dimension(100, 30));
+
         // Create option check boxes
-        panel.add(UICreator.createJCheckBox("Whole word", false, e -> { wholeWord = !wholeWord; }));
-        panel.add(UICreator.createJCheckBox("Match case", true, e -> { matchCase = !matchCase; }));
+        checkBoxPanel.add(UICreator.createJCheckBox("Whole word", false, e -> { wholeWord = !wholeWord; }));
+        checkBoxPanel.add(UICreator.createJCheckBox("Match case", true, e -> { matchCase = !matchCase; }));
+
+        panel.add(checkBoxPanel);
 
         // Create exist button
         panel.add(UICreator.createJButton("X", e -> dispose(), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
@@ -66,8 +73,6 @@ public class FindWindow extends JFrame {
         int[] indexes = new int[2];
         int beginIndex = -1;
 
-        System.out.println(startIndex);
-
         if (!matchCase) {
             text = text.toLowerCase();
             searchText = searchText.toLowerCase();
@@ -83,7 +88,6 @@ public class FindWindow extends JFrame {
             indexes[0] = beginIndex;
             indexes[1] = beginIndex + searchText.length();
         }
-
 
         if (wholeWord && Character.isAlphabetic(text.charAt(beginIndex + searchText.length())))
             return findInText(beginIndex + 1, text, searchText, matchCase, wholeWord, forward);
