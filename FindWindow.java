@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -12,6 +13,7 @@ public class FindWindow extends JFrame {
     private String text;
     private boolean wholeWord = false, matchCase = true;
     private int selectedIndex = 0;
+    private boolean replaceUI = false;
 
     public FindWindow(String text, App app) {
         this.text = text;
@@ -19,19 +21,23 @@ public class FindWindow extends JFrame {
 
         showGUI();
 
+        setUndecorated(true);
         setAlwaysOnTop(true);
         setVisible(true);
         pack();
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(getParent());
         requestFocus();
     }
 
     private void showGUI() {
-        setUndecorated(true);
+        // Create border
+        getRootPane().setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
 
         // Create find options UI
         JPanel findPanel = new JPanel();
-        findPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
+
+        // Create "show replace options button"
+        findPanel.add(UICreator.createJButton("Replace", e -> showReplaceOptions(), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
 
         // Create search textArea
         JTextArea textArea = UICreator.createJTextArea("", new Dimension(200, 25), false);
@@ -57,7 +63,31 @@ public class FindWindow extends JFrame {
         // Create exist button
         findPanel.add(UICreator.createJButton("X", e -> dispose(), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
 
-        add(findPanel);
+        add(findPanel, BorderLayout.NORTH);
+
+        // Create replace options UI
+        if (!replaceUI)
+            return;
+
+        JPanel replacePanel = new JPanel();
+
+        JTextArea replaceText = UICreator.createJTextArea("", new Dimension(200, 25), false);
+        replacePanel.add(replaceText);
+
+        // Create replace and replace all buttons
+        replacePanel.add(UICreator.createJButton("Replace", null, UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
+        replacePanel.add(UICreator.createJButton("Replace all", null, new Dimension(115, 25), UICreator.DEFAULT_INSETS));
+
+        add(replacePanel, BorderLayout.SOUTH);
+    }
+
+    private void showReplaceOptions() {
+        replaceUI = !replaceUI;
+        getContentPane().removeAll();
+        showGUI();
+        revalidate();
+        repaint();
+        pack();
     }
 
     private void findAndSelect(int startIndex, String searchText, boolean forward) {

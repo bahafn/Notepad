@@ -115,10 +115,6 @@ public class App extends JFrame {
         // TODO: write function
     }
 
-    public static void main(String[] args) {
-        new App();
-    }
-
     private void changeTap(int newTap) {
         // Update text in tap object
         taps.get(activeTap).setText(textArea.getText());
@@ -126,5 +122,9 @@ public class App extends JFrame {
         // Change active tap
         activeTap = newTap;
         textArea.setText(taps.get(activeTap).getText());
+    }
+
+    public static void main(String[] args) {
+        new App();
     }
 }
