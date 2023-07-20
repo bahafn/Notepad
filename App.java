@@ -16,7 +16,7 @@ public class App extends JFrame {
     private int activeTap = 0;
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-    private JTextArea textArea = new JTextArea();
+    private JTextArea textArea = UICreator.createJTextArea("", new Dimension(1000, 600), true);
     private UndoManager undoManager = new UndoManager();
 
     public App() {
@@ -36,7 +36,6 @@ public class App extends JFrame {
         newTap(); // Create first tap
 
         // Add main text area
-        textArea.setPreferredSize(new Dimension(1000, 600));
         add(textArea, BorderLayout.SOUTH);
 
         // Create menuBar items
