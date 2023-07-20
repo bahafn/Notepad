@@ -75,8 +75,8 @@ public class FindWindow extends JFrame {
         replacePanel.add(replaceText);
 
         // Create replace and replace all buttons
-        replacePanel.add(UICreator.createJButton("Replace", null, UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
-        replacePanel.add(UICreator.createJButton("Replace all", null, new Dimension(115, 25), UICreator.DEFAULT_INSETS));
+        replacePanel.add(UICreator.createJButton("Replace", e -> replace(textArea.getText(), replaceText.getText()), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
+        replacePanel.add(UICreator.createJButton("Replace all", e -> replaceAll(textArea.getText(), replaceText.getText()), new Dimension(115, 25), UICreator.DEFAULT_INSETS));
 
         add(replacePanel, BorderLayout.SOUTH);
     }
@@ -90,13 +90,35 @@ public class FindWindow extends JFrame {
         pack();
     }
 
-    private void findAndSelect(int startIndex, String searchText, boolean forward) {
+    private void replace(String oldText, String newText) {
+        if (findAndSelect(0, oldText, rootPaneCheckingEnabled) != -1)
+            text = app.replace(newText);
+    }
+
+    private void replaceAll(String oldText, String newText) {
+        int beginIndex = 0;
+
+        while (true) {
+            if (findAndSelect(beginIndex, oldText, true) != -1) {
+                text = app.replace(newText);
+                beginIndex += newText.length();
+            }
+            else
+                break;
+        }
+    }
+
+    // Returns the begin index of the word we are looking for which is used by the replace all method
+    private int findAndSelect(int startIndex, String searchText, boolean forward) {
         int[] indexes = findInText(startIndex, text, searchText, matchCase, wholeWord, forward);
 
         if (indexes[0] != indexes[1]) {
             app.selectText(indexes[0], indexes[1]);
             selectedIndex = indexes[0];
+            return indexes[0];
         }
+        else
+            return -1;
     }
 
     // Returns an array with two integers, one for the begin index, the other for the end index

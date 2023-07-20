@@ -90,6 +90,12 @@ public class App extends JFrame {
         textArea.select(beginIndex, endIndex);
     }
 
+    // Returns new text so FindWindow can update its text varible
+    public String replace(String newText) {
+        textArea.replaceRange(newText, textArea.getSelectionStart(), textArea.getSelectionEnd());
+        return textArea.getText();
+    }
+
     private void newTap() {
         taps.add(new Tap());
         activeTap = taps.size() - 1;
