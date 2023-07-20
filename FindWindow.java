@@ -29,19 +29,20 @@ public class FindWindow extends JFrame {
     private void showGUI() {
         setUndecorated(true);
 
-        JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
+        // Create find options UI
+        JPanel findPanel = new JPanel();
+        findPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
 
         // Create search textArea
         JTextArea textArea = UICreator.createJTextArea("", new Dimension(200, 25), false);
-        panel.add(textArea);
+        findPanel.add(textArea);
 
         // Create search button
-        panel.add(UICreator.createJButton("Find", e -> findAndSelect(0, textArea.getText(), true), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
+        findPanel.add(UICreator.createJButton("Find", e -> findAndSelect(0, textArea.getText(), true), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
 
         // Create next and previous buttons
-        panel.add(UICreator.createJButton("<", e -> findAndSelect(selectedIndex - 1, textArea.getText(), false), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
-        panel.add(UICreator.createJButton(">", e -> findAndSelect(selectedIndex + 1, textArea.getText(), true), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
+        findPanel.add(UICreator.createJButton("<", e -> findAndSelect(selectedIndex - 1, textArea.getText(), false), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
+        findPanel.add(UICreator.createJButton(">", e -> findAndSelect(selectedIndex + 1, textArea.getText(), true), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
 
         // This is used so the check boxes are on top of each other
         JPanel checkBoxPanel = new JPanel(new GridLayout(2, 1, 0, 0));
@@ -51,12 +52,12 @@ public class FindWindow extends JFrame {
         checkBoxPanel.add(UICreator.createJCheckBox("Whole word", false, e -> { wholeWord = !wholeWord; }));
         checkBoxPanel.add(UICreator.createJCheckBox("Match case", true, e -> { matchCase = !matchCase; }));
 
-        panel.add(checkBoxPanel);
+        findPanel.add(checkBoxPanel);
 
         // Create exist button
-        panel.add(UICreator.createJButton("X", e -> dispose(), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
+        findPanel.add(UICreator.createJButton("X", e -> dispose(), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
 
-        add(panel);
+        add(findPanel);
     }
 
     private void findAndSelect(int startIndex, String searchText, boolean forward) {
@@ -70,30 +71,42 @@ public class FindWindow extends JFrame {
 
     // Returns an array with two integers, one for the begin index, the other for the end index
     public static int[] findInText(int startIndex, String text, String searchText, boolean matchCase, boolean wholeWord, boolean forward) {
-        int[] indexes = new int[2];
-        int beginIndex = -1;
+        int[] indexes = new int[2]; // The array that will be returned at the end
+        int beginIndex = -1; // The index at which the seatchText starts (-1 means not found)
 
+        // Make sure the startIndex isn't outOfBounds
+        // Used mostly because next and previous buttons can make send values bigger than text.length() or
+        // smaller than zero
+        if (startIndex >= text.length() || startIndex < 0)
+            startIndex = 0;
+
+        // Make everything lower case if we don't care about case
         if (!matchCase) {
             text = text.toLowerCase();
             searchText = searchText.toLowerCase();
         }
 
+        // If we are going forward, find the first occurnce of searchText in text (strating from startIndex)
         if (forward) {
             beginIndex = text.indexOf(searchText, startIndex);
             indexes[0] = beginIndex;
             indexes[1] = beginIndex + searchText.length();
         }
+        // Otherwise, find the last occurnce in the text, start from the first index to the startIndex
         else {
             beginIndex = text.substring(0, startIndex).lastIndexOf(searchText);
             indexes[0] = beginIndex;
             indexes[1] = beginIndex + searchText.length();
         }
 
-        if (wholeWord && Character.isAlphabetic(text.charAt(beginIndex + searchText.length())))
-            return findInText(beginIndex + 1, text, searchText, matchCase, wholeWord, forward);
-
+        // If beginIndex is set to -1 (or is still -1) it means we didn't find the word
         if (beginIndex == -1)
             return new int[2];
+
+        // If we are looking for a wholeWord, check if the we found the index after the word has a letter or
+        // not. If so, it means what we found wasn't the a whole word and we need to check again
+        if (beginIndex + searchText.length() < text.length() && wholeWord && Character.isAlphabetic(text.charAt(beginIndex + searchText.length())))
+            return findInText(beginIndex + 1, text, searchText, matchCase, wholeWord, forward);
 
         return indexes;
     }
