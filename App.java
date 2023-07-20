@@ -58,8 +58,8 @@ public class App extends JFrame {
 
         editItems[0] = UICreator.createJMenuItem("Undo", e -> undoManager.undo());
         editItems[1] = UICreator.createJMenuItem("Redo", e -> undoManager.redo());
-        editItems[2] = UICreator.createJMenuItem("Find", e -> taps.get(activeTap).find());
-        editItems[3] = UICreator.createJMenuItem("Replace", e -> taps.get(activeTap).replace());
+        editItems[2] = UICreator.createJMenuItem("Find", e -> { new FindWindow(textArea.getText(), this); });
+        editItems[3] = UICreator.createJMenuItem("Replace", null);
         editItems[4] = UICreator.createJMenuItem("Go to", null);
         editItems[5] = UICreator.createJMenuItem("Font", e -> newFontWindow());
 
@@ -83,6 +83,11 @@ public class App extends JFrame {
 
         tapsPanel.revalidate();
         tapsPanel.repaint();
+    }
+
+    public void selectText(int beginIndex, int endIndex) {
+        textArea.requestFocus();
+        textArea.select(beginIndex, endIndex);
     }
 
     private void newTap() {

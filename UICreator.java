@@ -3,6 +3,7 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JTextArea;
 
 import java.awt.event.ActionListener;
@@ -25,8 +26,8 @@ public class UICreator {
         return textArea;
     }
 
-    public static JButton createJButton(String name, ActionListener actionListener, Dimension size, Insets margins) {
-        JButton button = new JButton(name);
+    public static JButton createJButton(String text, ActionListener actionListener, Dimension size, Insets margins) {
+        JButton button = new JButton(text);
         button.addActionListener(actionListener);
         button.setPreferredSize(size);
         button.setMargin(margins);
@@ -34,15 +35,23 @@ public class UICreator {
         return button;
     }
 
-    public static JMenuItem createJMenuItem(String name, ActionListener actionListener) {
-        JMenuItem item = new JMenuItem(name);
+    public static JCheckBox createJCheckBox(String text, boolean state, ActionListener actionListener) {
+        JCheckBox checkBox = new JCheckBox(text);
+        checkBox.setSelected(state);
+        checkBox.addActionListener(actionListener);
+
+        return checkBox;
+    }
+
+    public static JMenuItem createJMenuItem(String text, ActionListener actionListener) {
+        JMenuItem item = new JMenuItem(text);
         item.addActionListener(actionListener);
 
         return item;
     }
 
-    public static JMenu createJMenu(String name, JMenuItem[] items) {
-        JMenu menu = new JMenu(name);
+    public static JMenu createJMenu(String text, JMenuItem[] items) {
+        JMenu menu = new JMenu(text);
         addItems(menu, items);
 
         return menu;

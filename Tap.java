@@ -7,14 +7,6 @@ public class Tap {
     private String name = "Untitled";
     private String text = "";
 
-    public void find() {
-        // TODO: write function
-    }
-
-    public void replace() {
-        // TODO: write function
-    }
-
     public void open() {
         file = chooseFile();
         name = file.getName();
