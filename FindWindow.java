@@ -10,10 +10,15 @@ import javax.swing.JPanel;
 
 public class FindWindow extends JFrame {
     private App app;
+
     private String text;
-    private boolean wholeWord = false, matchCase = true;
     private int selectedIndex = 0;
+
+    private boolean wholeWord = false, matchCase = true;
     private boolean replaceUI = false;
+
+    private JTextArea searchText;
+    private JPanel replacePanel;
 
     public FindWindow(String text, App app) {
         this.text = text;
@@ -40,15 +45,15 @@ public class FindWindow extends JFrame {
         findPanel.add(UICreator.createJButton("Replace", e -> showReplaceOptions(), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
 
         // Create search textArea
-        JTextArea textArea = UICreator.createJTextArea("", new Dimension(200, 25), false);
-        findPanel.add(textArea);
+        searchText = UICreator.createJTextArea("", new Dimension(200, 25), false);
+        findPanel.add(searchText);
 
         // Create search button
-        findPanel.add(UICreator.createJButton("Find", e -> findAndSelect(0, textArea.getText(), true), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
+        findPanel.add(UICreator.createJButton("Find", e -> findAndSelect(0, searchText.getText(), true), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
 
         // Create next and previous buttons
-        findPanel.add(UICreator.createJButton("<", e -> findAndSelect(selectedIndex - 1, textArea.getText(), false), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
-        findPanel.add(UICreator.createJButton(">", e -> findAndSelect(selectedIndex + 1, textArea.getText(), true), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
+        findPanel.add(UICreator.createJButton("<", e -> findAndSelect(selectedIndex - 1, searchText.getText(), false), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
+        findPanel.add(UICreator.createJButton(">", e -> findAndSelect(selectedIndex + 1, searchText.getText(), true), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
 
         // This is used so the check boxes are on top of each other
         JPanel checkBoxPanel = new JPanel(new GridLayout(2, 1, 0, 0));
@@ -66,27 +71,23 @@ public class FindWindow extends JFrame {
         add(findPanel, BorderLayout.NORTH);
 
         // Create replace options UI
-        if (!replaceUI)
-            return;
-
-        JPanel replacePanel = new JPanel();
+        replacePanel = new JPanel();
 
         JTextArea replaceText = UICreator.createJTextArea("", new Dimension(200, 25), false);
         replacePanel.add(replaceText);
 
         // Create replace and replace all buttons
-        replacePanel.add(UICreator.createJButton("Replace", e -> replace(textArea.getText(), replaceText.getText()), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
-        replacePanel.add(UICreator.createJButton("Replace all", e -> replaceAll(textArea.getText(), replaceText.getText()), new Dimension(115, 25), UICreator.DEFAULT_INSETS));
-
-        add(replacePanel, BorderLayout.SOUTH);
+        replacePanel.add(UICreator.createJButton("Replace", e -> replace(searchText.getText(), replaceText.getText()), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
+        replacePanel.add(UICreator.createJButton("Replace all", e -> replaceAll(searchText.getText(), replaceText.getText()), new Dimension(115, 25), UICreator.DEFAULT_INSETS));
     }
 
     private void showReplaceOptions() {
+        if (replaceUI)
+            remove(replacePanel);
+        else
+            add(replacePanel);
+
         replaceUI = !replaceUI;
-        getContentPane().removeAll();
-        showGUI();
-        revalidate();
-        repaint();
         pack();
     }
 
@@ -146,7 +147,7 @@ public class FindWindow extends JFrame {
         }
         // Otherwise, find the last occurnce in the text, start from the first index to the startIndex
         else {
-            beginIndex = text.substring(0, startIndex).lastIndexOf(searchText);
+            beginIndex = text.lastIndexOf(searchText, startIndex);
             indexes[0] = beginIndex;
             indexes[1] = beginIndex + searchText.length();
         }
