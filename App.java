@@ -16,7 +16,7 @@ public class App extends JFrame {
     private int activeTap = 0;
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-    private JTextArea textArea = UICreator.createJTextArea("", new Dimension(1000, 600), true);
+    private JTextArea textArea = UICreator.createJTextArea("", true);
     private UndoManager undoManager = new UndoManager();
 
     public App() {
@@ -30,16 +30,16 @@ public class App extends JFrame {
     }
 
     private void showGUI() {
+        // Make scroll bar
+        add(UICreator.createJScrollPane(new Dimension(1000, 600), textArea), BorderLayout.SOUTH);
+
         // Add undo manger to textArea
         textArea.getDocument().addUndoableEditListener(undoManager);
 
         newTap(); // Create first tap
 
-        // Add main text area
-        add(textArea, BorderLayout.SOUTH);
-
         // Create menuBar items
-        JMenu[] menus = new JMenu[2];
+        JMenu[] menus = new JMenu[3];
 
         // Create File menu items
         JMenuItem[] fileItems = new JMenuItem[6];
@@ -64,6 +64,19 @@ public class App extends JFrame {
         editItems[5] = UICreator.createJMenuItem("Font", e -> newFontWindow());
 
         menus[1] = UICreator.createJMenu("Edit", editItems);
+
+        // Create view menu items
+        JMenuItem[] viewItems = new JMenuItem[3];
+
+        viewItems[0] = UICreator.createJMenu("Zoom", new JMenuItem[] {
+            UICreator.createJMenuItem("Zoom in", null),
+            UICreator.createJMenuItem("Zoom out", null),
+            UICreator.createJMenuItem("Reset zoom", null)
+        });
+        viewItems[1] = UICreator.createJMenuItem("Status bar", null);
+        viewItems[2] = UICreator.createJMenuItem("Word wrap", null);
+
+        menus[2] = UICreator.createJMenu("View", viewItems);
 
         JMenuBar menuBar = UICreator.createJMenuBar(menus); // Create menu bar
 

@@ -1,4 +1,5 @@
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -18,12 +19,18 @@ public class UICreator {
 
     private UICreator() {}
 
+    public static JTextArea createJTextArea(String text, boolean lineWarp) {
+        JTextArea textArea = new JTextArea(text);
+        textArea.setLineWrap(lineWarp);
+
+        return textArea;
+    }
+
     public static JTextArea createJTextArea(String text, Dimension size, boolean lineWarp) {
         checkDimension(size);
 
-        JTextArea textArea = new JTextArea(text);
+        JTextArea textArea = createJTextArea(text, lineWarp);
         textArea.setPreferredSize(size);
-        textArea.setLineWrap(lineWarp);
 
         return textArea;
     }
@@ -45,6 +52,15 @@ public class UICreator {
         checkBox.addActionListener(actionListener);
 
         return checkBox;
+    }
+
+    public static JScrollPane createJScrollPane(Dimension size, JTextArea component) {
+        checkDimension(size);
+
+        JScrollPane scrollPane = new JScrollPane(component);
+        scrollPane.setPreferredSize(size);
+
+        return scrollPane;
     }
 
     public static JMenuItem createJMenuItem(String text, ActionListener actionListener) {
