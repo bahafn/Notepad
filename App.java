@@ -56,8 +56,8 @@ public class App extends JFrame {
         // Create Edit menu items
         JMenuItem[] editItems = new JMenuItem[6];
 
-        editItems[0] = UICreator.createJMenuItem("Undo", e -> undoManager.undo());
-        editItems[1] = UICreator.createJMenuItem("Redo", e -> undoManager.redo());
+        editItems[0] = UICreator.createJMenuItem("Undo", e -> undo());
+        editItems[1] = UICreator.createJMenuItem("Redo", e -> redo());
         editItems[2] = UICreator.createJMenuItem("Find", e -> { new FindWindow(this, false); });
         editItems[3] = UICreator.createJMenuItem("Replace", e -> { new FindWindow(this, true); });
         editItems[4] = UICreator.createJMenuItem("Go to", null);
@@ -117,6 +117,16 @@ public class App extends JFrame {
 
     private void saveAll() {
         // TODO: write function
+    }
+
+    private void undo() {
+        if (undoManager.canUndo())
+            undoManager.undo();
+    }
+
+    private void redo() {
+        if (undoManager.canRedo())
+            undoManager.redo();
     }
 
     private void newFontWindow() {
