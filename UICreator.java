@@ -19,6 +19,8 @@ public class UICreator {
     private UICreator() {}
 
     public static JTextArea createJTextArea(String text, Dimension size, boolean lineWarp) {
+        checkDimension(size);
+
         JTextArea textArea = new JTextArea(text);
         textArea.setPreferredSize(size);
         textArea.setLineWrap(lineWarp);
@@ -27,6 +29,8 @@ public class UICreator {
     }
 
     public static JButton createJButton(String text, ActionListener actionListener, Dimension size, Insets margins) {
+        checkDimension(size);
+        
         JButton button = new JButton(text);
         button.addActionListener(actionListener);
         button.setPreferredSize(size);
@@ -67,5 +71,10 @@ public class UICreator {
     private static void addItems(JComponent parent, JComponent[] items) {
         for (JComponent item : items)
             parent.add(item);
+    }
+
+    private static void checkDimension(Dimension size) {
+        if (size.getWidth() <= 0 || size.getHeight() <= 0)
+            throw new IllegalArgumentException("Dimensions width and height can't be zero or lower.");
     }
 }
