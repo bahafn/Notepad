@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 public class FindWindow extends JFrame {
     private App app;
 
-    private String text;
     private int selectedIndex = 0;
 
     private boolean wholeWord = false, matchCase = true;
@@ -20,9 +19,9 @@ public class FindWindow extends JFrame {
     private JTextArea searchText;
     private JPanel replacePanel;
 
-    public FindWindow(String text, App app) {
-        this.text = text;
+    public FindWindow(App app, boolean replaceUI) {
         this.app = app;
+        this.replaceUI = replaceUI;
 
         showGUI();
 
@@ -79,6 +78,9 @@ public class FindWindow extends JFrame {
         // Create replace and replace all buttons
         replacePanel.add(UICreator.createJButton("Replace", e -> replace(searchText.getText(), replaceText.getText()), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
         replacePanel.add(UICreator.createJButton("Replace all", e -> replaceAll(searchText.getText(), replaceText.getText()), new Dimension(115, 25), UICreator.DEFAULT_INSETS));
+
+        if (replaceUI)
+            add(replacePanel);
     }
 
     private void showReplaceOptions() {
@@ -93,7 +95,7 @@ public class FindWindow extends JFrame {
 
     private void replace(String oldText, String newText) {
         if (findAndSelect(0, oldText, rootPaneCheckingEnabled) != -1)
-            text = app.replace(newText);
+            app.replace(newText);
     }
 
     private void replaceAll(String oldText, String newText) {
@@ -101,7 +103,7 @@ public class FindWindow extends JFrame {
 
         while (true) {
             if (findAndSelect(beginIndex, oldText, true) != -1) {
-                text = app.replace(newText);
+                app.replace(newText);
                 beginIndex += newText.length();
             }
             else
@@ -111,7 +113,7 @@ public class FindWindow extends JFrame {
 
     // Returns the begin index of the word we are looking for which is used by the replace all method
     private int findAndSelect(int startIndex, String searchText, boolean forward) {
-        int[] indexes = findInText(startIndex, text, searchText, matchCase, wholeWord, forward);
+        int[] indexes = findInText(startIndex, app.getText(), searchText, matchCase, wholeWord, forward);
 
         if (indexes[0] != indexes[1]) {
             app.selectText(indexes[0], indexes[1]);
@@ -159,7 +161,7 @@ public class FindWindow extends JFrame {
         // If we are looking for a wholeWord, check if the we found the index after the word has a letter or
         // not. If so, it means what we found wasn't the a whole word and we need to check again
         if (beginIndex + searchText.length() < text.length() && wholeWord && Character.isAlphabetic(text.charAt(beginIndex + searchText.length())))
-            return findInText(beginIndex + 1, text, searchText, matchCase, wholeWord, forward);
+            return findInText(beginIndex + (forward ? 1 : -1), text, searchText, matchCase, wholeWord, forward);
 
         return indexes;
     }

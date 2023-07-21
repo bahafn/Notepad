@@ -58,8 +58,8 @@ public class App extends JFrame {
 
         editItems[0] = UICreator.createJMenuItem("Undo", e -> undoManager.undo());
         editItems[1] = UICreator.createJMenuItem("Redo", e -> undoManager.redo());
-        editItems[2] = UICreator.createJMenuItem("Find", e -> { new FindWindow(textArea.getText(), this); });
-        editItems[3] = UICreator.createJMenuItem("Replace", null);
+        editItems[2] = UICreator.createJMenuItem("Find", e -> { new FindWindow(this, false); });
+        editItems[3] = UICreator.createJMenuItem("Replace", e -> { new FindWindow(this, true); });
         editItems[4] = UICreator.createJMenuItem("Go to", null);
         editItems[5] = UICreator.createJMenuItem("Font", e -> newFontWindow());
 
@@ -90,9 +90,11 @@ public class App extends JFrame {
         textArea.select(beginIndex, endIndex);
     }
 
-    // Returns new text so FindWindow can update its text varible
-    public String replace(String newText) {
+    public void replace(String newText) {
         textArea.replaceRange(newText, textArea.getSelectionStart(), textArea.getSelectionEnd());
+    }
+
+    public String getText() {
         return textArea.getText();
     }
 
