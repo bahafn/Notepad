@@ -41,42 +41,36 @@ public class App extends JFrame {
         // Create menuBar items
         JMenu[] menus = new JMenu[3];
 
-        // Create File menu items
-        JMenuItem[] fileItems = new JMenuItem[6];
+        // Create File menu
+        menus[0] = UICreator.createJMenu("File", new JMenuItem[] {
+            UICreator.createJMenuItem("New tap", e -> newTap()),
+            UICreator.createJMenuItem("New window", e -> newWindow()),
+            UICreator.createJMenuItem("Open", e -> open()),
+            UICreator.createJMenuItem("Save", e -> taps.get(activeTap).save()),
+            UICreator.createJMenuItem("Save as", e -> taps.get(activeTap).save()),
+            UICreator.createJMenuItem("Save all", e -> saveAll())
+        });
 
-        fileItems[0] = UICreator.createJMenuItem("New tap", e -> newTap());
-        fileItems[1] = UICreator.createJMenuItem("New window", e -> newWindow());
-        fileItems[2] = UICreator.createJMenuItem("Open", e -> open());
-        fileItems[3] = UICreator.createJMenuItem("Save", e -> taps.get(activeTap).save());
-        fileItems[4] = UICreator.createJMenuItem("Save as", e -> taps.get(activeTap).save());
-        fileItems[5] = UICreator.createJMenuItem("Save all", e -> saveAll());
-
-        menus[0] = UICreator.createJMenu("File", fileItems); // Create File menu
-
-        // Create Edit menu items
-        JMenuItem[] editItems = new JMenuItem[6];
-
-        editItems[0] = UICreator.createJMenuItem("Undo", e -> undo());
-        editItems[1] = UICreator.createJMenuItem("Redo", e -> redo());
-        editItems[2] = UICreator.createJMenuItem("Find", e -> { new FindWindow(this, false); });
-        editItems[3] = UICreator.createJMenuItem("Replace", e -> { new FindWindow(this, true); });
-        editItems[4] = UICreator.createJMenuItem("Go to", null);
-        editItems[5] = UICreator.createJMenuItem("Font", e -> newFontWindow());
-
-        menus[1] = UICreator.createJMenu("Edit", editItems);
+        // Create edit menu
+        menus[1] = UICreator.createJMenu("Edit", new JMenuItem[] {
+            UICreator.createJMenuItem("Undo", e -> undo()),
+            UICreator.createJMenuItem("Redo", e -> redo()),
+            UICreator.createJMenuItem("Find", e -> { new FindWindow(this, false); }),
+            UICreator.createJMenuItem("Replace", e -> { new FindWindow(this, true); }),
+            UICreator.createJMenuItem("Go to", null),
+            UICreator.createJMenuItem("Font", e -> newFontWindow())
+        });
 
         // Create view menu items
-        JMenuItem[] viewItems = new JMenuItem[3];
-
-        viewItems[0] = UICreator.createJMenu("Zoom", new JMenuItem[] {
-            UICreator.createJMenuItem("Zoom in", null),
-            UICreator.createJMenuItem("Zoom out", null),
-            UICreator.createJMenuItem("Reset zoom", null)
+        menus[2] = UICreator.createJMenu("View", new JMenuItem[] {
+            UICreator.createJMenu("Zoom", new JMenuItem[] {
+                UICreator.createJMenuItem("Zoom in", null),
+                UICreator.createJMenuItem("Zoom out", null),
+                UICreator.createJMenuItem("Reset zoom", null)
+            }),
+            UICreator.createJMenuItem("Status bar", null),
+            UICreator.createJMenuItem("Word wrap", e -> textArea.setLineWrap(!textArea.getLineWrap()))
         });
-        viewItems[1] = UICreator.createJMenuItem("Status bar", null);
-        viewItems[2] = UICreator.createJMenuItem("Word wrap", e -> textArea.setLineWrap(!textArea.getLineWrap()));
-
-        menus[2] = UICreator.createJMenu("View", viewItems);
 
         JMenuBar menuBar = UICreator.createJMenuBar(menus); // Create menu bar
 
