@@ -74,7 +74,7 @@ public class App extends JFrame {
             UICreator.createJMenuItem("Reset zoom", null)
         });
         viewItems[1] = UICreator.createJMenuItem("Status bar", null);
-        viewItems[2] = UICreator.createJMenuItem("Word wrap", null);
+        viewItems[2] = UICreator.createJMenuItem("Word wrap", e -> textArea.setLineWrap(!textArea.getLineWrap()));
 
         menus[2] = UICreator.createJMenu("View", viewItems);
 
