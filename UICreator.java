@@ -5,6 +5,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JTextArea;
 
 import java.awt.event.ActionListener;
@@ -47,8 +48,14 @@ public class UICreator {
     }
 
     public static JCheckBox createJCheckBox(String text, boolean state, ActionListener actionListener) {
-        JCheckBox checkBox = new JCheckBox(text);
-        checkBox.setSelected(state);
+        JCheckBox checkBox = new JCheckBox(text, state);
+        checkBox.addActionListener(actionListener);
+
+        return checkBox;
+    }
+
+    public static JCheckBoxMenuItem createJCheckBoxMenuItem(String text, boolean state, ActionListener actionListener) {
+        JCheckBoxMenuItem checkBox = new JCheckBoxMenuItem(text, state);
         checkBox.addActionListener(actionListener);
 
         return checkBox;

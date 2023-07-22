@@ -68,8 +68,8 @@ public class App extends JFrame {
                 UICreator.createJMenuItem("Zoom out", null),
                 UICreator.createJMenuItem("Reset zoom", null)
             }),
-            UICreator.createJMenuItem("Status bar", null),
-            UICreator.createJMenuItem("Word wrap", e -> textArea.setLineWrap(!textArea.getLineWrap()))
+            UICreator.createJCheckBoxMenuItem("Status bar", true, null),
+            UICreator.createJCheckBoxMenuItem("Word wrap", true, e -> textArea.setLineWrap(!textArea.getLineWrap()))
         });
 
         JMenuBar menuBar = UICreator.createJMenuBar(menus); // Create menu bar
