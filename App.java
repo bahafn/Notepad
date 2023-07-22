@@ -17,6 +17,8 @@ public class App extends JFrame {
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
     private JTextArea textArea = UICreator.createJTextArea("", true);
+    private final float DEFAULT_ZOOM = textArea.getFont().getSize();
+
     private UndoManager undoManager = new UndoManager();
 
     public App() {
@@ -64,9 +66,9 @@ public class App extends JFrame {
         // Create view menu items
         menus[2] = UICreator.createJMenu("View", new JMenuItem[] {
             UICreator.createJMenu("Zoom", new JMenuItem[] {
-                UICreator.createJMenuItem("Zoom in", null),
-                UICreator.createJMenuItem("Zoom out", null),
-                UICreator.createJMenuItem("Reset zoom", null)
+                UICreator.createJMenuItem("Zoom in", e -> { textArea.setFont(textArea.getFont().deriveFont(textArea.getFont().getSize() * 1.3f)); }),
+                UICreator.createJMenuItem("Zoom out", e -> { textArea.setFont(textArea.getFont().deriveFont(textArea.getFont().getSize() / 1.3f)); }),
+                UICreator.createJMenuItem("Reset zoom", e -> { textArea.setFont(textArea.getFont().deriveFont(DEFAULT_ZOOM)); })
             }),
             UICreator.createJCheckBoxMenuItem("Status bar", true, null),
             UICreator.createJCheckBoxMenuItem("Word wrap", true, e -> textArea.setLineWrap(!textArea.getLineWrap()))
