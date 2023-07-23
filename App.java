@@ -3,7 +3,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.undo.UndoManager;
 
 import java.awt.BorderLayout;
@@ -16,7 +15,7 @@ public class App extends JFrame {
     private int activeTap = 0;
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-    private JTextArea textArea = UICreator.createJTextArea("", true);
+    private NotepadTextBox textArea = new NotepadTextBox(true, "", true);
     private final float DEFAULT_ZOOM = textArea.getFont().getSize();
 
     private UndoManager undoManager = new UndoManager();
@@ -70,7 +69,7 @@ public class App extends JFrame {
                 UICreator.createJMenuItem("Zoom out", e -> { textArea.setFont(textArea.getFont().deriveFont(textArea.getFont().getSize() / 1.3f)); }),
                 UICreator.createJMenuItem("Reset zoom", e -> { textArea.setFont(textArea.getFont().deriveFont(DEFAULT_ZOOM)); })
             }),
-            UICreator.createJCheckBoxMenuItem("Status bar", true, null),
+            UICreator.createJCheckBoxMenuItem("Status bar", true, e -> { textArea.changeStatusBar(); }),
             UICreator.createJCheckBoxMenuItem("Word wrap", true, e -> textArea.setLineWrap(!textArea.getLineWrap()))
         });
 
@@ -86,8 +85,7 @@ public class App extends JFrame {
 
         for (int i = 0; i < taps.size(); i++) {
             final int index = i; // Used beccause non-final values can't be used in lambda
-            tapsPanel.add(UICreator.createJButton(taps.get(i).getName(), e -> changeTap(index),
-                    UICreator.DEFAULT_SIZE, UICreator.NO_INSETS));
+            tapsPanel.add(UICreator.createJButton(taps.get(i).getName(), e -> changeTap(index), UICreator.DEFAULT_SIZE, UICreator.NO_INSETS));
         }
 
         tapsPanel.revalidate();
