@@ -29,13 +29,9 @@ public class App extends JFrame {
     public App() {
         UICreator.setLookAndFeel(UICreator.SYSTEM_LOOK_AND_FEEL);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         showGUI();
 
-        setVisible(true);
-        pack();
-        setLocationRelativeTo(null);
+        UICreator.initJFrame(this, true, false, true, true, null);
     }
 
     private void showGUI() {

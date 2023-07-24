@@ -29,12 +29,7 @@ public class FindWindow extends JFrame {
 
         showGUI();
 
-        setUndecorated(true);
-        setAlwaysOnTop(true);
-        setVisible(true);
-        pack();
-        setLocationRelativeTo(getParent());
-        requestFocus();
+        UICreator.initJFrame(this, false, true, false, true, getParent());
     }
 
     private void showGUI() {

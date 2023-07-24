@@ -4,6 +4,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JButton;
@@ -13,6 +14,7 @@ import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
 import java.awt.event.ActionListener;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Insets;
 
@@ -105,6 +107,18 @@ public class UICreator {
         addItems(menuBar, items);
 
         return menuBar;
+    }
+
+    // This is used so we don't repeat the same code in every class that extends JFrame
+    public static void initJFrame(JFrame frame, boolean decorated, boolean alwaysOnTop, boolean mainFrame, boolean pack, Container parent) {
+        frame.setUndecorated(!decorated);
+        frame.setAlwaysOnTop(alwaysOnTop);
+        frame.setVisible(true);
+        if (pack)
+            frame.pack();
+        frame.setLocationRelativeTo(parent);
+        if (mainFrame)
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     private static void addItems(JComponent parent, JComponent[] items) {
