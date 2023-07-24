@@ -43,7 +43,7 @@ public class FindWindow extends JFrame {
         findPanel.add(UICreator.createJButton("Replace", e -> showReplaceOptions(), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
 
         // Create search textArea
-        searchText = UICreator.createJTextArea("", new Dimension(200, 25), false);
+        searchText = UICreator.createJTextArea("", UICreator.DEFAULT_TEXT_SIZE, false);
         findPanel.add(searchText);
 
         // Create search button
@@ -71,7 +71,7 @@ public class FindWindow extends JFrame {
         // Create replace options UI
         replacePanel = new JPanel();
 
-        JTextArea replaceText = UICreator.createJTextArea("", new Dimension(200, 25), false);
+        JTextArea replaceText = UICreator.createJTextArea("", UICreator.DEFAULT_TEXT_SIZE, false);
         replacePanel.add(replaceText);
 
         // Create replace and replace all buttons
