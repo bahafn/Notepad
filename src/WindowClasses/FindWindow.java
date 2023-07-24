@@ -1,3 +1,5 @@
+package WindowClasses;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,6 +9,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JPanel;
+
+import UI.UICreator;
 
 public class FindWindow extends JFrame {
     private App app;

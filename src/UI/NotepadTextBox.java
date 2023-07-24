@@ -1,3 +1,5 @@
+package UI;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 

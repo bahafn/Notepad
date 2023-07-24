@@ -1,0 +1,28 @@
+Code things to do:
+1- Add IllegalArgumentException to UICreate class.
+2- Update UI with better java themes and icons for somethings.
+3- Better looking tap buttons.
+
+Features:
+1- taps. *
+2- Find and replace. *
+3- Zoom in and out. *
+4- Word wrap. *
+5- Status bar. *
+6- Go to.
+7- Font window.
+8- Text alignment.
+9- Save and load (with options for pure text, with font, and with font and alignment).
+10- Keyboard shortcuts.
+11- Autosave.
+
+Maybe features:
+1- Animations for buttons and windows.
+2- More complex text alignment for things like screenwriting.
+3- Version control.
+4- Drag and drop taps from other windows.
+
+Probabaly not features:
+1- From scratch text comprision.
+2- Different themes the user can choose from.
+3- Spellcheck.

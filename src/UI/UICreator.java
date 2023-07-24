@@ -1,3 +1,5 @@
+package UI;
+
 import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JComponent;

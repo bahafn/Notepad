@@ -1,3 +1,5 @@
+package WindowClasses;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -9,6 +11,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
+
+import UI.Tap;
+import UI.NotepadTextBox;
+import UI.UICreator;
 
 public class App extends JFrame {
     private ArrayList<Tap> taps = new ArrayList<>();
