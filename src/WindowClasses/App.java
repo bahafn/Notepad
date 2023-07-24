@@ -27,6 +27,8 @@ public class App extends JFrame {
     private UndoManager undoManager = new UndoManager();
 
     public App() {
+        UICreator.setLookAndFeel(UICreator.SYSTEM_LOOK_AND_FEEL);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         showGUI();

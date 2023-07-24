@@ -1,6 +1,7 @@
 package UI;
 
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -9,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JTextArea;
+import javax.swing.UIManager;
 
 import java.awt.event.ActionListener;
 import java.awt.Dimension;
@@ -20,7 +22,19 @@ public class UICreator {
     public static final Insets DEFAULT_INSETS = new JButton().getInsets();
     public static final Insets NO_INSETS = new Insets(0, 0, 0, 0);
 
+    public static final String SYSTEM_LOOK_AND_FEEL = UIManager.getSystemLookAndFeelClassName();
+
     private UICreator() {}
+
+    public static void setLookAndFeel(String lookAndFeel) {
+        try {
+            UIManager.setLookAndFeel(lookAndFeel);
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Couldn't find look and feel", "Warning", 0);
+            System.exit(0);
+        }
+    }
 
     public static JTextArea createJTextArea(String text, boolean lineWarp) {
         JTextArea textArea = new JTextArea(text);
