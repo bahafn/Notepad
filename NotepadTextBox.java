@@ -5,7 +5,7 @@ import javax.swing.JTextArea;
 
 public class NotepadTextBox extends JTextArea {
     private boolean statusBar;
-    int ln, col; // These are used to sure we need a repaint
+    private int ln, col; // These are used to sure we need a repaint
 
     public NotepadTextBox(boolean statusBar, Dimension size, String text, boolean lineWrap) {
         this(statusBar, text, lineWrap);
