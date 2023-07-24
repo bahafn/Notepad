@@ -115,8 +115,7 @@ public class App extends JFrame {
 
     private void newTap() {
         taps.add(new Tap());
-        activeTap = taps.size() - 1;
-        changeTap(activeTap);
+        changeTap(taps.size() - 1);
 
         updateTapsPanel();
     }
