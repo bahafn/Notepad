@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JButton;
@@ -16,6 +17,7 @@ import javax.swing.UIManager;
 import java.awt.event.ActionListener;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Insets;
 
 public class UICreator {
@@ -27,6 +29,9 @@ public class UICreator {
     public static final Insets NO_INSETS = new Insets(0, 0, 0, 0);
 
     public static final String SYSTEM_LOOK_AND_FEEL = UIManager.getSystemLookAndFeelClassName();
+
+    public static final Font DEFAULT_FONT = new JTextArea().getFont();
+    public static final float DEFAULT_FONT_SIZE = 12;
 
     private UICreator() {}
 
@@ -63,6 +68,26 @@ public class UICreator {
         textArea.setLineWrap(lineWarp);
 
         return textArea;
+    }
+
+    public static JLabel creatJLabel(String text, Dimension size, Font font) {
+        checkDimension(size);
+
+        JLabel label = new JLabel(text);
+        label.setFont(font);
+        label.setPreferredSize(size);
+
+        return label;
+    }
+
+    public static JLabel creatJLabel(String text, Dimension size, Font font, float fontSize) {
+        checkDimension(size);
+
+        JLabel label = new JLabel(text);
+        label.setFont(font.deriveFont(fontSize));
+        label.setPreferredSize(size);
+
+        return label;
     }
 
     public static JButton createJButton(String text, ActionListener actionListener, Dimension size, Insets margins) {

@@ -37,10 +37,7 @@ public class NumericalTextArea extends JTextArea {
     }
 
     private boolean checkChange(String change) {
-        if (change.matches(regex))
-            return true;
-        else
-            return false;
+        return change.matches(regex);
     }
 
     public void setText(String text) {
