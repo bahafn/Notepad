@@ -8,7 +8,9 @@ import javax.swing.JFrame;
 public class Tests {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
-        frame.add(new NumericalTextArea("1", true));
+        NumericalTextArea area = new NumericalTextArea("1.1", false);
+        frame.add(area);
+        System.out.println(area.getDoubleValue());
         UICreator.initJFrame(frame, true, false, true, true, null);
     }
 }

@@ -12,9 +12,9 @@ public class NumericalTextArea extends JTextArea {
 
     public NumericalTextArea(String text, boolean integer) {
         if (integer)
-            regex = "[123456789]";
+            regex = "^[123456789]+$";
         else
-            regex = "[123456789.]";
+            regex = "^[123456789.]+$";
 
         getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -55,5 +55,13 @@ public class NumericalTextArea extends JTextArea {
         }
 
         super.paintComponent(g);
+    }
+
+    public int getIntValue() {
+        return (int)getDoubleValue();
+    }
+
+    public double getDoubleValue() {
+        return Double.parseDouble(getText());
     }
 }
