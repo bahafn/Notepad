@@ -62,7 +62,7 @@ public class App extends JFrame {
             UICreator.createJMenuItem("Redo", e -> redo()),
             UICreator.createJMenuItem("Find", e -> { new FindWindow(this, false); }),
             UICreator.createJMenuItem("Replace", e -> { new FindWindow(this, true); }),
-            UICreator.createJMenuItem("Go to", e -> { new GoToWindow(); }),
+            UICreator.createJMenuItem("Go to", e -> { new GoToWindow(this); }),
             UICreator.createJMenuItem("Font", e -> newFontWindow())
         });
 

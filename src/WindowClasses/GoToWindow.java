@@ -12,7 +12,11 @@ import UI.NumericalTextArea;
 import UI.UICreator;
 
 public class GoToWindow extends JFrame {
-    public GoToWindow() {
+    private App app;
+    
+    public GoToWindow(App app) {
+        this.app = app;
+
         showGUI();
         
         UICreator.initJFrame(this, false, true, false, true, getParent());
@@ -31,9 +35,30 @@ public class GoToWindow extends JFrame {
 
         JPanel buttonPanel = new JPanel();
 
-        buttonPanel.add(UICreator.createJButton("Go to", null, UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS), BorderLayout.SOUTH);
-        buttonPanel.add(UICreator.createJButton("Cancel", null, UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
+        buttonPanel.add(UICreator.createJButton("Go to", e -> goTo(lineArea.getIntValue() - 1), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS), BorderLayout.SOUTH);
+        buttonPanel.add(UICreator.createJButton("Cancel", e -> { dispose(); }, UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
     
         add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private void goTo(int line) {
+        String text = app.getText();
+        String[] lines = text.split("\r|\n|\r\n", -1);
+
+        if (line >= lines.length) {
+            setVisible(false);
+            UICreator.showErrorMessage(this, "The line number is beyond the totla number of lines.", "Go to.", 1);
+            dispose();
+            return;
+        }
+
+        int selectIndex = 0;
+
+        for (int i = 0; i < line; i++)
+            selectIndex += lines[i].length() + 1;
+
+        app.selectText(selectIndex, selectIndex);
+
+        dispose();
     }
 }

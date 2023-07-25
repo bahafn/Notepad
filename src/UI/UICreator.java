@@ -15,6 +15,7 @@ import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
 import java.awt.event.ActionListener;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -33,16 +34,20 @@ public class UICreator {
     public static final Font DEFAULT_FONT = new JTextArea().getFont();
     public static final float DEFAULT_FONT_SIZE = 12;
 
-    private UICreator() {}
+    private UICreator() {
+    }
 
     public static void setLookAndFeel(String lookAndFeel) {
         try {
             UIManager.setLookAndFeel(lookAndFeel);
-        }
-        catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Couldn't find look and feel", "Warning", 0);
+        } catch (Exception e) {
+            showErrorMessage(null, "Couldn't find look and feel", "Warning", 0);
             System.exit(0);
         }
+    }
+
+    public static void showErrorMessage(Component parent, String message, String title, int messageType) {
+        JOptionPane.showMessageDialog(null, message, title, messageType);
     }
 
     public static JTextArea createJTextArea(String text, boolean lineWarp) {
@@ -61,7 +66,8 @@ public class UICreator {
         return textArea;
     }
 
-    public static NumericalTextArea createNumericalTextArea(String text, Dimension size, boolean integer, boolean lineWarp) {
+    public static NumericalTextArea createNumericalTextArea(String text, Dimension size, boolean integer,
+            boolean lineWarp) {
         checkDimension(size);
 
         NumericalTextArea textArea = new NumericalTextArea(text, size, integer);
@@ -145,8 +151,10 @@ public class UICreator {
         return menuBar;
     }
 
-    // This is used so we don't repeat the same code in every class that extends JFrame
-    public static void initJFrame(JFrame frame, boolean decorated, boolean alwaysOnTop, boolean mainFrame, boolean pack, Container parent) {
+    // This is used so we don't repeat the same code in every class that extends
+    // JFrame
+    public static void initJFrame(JFrame frame, boolean decorated, boolean alwaysOnTop, boolean mainFrame, boolean pack,
+            Container parent) {
         frame.setUndecorated(!decorated);
         frame.setAlwaysOnTop(alwaysOnTop);
         frame.setVisible(true);
