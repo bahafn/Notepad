@@ -5,12 +5,13 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import java.awt.Graphics;
+import java.awt.Dimension;
 
 public class NumericalTextArea extends JTextArea {
     private String regex;
     private String removeString = null;
 
-    public NumericalTextArea(String text, boolean integer) {
+    public NumericalTextArea(String text, Dimension size, boolean integer) {
         if (integer)
             regex = "^[123456789]+$";
         else
@@ -26,6 +27,7 @@ public class NumericalTextArea extends JTextArea {
         });
 
         setText(text);
+        super.setPreferredSize(size);
     }
 
     private void handleUserChange(int changeIndex, int changeLength) {

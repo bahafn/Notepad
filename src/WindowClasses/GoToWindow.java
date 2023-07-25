@@ -12,6 +12,6 @@ public class GoToWindow extends JFrame {
     }
 
     private void showGUI() {
-
+        
     }
 }

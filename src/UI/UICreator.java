@@ -56,6 +56,15 @@ public class UICreator {
         return textArea;
     }
 
+    public static NumericalTextArea createNumericalTextArea(String text, Dimension size, boolean integer, boolean lineWarp) {
+        checkDimension(size);
+
+        NumericalTextArea textArea = new NumericalTextArea(text, size, integer);
+        textArea.setLineWrap(lineWarp);
+
+        return textArea;
+    }
+
     public static JButton createJButton(String text, ActionListener actionListener, Dimension size, Insets margins) {
         checkDimension(size);
 
