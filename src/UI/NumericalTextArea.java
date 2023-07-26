@@ -11,11 +11,11 @@ public class NumericalTextArea extends JTextArea {
     private String regex;
     private String removeString = null;
 
-    public NumericalTextArea(String text, Dimension size, boolean integer) {
+    public NumericalTextArea(String text, Dimension size, boolean integer, boolean positive) {
         if (integer)
-            regex = "^[123456789]+$";
+            regex = positive ? "^[1234567890]+$" : "^[-1234567890]+$";
         else
-            regex = "^[123456789.]+$";
+            regex = positive ? "^[1234567890.]+$" : "^[-1234567890.]+$";
 
         getDocument().addDocumentListener(new DocumentListener() {
             @Override

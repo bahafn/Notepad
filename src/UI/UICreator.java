@@ -66,11 +66,10 @@ public class UICreator {
         return textArea;
     }
 
-    public static NumericalTextArea createNumericalTextArea(String text, Dimension size, boolean integer,
-            boolean lineWarp) {
+    public static NumericalTextArea createNumericalTextArea(String text, Dimension size, boolean integer, boolean positive, boolean lineWarp) {
         checkDimension(size);
 
-        NumericalTextArea textArea = new NumericalTextArea(text, size, integer);
+        NumericalTextArea textArea = new NumericalTextArea(text, size, integer, positive);
         textArea.setLineWrap(lineWarp);
 
         return textArea;
