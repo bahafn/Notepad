@@ -30,7 +30,7 @@ public class GoToWindow extends JFrame {
         labelPanel.add(UICreator.creatJLabel("Line number: ", UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT), BorderLayout.SOUTH);
         add(labelPanel, BorderLayout.NORTH);
 
-        NumericalTextArea lineArea = UICreator.createNumericalTextArea("1", UICreator.DEFAULT_TEXT_SIZE, true, false, true);
+        NumericalTextArea lineArea = UICreator.createNumericalTextArea("1", UICreator.DEFAULT_TEXT_SIZE, true, true, true);
         add(lineArea, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
