@@ -7,10 +7,30 @@ import javax.swing.event.DocumentListener;
 import java.awt.Graphics;
 import java.awt.Dimension;
 
+/**
+ * Extends <code>JTextArea</code> but can only have numerical value.
+ * <p>
+ * This class checks every change the user (or program) makes to the text of the
+ * <code>JTextArea</code> and removes any changes that are non-numerical.
+ * <p>
+ * The point of this class is have a way to only take numerical input without
+ * needing to use complex classes like <code>JFormattedTextArea</code>
+ * @see JTextArea
+ * @apiNote Even though this extends JTextArea, it takes more space and time to make
+ * operations. Make sure this class fits your needs before using it.
+ */
 public class NumericalTextArea extends JTextArea {
     private String regex; // Saves the the character that are allowed to be used
     private int[] removeStringIndex = null; // The string to remove in the next call to paintComponent
 
+    /**
+     * Constructs a <code>NumericalTextArea</code> and sets the text, size, and regex (see comment 
+     * above) of it.
+     * @param text the text to be set
+     * @param size the size of the component
+     * @param integer weather to take double values or not
+     * @param positive weather to take neagtive values or not
+     */
     public NumericalTextArea(String text, Dimension size, boolean integer, boolean positive) {
         // Set the regex (allowed characters)
         if (integer)
