@@ -9,7 +9,7 @@ import java.awt.Dimension;
 
 public class NumericalTextArea extends JTextArea {
     private String regex; // Saves the the character that are allowed to be used
-    private String removeString = null; // The string to remove in the next call to paintComponent
+    private int[] removeStringIndex = null; // The string to remove in the next call to paintComponent
 
     public NumericalTextArea(String text, Dimension size, boolean integer, boolean positive) {
         // Set the regex (allowed characters)
@@ -33,18 +33,45 @@ public class NumericalTextArea extends JTextArea {
     }
 
     private void handleUserChange(int changeIndex, int changeLength) {
-        String change = getText().substring(changeIndex, changeIndex + changeLength);
-        if (!checkChange(change))
-            removeString = change;
+        if (!checkChange(getText().substring(changeIndex, changeIndex + changeLength)))
+            removeStringIndex = new int[] {changeIndex, changeIndex + changeLength};
     }
 
-    // Return true if the keeps the text numerical
+    /**
+     * @param change A String containing the change that happened to the text.
+     * @return <code>true</code> if the change keeps the text numerical.
+     */
     // TODO: Add all contions to this function like not begin able to put two . or -
     private boolean checkChange(String change) {
-        return change.matches(regex);
+        if (getText().length() == 0)
+            return true;
+
+        boolean hasDot = getText().charAt(0) == '.';
+
+        for (int i = 1; i < getText().length(); i++) {
+            if (getText().charAt(i) == '.') {
+                if (hasDot)
+                    return false;
+
+                hasDot = true;
+            }
+
+            if (getText().charAt(i) == '-')
+                return false;
+        }
+
+        return change.matches(regex.toString());
     }
 
-    // Overrides JTextArea's setText method so you can't use it for non-numerical values
+    /**
+     * Chagnes the text of the JTextArea if <code>checkChagne(text)</code> returns true,
+     * throws an IlleagalArgumentException otherwise.
+     * <p>
+     * Overrides the <code>JTextArea.setText(String)</code> method so you can't set the text
+     * before checking if it is numerical.
+     * @param text the text to be set.
+     */
+    @Override
     public void setText(String text) {
         if (!checkChange(text))
             throw new IllegalArgumentException("NumericalTextArea can't have non-numerical string.");
@@ -54,9 +81,9 @@ public class NumericalTextArea extends JTextArea {
 
     public void paintComponent(Graphics g) {
         // Remove any unwanted string (string that are in removeString)
-        if (removeString != null) {
-            super.setText(getText().substring(0, getText().indexOf(removeString)));
-            removeString = null;
+        if (removeStringIndex != null) {
+            replaceRange(null, removeStringIndex[0], removeStringIndex[1]);
+            removeStringIndex = null;
         }
 
         super.paintComponent(g);

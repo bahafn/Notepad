@@ -34,8 +34,7 @@ public class UICreator {
     public static final Font DEFAULT_FONT = new JTextArea().getFont();
     public static final float DEFAULT_FONT_SIZE = 12;
 
-    private UICreator() {
-    }
+    private UICreator() {}
 
     public static void setLookAndFeel(String lookAndFeel) {
         try {
@@ -152,8 +151,7 @@ public class UICreator {
 
     // This is used so we don't repeat the same code in every class that extends
     // JFrame
-    public static void initJFrame(JFrame frame, boolean decorated, boolean alwaysOnTop, boolean mainFrame, boolean pack,
-            Container parent) {
+    public static void initJFrame(JFrame frame, boolean decorated, boolean alwaysOnTop, boolean mainFrame, boolean pack, Container parent) {
         frame.setUndecorated(!decorated);
         frame.setAlwaysOnTop(alwaysOnTop);
         frame.setVisible(true);
