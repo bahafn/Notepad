@@ -11,9 +11,17 @@ import javax.swing.JPanel;
 import UI.NumericalTextArea;
 import UI.UICreator;
 
+/**
+ * This class creates the go to UI and selects the line the user chooses.
+ * <p>
+ * This extends <code>JFrame</code> so the UI is added directly to it.
+ * @see JFrame
+ */
 public class GoToWindow extends JFrame {
+    /** The <code>App</code> that created this object. */
     private App app;
     
+    /** Creates a new <code>GoToWindow</code>. */
     public GoToWindow(App app) {
         this.app = app;
 
@@ -41,13 +49,14 @@ public class GoToWindow extends JFrame {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    private void goTo(int line) {
+    /** Selects a line depending on the given int */
+    public void goTo(int line) {
         String text = app.getText();
         String[] lines = text.split("\r|\n|\r\n", -1);
 
         if (line >= lines.length) {
             setVisible(false);
-            UICreator.showErrorMessage(this, "The line number is beyond the totla number of lines.", "Go to.", 1);
+            UICreator.showErrorMessage(this, "The line number is beyond the total number of lines.", "Go to.", 1);
             dispose();
             return;
         }

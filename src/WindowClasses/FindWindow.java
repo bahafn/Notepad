@@ -12,17 +12,30 @@ import javax.swing.JPanel;
 
 import UI.UICreator;
 
+/**
+ * This class creates the find window UI and selects and replaces the words the user is looking for.
+ * <p>
+ * This extends <code>JFrame</code> so it the UI is added directly to it.
+ * @see JFrame
+ */
 public class FindWindow extends JFrame {
+    /** The app object that created this object */
     private App app;
 
+    /** 
+     * The index that the word was found on.
+     * <p>
+     * Used so we can know where to start searching from when searching for previous and next.
+     */
     private int selectedIndex = 0;
 
-    private boolean wholeWord = false, matchCase = true;
-    private boolean replaceUI = false;
+    /** Options variable */
+    private boolean wholeWord = false, matchCase = true, replaceUI = false;
 
     private JTextArea searchText;
     private JPanel replacePanel;
 
+    /** Creates a new <code>FindWindow</code>. */
     public FindWindow(App app, boolean replaceUI) {
         this.app = app;
         this.replaceUI = replaceUI;
@@ -92,11 +105,13 @@ public class FindWindow extends JFrame {
         pack();
     }
 
+    /** replaces one occurnce of a word */
     private void replace(String oldText, String newText) {
         if (findAndSelect(0, oldText, rootPaneCheckingEnabled) != -1)
             app.replace(newText);
     }
 
+    /** replaces all occurnes of a word */
     private void replaceAll(String oldText, String newText) {
         int beginIndex = 0;
 
@@ -110,7 +125,12 @@ public class FindWindow extends JFrame {
         }
     }
 
-    // Returns the begin index of the word we are looking for which is used by the replace all method
+    /**
+     * @return the begin index of the word we are looking for which is used by the replace all method
+     * @param startIndex the index to start searching from
+     * @param searchText the text we are searching for
+     * @param forward weather we are searching after or before the startIndex
+     */
     private int findAndSelect(int startIndex, String searchText, boolean forward) {
         int[] indexes = findInText(startIndex, app.getText(), searchText, matchCase, wholeWord, forward);
 
@@ -123,7 +143,15 @@ public class FindWindow extends JFrame {
             return -1;
     }
 
-    // Returns an array with two integers, one for the begin index, the other for the end index
+    /**
+     * @return an array with two integers, one for the begin index, the other for the end index
+     * @param startIndex the index to start searching from
+     * @param text the text we are searching in
+     * @param searchText the text are searching for
+     * @param matchCase weather to care about case when searching
+     * @param wholeWord weather the search text is part of a word or an entire word
+     * @param forward weather to search after or before the begin index
+     */
     public static int[] findInText(int startIndex, String text, String searchText, boolean matchCase, boolean wholeWord, boolean forward) {
         int[] indexes = new int[2]; // The array that will be returned at the end
         int beginIndex = -1; // The index at which the seatchText starts (-1 means not found)
