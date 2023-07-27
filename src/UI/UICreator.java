@@ -23,7 +23,7 @@ import java.awt.Insets;
 
 /**
  * This class has functions and constants to make it easier to create <code>javax.swing</code>
- * components. While it has some overloaded functions, it is build in a way that you'll need
+ * components. While it has some overloaded methods, it is build in a way that you'll need
  * to use the constants if you don't want to set some values.
  */
 public class UICreator {

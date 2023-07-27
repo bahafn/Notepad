@@ -24,8 +24,8 @@ public class NumericalTextArea extends JTextArea {
     private int[] removeStringIndex = null; // The string to remove in the next call to paintComponent
 
     /**
-     * Constructs a <code>NumericalTextArea</code> and sets the text, size, and regex (see comment 
-     * above) of it.
+     * Constructs a <code>NumericalTextArea</code> and sets the text, size, and regex (allowed characters) 
+     * of it.
      * @param text the text to be set
      * @param size the size of the component
      * @param integer weather to take double values or not
@@ -84,7 +84,7 @@ public class NumericalTextArea extends JTextArea {
     }
 
     /**
-     * Chagnes the text of the JTextArea if <code>checkChagne(text)</code> returns true,
+     * Chagnes the text of the <code>JTextArea</code> if <code>checkChagne(text)</code> returns true,
      * throws an IlleagalArgumentException otherwise.
      * <p>
      * Overrides the <code>JTextArea.setText(String)</code> method so you can't set the text
@@ -109,10 +109,12 @@ public class NumericalTextArea extends JTextArea {
         super.paintComponent(g);
     }
 
+    /** @return the integer value of the text */
     public int getIntValue() {
         return (int)getDoubleValue();
     }
 
+    /** @return the double value of the text */
     public double getDoubleValue() {
         return Double.parseDouble(getText());
     }

@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import javax.swing.JTextArea;
 
+/** Has the same functionality as JTextArea but can draw the status bar. */
 public class NotepadTextBox extends JTextArea {
     private boolean statusBar;
     private int ln, col; // These are used to sure we need a repaint
@@ -39,7 +40,7 @@ public class NotepadTextBox extends JTextArea {
 
         int ln = lines.length; // The length of the array is the line we are on
 
-        g.drawString("Ln: " + ln + ", Col: " + col, 10, getHeight() - 5); // Draw status bar
+        g.drawString("Ln: " + ln + ", Col: " + col, 10, getHeight() - 10); // Draw status bar
         
         // Check if anything changed to do a repaint (this saves memory)
         if (this.ln != ln || this.col != col) {
