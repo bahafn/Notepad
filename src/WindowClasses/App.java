@@ -16,13 +16,6 @@ import UI.Tap;
 import UI.NotepadTextBox;
 import UI.UICreator;
 
-/**
- * This class is the main window of the program.
- * <p>
- * It creates the UI for the text area and menu bar and handles many operations
- * like opening other windows (<code>FindWindow</code>, <code>GoToWindow</code>),
- * undo and redo, and changing taps.
- */
 public class App extends JFrame {
     private ArrayList<Tap> taps = new ArrayList<>();
     private int activeTap = 0;
@@ -33,7 +26,6 @@ public class App extends JFrame {
 
     private UndoManager undoManager = new UndoManager();
 
-    /** Creates a new <code>App</code>. */
     public App() {
         UICreator.setLookAndFeel(UICreator.SYSTEM_LOOK_AND_FEEL);
 
@@ -92,7 +84,6 @@ public class App extends JFrame {
         add(tapsPanel);
     }
 
-    /** Updates <code>taps</code> <code>ArrayList</code> (removing them, adding them, or renaming them). */
     public void updateTapsPanel() {
         tapsPanel.removeAll();
 
@@ -105,41 +96,19 @@ public class App extends JFrame {
         tapsPanel.repaint();
     }
 
-    /** Selects the texts between two indexes from the <code>textArea</code>. */
     public void selectText(int beginIndex, int endIndex) {
         textArea.requestFocus();
         textArea.select(beginIndex, endIndex);
     }
 
-    /**
-     * Replaces the text between the two indexes.
-     * <p>
-     * Used by <code>FindWindow</code>.
-    */
-    public void replace(String newText, int beginIndex, int endIndex) {
-        textArea.replaceRange(newText, beginIndex, endIndex);
+    public void replace(String newText) {
+        textArea.replaceRange(newText, textArea.getSelectionStart(), textArea.getSelectionEnd());
     }
 
-    /**
-     * Replaces the selected text.
-     * <p>
-     * Used by <code>FindWindow</code>.
-     * @return <code>true</code> if some text was replaced
-    */    
-    public boolean replace(String newText) {
-        if (textArea.getSelectionEnd() == textArea.getSelectionStart())
-            return false;
-
-        textArea.replaceSelection(newText);
-        return true;
-    }
-
-    /** @return the text of the <code>textArea</code>. */
     public String getText() {
         return textArea.getText();
     }
 
-    /** Creates a new <code>Tap</code> and adds it to <code>taps</code>. */
     private void newTap() {
         taps.add(new Tap());
         changeTap(taps.size() - 1);
@@ -147,7 +116,6 @@ public class App extends JFrame {
         updateTapsPanel();
     }
 
-    /** Creates new <code>App</code>. */
     private void newWindow() {
         new App();
     }
@@ -175,7 +143,6 @@ public class App extends JFrame {
         // TODO: write function
     }
 
-    /** Changes the active tap and updates the <code>textArea</code>'s text. */
     private void changeTap(int newTap) {
         // Update text in tap object
         taps.get(activeTap).setText(textArea.getText());

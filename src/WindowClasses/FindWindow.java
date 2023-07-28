@@ -88,7 +88,7 @@ public class FindWindow extends JFrame {
         replacePanel.add(replaceText);
 
         // Create replace and replace all buttons
-        replacePanel.add(UICreator.createJButton("Replace", e -> replace(replaceText.getText()), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
+        replacePanel.add(UICreator.createJButton("Replace", e -> replace(searchText.getText(), replaceText.getText()), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
         replacePanel.add(UICreator.createJButton("Replace all", e -> replaceAll(searchText.getText(), replaceText.getText()), new Dimension(115, 25), UICreator.DEFAULT_INSETS));
 
         if (replaceUI)
@@ -105,11 +105,10 @@ public class FindWindow extends JFrame {
         pack();
     }
 
-    private void replace(String newText) {
-        if (!app.replace(newText))
-            findAndSelect(selectedIndex, searchText.getText(), true);
-        else
-            selectedIndex = 0;
+    /** replaces one occurnce of a word */
+    private void replace(String oldText, String newText) {
+        if (findAndSelect(0, oldText, rootPaneCheckingEnabled) != -1)
+            app.replace(newText);
     }
 
     /** replaces all occurnes of a word */
@@ -117,10 +116,8 @@ public class FindWindow extends JFrame {
         int beginIndex = 0;
 
         while (true) {
-            int[] indexes = findInText(beginIndex, app.getText(), oldText, matchCase, wholeWord, true);
-
-            if (indexes[0] != indexes[1]) {
-                app.replace(newText, indexes[0], indexes[1]);
+            if (findAndSelect(beginIndex, oldText, true) != -1) {
+                app.replace(newText);
                 beginIndex += newText.length();
             }
             else
