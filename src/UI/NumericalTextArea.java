@@ -61,7 +61,6 @@ public class NumericalTextArea extends JTextArea {
      * @param change A String containing the change that happened to the text.
      * @return <code>true</code> if the change keeps the text numerical.
      */
-    // TODO: Add all contions to this function like not begin able to put two . or -
     private boolean checkChange(String change) {
         if (getText().length() == 0)
             return true;

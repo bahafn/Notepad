@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.undo.UndoManager;
 
 import java.awt.BorderLayout;
@@ -33,13 +34,15 @@ public class App extends JFrame {
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
     private JTextArea textArea = UICreator.createJTextArea("", true);
-    private JLabel statusBar = UICreator.creatJLabel("Ln: 0, Col: 0", UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT, 14);
+    private JLabel statusBar = UICreator.creatJLabel("Ln: 1, Col: 1", UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT, 14);
     private final float DEFAULT_ZOOM = textArea.getFont().getSize();
     private boolean replacing = false;
 
     private UndoManager undoManager = new UndoManager();
 
     public App() {
+        super("Notepad");
+
         UICreator.setLookAndFeel(UICreator.SYSTEM_LOOK_AND_FEEL);
         showGUI();
         UICreator.initJFrame(this, true, false, true, true, null);
@@ -197,25 +200,33 @@ public class App extends JFrame {
         textArea.setText(taps.get(activeTap).getText());
     }
 
+    /** Calculates the line number and the colume number that are selected */
     private void updateStatusBar() {
+        // This is used because the JTextArea.replaceSelected and JTextArea.replaceRange methods select
+        // the text they are replacing, and we don't need to be updating the status bar while
+        // replaing all occurnces of word because the user wouldn't see it
         if (replacing)
             return;
 
-        // Get array of every line before the selected line
-        String[] lines = getText().substring(0, textArea.getSelectionEnd()).split("\r\n|\n|\r", -1);
+        int ln = 1, col;
 
-        // Get the index of the selected character (this index is for all lines not just
-        // the selected one)
-        int col = textArea.getSelectionEnd() + 1;
+        try {
+            // Calculate the line number from the selected index.
+            // The textArea.getLineEndOffset method gets us the index at which the line ends
+            // and while that index is lower than the selected index, it means that we are on
+            // a lower line
+            while (ln < textArea.getLineCount() && textArea.getLineEndOffset(ln - 1) - 1 < textArea.getSelectionEnd())
+                ln++;
 
-        // Remove the characters of all the other lines from the index of the selected
-        // character
-        for (int i = 0; i < lines.length - 1; i++)
-            col -= lines[i].length() + 1;
-
-        int ln = lines.length; // The length of the array is the line we are on
-
-        statusBar.setText("Ln: " + ln + ", Col: " + col);
+            // The selected colume's index is the index of the selected character minus
+            // the index of the index of the start of the selected line
+            col = textArea.getSelectionEnd() - textArea.getLineStartOffset(ln - 1) + 1;
+            
+            statusBar.setText("Ln: " + ln + ", Col: " + col);
+        }
+        catch (BadLocationException ble) {
+            UICreator.showErrorMessage(this, "This error isn't supposed to happen", "You win.", 0);
+        }
     }
 
     public void setReplacing(boolean replacing) {
