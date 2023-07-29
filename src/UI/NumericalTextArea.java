@@ -16,7 +16,7 @@ import java.awt.Dimension;
  * The point of this class is have a way to only take numerical input without
  * needing to use complex classes like <code>JFormattedTextArea</code>
  * @see JTextArea
- * @apiNote Even though this extends JTextArea, it takes more space and time to make
+ * @implNote Even though this extends JTextArea, it takes more space and time to make
  * operations. Make sure this class fits your needs before using it.
  */
 public class NumericalTextArea extends JTextArea {

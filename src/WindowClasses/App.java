@@ -1,25 +1,32 @@
 package WindowClasses;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.undo.UndoManager;
 import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.JLabel;
+import javax.swing.undo.UndoManager;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Color;
 import java.util.ArrayList;
 
 import UI.Tap;
 import UI.UICreator;
 
+/**
+ * This class is the main window of the program.
+ * <p>
+ * It creates the UI for the text area and menu bar and handles many operations
+ * like opening other windows (<code>FindWindow</code>, <code>GoToWindow</code>),
+ * undo and redo, and changing taps.
+ */
 public class App extends JFrame {
     private ArrayList<Tap> taps = new ArrayList<>();
     private int activeTap = 0;
@@ -28,6 +35,7 @@ public class App extends JFrame {
     private JTextArea textArea = UICreator.createJTextArea("", true);
     private JLabel statusBar = UICreator.creatJLabel("Ln: 0, Col: 0", UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT, 14);
     private final float DEFAULT_ZOOM = textArea.getFont().getSize();
+    private boolean replacing = false;
 
     private UndoManager undoManager = new UndoManager();
 
@@ -85,7 +93,7 @@ public class App extends JFrame {
                 UICreator.createJMenuItem("Zoom out", e -> { textArea.setFont(textArea.getFont().deriveFont(textArea.getFont().getSize() / 1.3f)); }),
                 UICreator.createJMenuItem("Reset zoom", e -> { textArea.setFont(textArea.getFont().deriveFont(DEFAULT_ZOOM)); })
             }),
-            UICreator.createJCheckBoxMenuItem("Status bar", true, e -> { statusBar.setVisible(!statusBar.isVisible()); }),
+            UICreator.createJCheckBoxMenuItem("Status bar", true, e -> {  }),
             UICreator.createJCheckBoxMenuItem("Word wrap", true, e -> textArea.setLineWrap(!textArea.getLineWrap()))
         });
 
@@ -96,6 +104,7 @@ public class App extends JFrame {
         add(tapsPanel);
     }
 
+    /** Updates <code>taps</code> <code>ArrayList</code> (removing them, adding them, or renaming them). */
     public void updateTapsPanel() {
         tapsPanel.removeAll();
 
@@ -108,19 +117,41 @@ public class App extends JFrame {
         tapsPanel.repaint();
     }
 
+    /** Selects the texts between two indexes from the <code>textArea</code>. */
     public void selectText(int beginIndex, int endIndex) {
         textArea.requestFocus();
         textArea.select(beginIndex, endIndex);
     }
 
-    public void replace(String newText) {
-        textArea.replaceRange(newText, textArea.getSelectionStart(), textArea.getSelectionEnd());
+    /**
+     * Replaces the text between the two indexes.
+     * <p>
+     * Used by <code>FindWindow</code>.
+    */
+    public void replace(String newText, int beginIndex, int endIndex) {
+        textArea.replaceRange(newText, beginIndex, endIndex);
     }
 
+    /**
+     * Replaces the selected text.
+     * <p>
+     * Used by <code>FindWindow</code>.
+     * @return <code>true</code> if some text was replaced
+    */    
+    public boolean replace(String newText) {
+        if (textArea.getSelectionEnd() == textArea.getSelectionStart())
+            return false;
+
+        textArea.replaceSelection(newText);
+        return true;
+    }
+
+    /** @return the text of the <code>textArea</code>. */
     public String getText() {
         return textArea.getText();
     }
 
+    /** Creates a new <code>Tap</code> and adds it to <code>taps</code>. */
     private void newTap() {
         taps.add(new Tap());
         changeTap(taps.size() - 1);
@@ -128,6 +159,7 @@ public class App extends JFrame {
         updateTapsPanel();
     }
 
+    /** Creates new <code>App</code>. */
     private void newWindow() {
         new App();
     }
@@ -155,6 +187,7 @@ public class App extends JFrame {
         // TODO: write function
     }
 
+    /** Changes the active tap and updates the <code>textArea</code>'s text. */
     private void changeTap(int newTap) {
         // Update text in tap object
         taps.get(activeTap).setText(textArea.getText());
@@ -165,6 +198,9 @@ public class App extends JFrame {
     }
 
     private void updateStatusBar() {
+        if (replacing)
+            return;
+
         // Get array of every line before the selected line
         String[] lines = getText().substring(0, textArea.getSelectionEnd()).split("\r\n|\n|\r", -1);
 
@@ -180,6 +216,10 @@ public class App extends JFrame {
         int ln = lines.length; // The length of the array is the line we are on
 
         statusBar.setText("Ln: " + ln + ", Col: " + col);
+    }
+
+    public void setReplacing(boolean replacing) {
+        this.replacing = replacing;
     }
 
     public static void main(String[] args) {
