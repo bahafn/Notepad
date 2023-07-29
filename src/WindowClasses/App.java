@@ -6,14 +6,18 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.undo.UndoManager;
+import javax.swing.JTextArea;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.JLabel;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 
 import UI.Tap;
-import UI.NotepadTextBox;
 import UI.UICreator;
 
 public class App extends JFrame {
@@ -21,22 +25,30 @@ public class App extends JFrame {
     private int activeTap = 0;
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-    private NotepadTextBox textArea = new NotepadTextBox(true, "", true);
+    private JTextArea textArea = UICreator.createJTextArea("", true);
+    private JLabel statusBar = UICreator.creatJLabel("Ln: 0, Col: 0", UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT, 14);
     private final float DEFAULT_ZOOM = textArea.getFont().getSize();
 
     private UndoManager undoManager = new UndoManager();
 
     public App() {
         UICreator.setLookAndFeel(UICreator.SYSTEM_LOOK_AND_FEEL);
-
         showGUI();
-
         UICreator.initJFrame(this, true, false, true, true, null);
+
+        textArea.getCaret().addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) { updateStatusBar(); };
+        });
     }
 
     private void showGUI() {
-        // Make scroll bar
-        add(UICreator.createJScrollPane(new Dimension(1000, 600), textArea), BorderLayout.SOUTH);
+        // Add JTextArea and status bar
+        JPanel southPanel = new JPanel(new BorderLayout());
+        southPanel.add(UICreator.createJScrollPane(new Dimension(1000, 600), textArea), BorderLayout.NORTH);
+        southPanel.add(statusBar, BorderLayout.CENTER);
+        southPanel.setBackground(Color.WHITE);
+        add(southPanel, BorderLayout.SOUTH);
 
         // Add undo manger to textArea
         textArea.getDocument().addUndoableEditListener(undoManager);
@@ -73,7 +85,7 @@ public class App extends JFrame {
                 UICreator.createJMenuItem("Zoom out", e -> { textArea.setFont(textArea.getFont().deriveFont(textArea.getFont().getSize() / 1.3f)); }),
                 UICreator.createJMenuItem("Reset zoom", e -> { textArea.setFont(textArea.getFont().deriveFont(DEFAULT_ZOOM)); })
             }),
-            UICreator.createJCheckBoxMenuItem("Status bar", true, e -> { textArea.changeStatusBar(); }),
+            UICreator.createJCheckBoxMenuItem("Status bar", true, e -> { statusBar.setVisible(!statusBar.isVisible()); }),
             UICreator.createJCheckBoxMenuItem("Word wrap", true, e -> textArea.setLineWrap(!textArea.getLineWrap()))
         });
 
@@ -150,6 +162,24 @@ public class App extends JFrame {
         // Change active tap
         activeTap = newTap;
         textArea.setText(taps.get(activeTap).getText());
+    }
+
+    private void updateStatusBar() {
+        // Get array of every line before the selected line
+        String[] lines = getText().substring(0, textArea.getSelectionEnd()).split("\r\n|\n|\r", -1);
+
+        // Get the index of the selected character (this index is for all lines not just
+        // the selected one)
+        int col = textArea.getSelectionEnd() + 1;
+
+        // Remove the characters of all the other lines from the index of the selected
+        // character
+        for (int i = 0; i < lines.length - 1; i++)
+            col -= lines[i].length() + 1;
+
+        int ln = lines.length; // The length of the array is the line we are on
+
+        statusBar.setText("Ln: " + ln + ", Col: " + col);
     }
 
     public static void main(String[] args) {
