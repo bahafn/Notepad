@@ -20,7 +20,9 @@ public class Tap {
 
     private File chooseFile() {
         JFileChooser fileChooser = new JFileChooser();
-        return (fileChooser.showOpenDialog(fileChooser.getParent()) == JFileChooser.APPROVE_OPTION ? fileChooser.getSelectedFile() : new File(""));
+        return (fileChooser.showOpenDialog(fileChooser.getParent()) == JFileChooser.APPROVE_OPTION
+                ? fileChooser.getSelectedFile()
+                : new File(""));
     }
 
     public String getName() {

@@ -22,9 +22,10 @@ import java.awt.Font;
 import java.awt.Insets;
 
 /**
- * This class has functions and constants to make it easier to create <code>javax.swing</code>
- * components. While it has some overloaded methods, it is build in a way that you'll need
- * to use the constants if you don't want to set some values.
+ * This class has functions and constants to make it easier to create
+ * <code>javax.swing</code> components. While it has some overloaded methods, it
+ * is build in a way that you'll need to use the constants if you don't want to
+ * set some values.
  */
 public class UICreator {
     public static final Dimension DEFAULT_SIZE = new Dimension(100, 25);
@@ -39,7 +40,8 @@ public class UICreator {
     public static final Font DEFAULT_FONT = new JTextArea().getFont();
     public static final float DEFAULT_FONT_SIZE = 12;
 
-    private UICreator() {}
+    private UICreator() {
+    }
 
     // TODO: Remove System.exist from here and make it throw an exception instead
     public static void setLookAndFeel(String lookAndFeel) {
@@ -57,7 +59,8 @@ public class UICreator {
 
     /**
      * Creates new <code>JTextArea</code>.
-     * @param text the text to be set
+     * 
+     * @param text     the text to be set
      * @param lineWarp weather to wrap the line at the end of the screen
      * @return new <code>JTextArea</code> with specified text and lineWrap
      * @see JTextArea
@@ -71,6 +74,7 @@ public class UICreator {
 
     /**
      * Creates new <code>JTextArea</code>.
+     * 
      * @param size the size of the component
      * @return new <code>JTextArea</code> with specified values
      * @throws IllegalArgumentException
@@ -88,16 +92,18 @@ public class UICreator {
 
     /**
      * Creates new <code>NumericalTextArea</code>.
-     * @param text the text to be set
-     * @param size the size of the component
-     * @param integer weather to take double values or not
+     * 
+     * @param text     the text to be set
+     * @param size     the size of the component
+     * @param integer  weather to take double values or not
      * @param positive weather to take neagtive values or not
      * @param lineWarp weather to wrap the line at the end of the screen
      * @return new <code>NumericalTextArea</code> with specified values
      * @throws IllegalArgumentException
      * @see NumericalTextArea
      */
-    public static NumericalTextArea createNumericalTextArea(String text, Dimension size, boolean integer, boolean positive, boolean lineWarp) {
+    public static NumericalTextArea createNumericalTextArea(String text, Dimension size, boolean integer,
+            boolean positive, boolean lineWarp) {
         checkDimension(size);
 
         NumericalTextArea textArea = new NumericalTextArea(text, size, integer, positive);
@@ -108,6 +114,7 @@ public class UICreator {
 
     /**
      * Creates new <code>JLabel</code>.
+     * 
      * @param text the text to be set
      * @param size the size of the component
      * @param font the font to use
@@ -128,7 +135,9 @@ public class UICreator {
 
     /**
      * Creates new <code>JLabel</code>.
-     * @param fontSize the size of the font to be used (overwrites the size of the font parameter)
+     * 
+     * @param fontSize the size of the font to be used (overwrites the size of the
+     *                 font parameter)
      * @return new <code>JLabel</code> with specified values
      * @throws IllegalArgumentException
      * @see JLabel
@@ -146,10 +155,13 @@ public class UICreator {
 
     /**
      * Creates new <code>JButton</code>.
-     * @param text the text to be set
-     * @param actionListener an <code>ActionListener</code> to be added to the <code>JButton</code>
-     * @param size the size of the component
-     * @param margins the margins at the which the text of the <code>JButton</code> can't continue
+     * 
+     * @param text           the text to be set
+     * @param actionListener an <code>ActionListener</code> to be added to the
+     *                       <code>JButton</code>
+     * @param size           the size of the component
+     * @param margins        the margins at the which the text of the
+     *                       <code>JButton</code> can't continue
      * @return new <code>JButton</code> with specified values
      * @throws IllegalArgumentException
      * @see <code>checkDimension</code>
@@ -168,9 +180,11 @@ public class UICreator {
 
     /**
      * Creates new <code>JCheckBox</code>.
-     * @param text the text to be set
-     * @param state the initial state of the <code>JCheckBox</code>
-     * @param actionListener an <code>ActionListener</code> to be added to the <code>JCheckBox</code>
+     * 
+     * @param text           the text to be set
+     * @param state          the initial state of the <code>JCheckBox</code>
+     * @param actionListener an <code>ActionListener</code> to be added to the
+     *                       <code>JCheckBox</code>
      * @return new <code>JCheckBox</code> with specified values
      * @see JCheckBox
      */
@@ -183,9 +197,11 @@ public class UICreator {
 
     /**
      * Creates new <code>JCheckBoxMenuItem</code>.
-     * @param text the text to be set
-     * @param state the initial state of the <code>JCheckBoxMenuItem</code>
-     * @param actionListener an <code>ActionListener</code> to be added to the <code>JCheckBoxMenuItem</code>
+     * 
+     * @param text           the text to be set
+     * @param state          the initial state of the <code>JCheckBoxMenuItem</code>
+     * @param actionListener an <code>ActionListener</code> to be added to the
+     *                       <code>JCheckBoxMenuItem</code>
      * @return new <code>JCheckBoxMenuItem</code> with specified values
      * @see JCheckBoxMenuItem
      */
@@ -198,7 +214,8 @@ public class UICreator {
 
     /**
      * Creates new <code>JScrollPane</code>.
-     * @param size the size of the component
+     * 
+     * @param size      the size of the component
      * @param component the component to be added to the <code>JScrollPane</code>
      * @return new <code>JScrollPane</code> with specified values
      * @throws IllegalArgumentException
@@ -216,8 +233,10 @@ public class UICreator {
 
     /**
      * Creates new <code>JMenuItem</code>.
-     * @param text the text to be set
-     * @param actionListener an <code>ActionListner</code> to be added to the <code>JMenuItem</code>
+     * 
+     * @param text           the text to be set
+     * @param actionListener an <code>ActionListner</code> to be added to the
+     *                       <code>JMenuItem</code>
      * @return new <code>JMenuItem</code> with specified values
      * @see JMenuItem
      */
@@ -230,8 +249,10 @@ public class UICreator {
 
     /**
      * Creates new <code>JMenu</code>.
-     * @param text the text to be set
-     * @param items the <code>JMenuItem</code>s to be added to the <code>JMenu</code>
+     * 
+     * @param text  the text to be set
+     * @param items the <code>JMenuItem</code>s to be added to the
+     *              <code>JMenu</code>
      * @return new <code>JMenu</code> with specified values
      * @see JMenu
      */
@@ -244,7 +265,9 @@ public class UICreator {
 
     /**
      * Create new <code>JMenuBar</code>.
-     * @param items the <code>JMenuItem</code>s to be added to the <code>JMenuBar</code>
+     * 
+     * @param items the <code>JMenuItem</code>s to be added to the
+     *              <code>JMenuBar</code>
      * @return new <code>JMenuBar</code> with specified values
      * @see JMenuBar
      */
@@ -256,9 +279,11 @@ public class UICreator {
     }
 
     /**
-     * Adds an array of <code>JComponent</code>s to the another <code>JComponent</code>.
+     * Adds an array of <code>JComponent</code>s to the another
+     * <code>JComponent</code>.
+     * 
      * @param parent the <code>JComponent</code> to be added to
-     * @param items the array of <code>JComponent</code>s to be added
+     * @param items  the array of <code>JComponent</code>s to be added
      * @see JComponent
      */
     private static void addItems(JComponent parent, JComponent[] items) {
@@ -268,17 +293,25 @@ public class UICreator {
 
     /**
      * Initializes a <code>JFrame</code> with specified values.
-     * @param frame the frame to be initialized
-     * @param decorated weather the <code>JFrame</code> is decorated (have edges and top) or not
-     * @param alwaysOnTop weather the <code>JFrame</code> is always on top of other windows
-     * @param mainFrame weather to set the <code>JFrame.defaultCloseOperation</code> to 
-     * <code>JFrame.EXIT_ON_CLOSE</code> or not
-     * @param pack weather to call <code>JFrame.pack()</code> or not (NOTE: if you want to call 
-     * <code>JFrame.pack()</code>, make sure to add the components before calling this function
-     * @param parent the parent of the <code>JFrame</code>. This is also passed to 
-     * <code>JFrame.setLocationRelativeTo()</code> method
+     * 
+     * @param frame       the frame to be initialized
+     * @param decorated   weather the <code>JFrame</code> is decorated (have edges
+     *                    and top) or not
+     * @param alwaysOnTop weather the <code>JFrame</code> is always on top of other
+     *                    windows
+     * @param mainFrame   weather to set the
+     *                    <code>JFrame.defaultCloseOperation</code> to
+     *                    <code>JFrame.EXIT_ON_CLOSE</code> or not
+     * @param pack        weather to call <code>JFrame.pack()</code> or not (NOTE:
+     *                    if you want to call
+     *                    <code>JFrame.pack()</code>, make sure to add the
+     *                    components before calling this function
+     * @param parent      the parent of the <code>JFrame</code>. This is also passed
+     *                    to
+     *                    <code>JFrame.setLocationRelativeTo()</code> method
      */
-    public static void initJFrame(JFrame frame, boolean decorated, boolean alwaysOnTop, boolean mainFrame, boolean pack, Container parent) {
+    public static void initJFrame(JFrame frame, boolean decorated, boolean alwaysOnTop, boolean mainFrame, boolean pack,
+            Container parent) {
         frame.setUndecorated(!decorated);
         frame.setAlwaysOnTop(alwaysOnTop);
         frame.setVisible(true);
@@ -290,12 +323,14 @@ public class UICreator {
         frame.requestFocus();
     }
 
-    /** 
+    /**
      * Checks the given <code>Dimension</code>'s width and height to make sure
      * they don't go under one.
      * <p>
-     * This is used because the <code>Dimension</code>'s constructer allows you to set width 
+     * This is used because the <code>Dimension</code>'s constructer allows you to
+     * set width
      * and height under 1 but creates problems if you do so.
+     * 
      * @throws IllegalArgumentException
      * @see Dimension
      */

@@ -15,20 +15,22 @@ import java.awt.Dimension;
  * <p>
  * The point of this class is have a way to only take numerical input without
  * needing to use complex classes like <code>JFormattedTextArea</code>
+ * 
  * @see JTextArea
- * @implNote Even though this extends JTextArea, it takes more space and time to make
- * operations. Make sure this class fits your needs before using it.
+ * @implNote Even though this extends JTextArea, it takes more space and time to
+ *           make operations. Make sure this class fits your needs before using
  */
 public class NumericalTextArea extends JTextArea {
     private String regex; // Saves the the character that are allowed to be used
     private int[] removeStringIndex = null; // The string to remove in the next call to paintComponent
 
     /**
-     * Constructs a <code>NumericalTextArea</code> and sets the text, size, and regex (allowed characters) 
-     * of it.
-     * @param text the text to be set
-     * @param size the size of the component
-     * @param integer weather to take double values or not
+     * Constructs a <code>NumericalTextArea</code> and sets the text, size, and
+     * regex (allowed characters) of it.
+     * 
+     * @param text     the text to be set
+     * @param size     the size of the component
+     * @param integer  weather to take double values or not
      * @param positive weather to take neagtive values or not
      */
     public NumericalTextArea(String text, Dimension size, boolean integer, boolean positive) {
@@ -41,11 +43,18 @@ public class NumericalTextArea extends JTextArea {
         // Add document listener to keep track of all changes that happen to text
         getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void changedUpdate(DocumentEvent e) { handleUserChange(e.getOffset(), e.getLength()); }
+            public void changedUpdate(DocumentEvent e) {
+                handleUserChange(e.getOffset(), e.getLength());
+            }
+
             @Override
-            public void insertUpdate(DocumentEvent e) { handleUserChange(e.getOffset(), e.getLength()); }
+            public void insertUpdate(DocumentEvent e) {
+                handleUserChange(e.getOffset(), e.getLength());
+            }
+
             @Override
-            public void removeUpdate(DocumentEvent e) {}
+            public void removeUpdate(DocumentEvent e) {
+            }
         });
 
         setText(text);
@@ -54,7 +63,7 @@ public class NumericalTextArea extends JTextArea {
 
     private void handleUserChange(int changeIndex, int changeLength) {
         if (!checkChange(getText().substring(changeIndex, changeIndex + changeLength)))
-            removeStringIndex = new int[] {changeIndex, changeIndex + changeLength};
+            removeStringIndex = new int[] { changeIndex, changeIndex + changeLength };
     }
 
     /**
@@ -83,11 +92,13 @@ public class NumericalTextArea extends JTextArea {
     }
 
     /**
-     * Chagnes the text of the <code>JTextArea</code> if <code>checkChagne(text)</code> returns true,
-     * throws an IlleagalArgumentException otherwise.
+     * Chagnes the text of the <code>JTextArea</code> if
+     * <code>checkChagne(text)</code> returns true, throws an
+     * IlleagalArgumentException otherwise.
      * <p>
-     * Overrides the <code>JTextArea.setText(String)</code> method so you can't set the text
-     * before checking if it is numerical.
+     * Overrides the <code>JTextArea.setText(String)</code> method so you can't set
+     * the text before checking if it is numerical.
+     * 
      * @param text the text to be set.
      */
     @Override
@@ -110,7 +121,7 @@ public class NumericalTextArea extends JTextArea {
 
     /** @return the integer value of the text */
     public int getIntValue() {
-        return (int)getDoubleValue();
+        return (int) getDoubleValue();
     }
 
     /** @return the double value of the text */
