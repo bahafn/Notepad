@@ -13,19 +13,22 @@ import javax.swing.JPanel;
 import UI.UICreator;
 
 /**
- * This class creates the find window UI and selects and replaces the words the user is looking for.
+ * This class creates the find window UI and selects and replaces the words the
+ * user is looking for.
  * <p>
  * This extends <code>JFrame</code> so it the UI is added directly to it.
+ * 
  * @see JFrame
  */
 public class FindWindow extends JFrame {
     /** The app object that created this object */
     private App app;
 
-    /** 
+    /**
      * The index that the word was found on.
      * <p>
-     * Used so we can know where to start searching from when searching for previous and next.
+     * Used so we can know where to start searching from when searching for previous
+     * and next.
      */
     private int selectedIndex = 0;
 
@@ -41,7 +44,6 @@ public class FindWindow extends JFrame {
         this.replaceUI = replaceUI;
 
         showGUI();
-
         UICreator.initJFrame(this, false, true, false, true, getParent());
     }
 
@@ -53,26 +55,34 @@ public class FindWindow extends JFrame {
         JPanel findPanel = new JPanel();
 
         // Create "show replace options button"
-        findPanel.add(UICreator.createJButton("Replace", e -> showReplaceOptions(), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
+        findPanel.add(UICreator.createJButton("Replace", e -> showReplaceOptions(), UICreator.DEFAULT_SIZE,
+                UICreator.DEFAULT_INSETS));
 
         // Create search textArea
         searchText = UICreator.createJTextArea("", UICreator.DEFAULT_TEXT_SIZE, false);
         findPanel.add(searchText);
 
         // Create search button
-        findPanel.add(UICreator.createJButton("Find", e -> findAndSelect(0, searchText.getText(), true), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
+        findPanel.add(UICreator.createJButton("Find", e -> findAndSelect(0, searchText.getText(), true),
+                UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
 
         // Create next and previous buttons
-        findPanel.add(UICreator.createJButton("<", e -> findAndSelect(selectedIndex - 1, searchText.getText(), false), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
-        findPanel.add(UICreator.createJButton(">", e -> findAndSelect(selectedIndex + 1, searchText.getText(), true), UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
+        findPanel.add(UICreator.createJButton("<", e -> findAndSelect(selectedIndex - 1, searchText.getText(), false),
+                UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
+        findPanel.add(UICreator.createJButton(">", e -> findAndSelect(selectedIndex + 1, searchText.getText(), true),
+                UICreator.SQUARE_SIZE, UICreator.NO_INSETS));
 
         // This is used so the check boxes are on top of each other
         JPanel checkBoxPanel = new JPanel(new GridLayout(2, 1, 0, 0));
         checkBoxPanel.setPreferredSize(new Dimension(100, 30));
 
         // Create option check boxes
-        checkBoxPanel.add(UICreator.createJCheckBox("Whole word", false, e -> { wholeWord = !wholeWord; }));
-        checkBoxPanel.add(UICreator.createJCheckBox("Match case", true, e -> { matchCase = !matchCase; }));
+        checkBoxPanel.add(UICreator.createJCheckBox("Whole word", false, e -> {
+            wholeWord = !wholeWord;
+        }));
+        checkBoxPanel.add(UICreator.createJCheckBox("Match case", true, e -> {
+            matchCase = !matchCase;
+        }));
 
         findPanel.add(checkBoxPanel);
 
@@ -88,8 +98,11 @@ public class FindWindow extends JFrame {
         replacePanel.add(replaceText);
 
         // Create replace and replace all buttons
-        replacePanel.add(UICreator.createJButton("Replace", e -> replace(replaceText.getText()), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS));
-        replacePanel.add(UICreator.createJButton("Replace all", e -> replaceAll(searchText.getText(), replaceText.getText()), new Dimension(115, 25), UICreator.DEFAULT_INSETS));
+        replacePanel.add(UICreator.createJButton("Replace", e -> replace(replaceText.getText()), UICreator.DEFAULT_SIZE,
+                UICreator.DEFAULT_INSETS));
+        replacePanel.add(
+                UICreator.createJButton("Replace all", e -> replaceAll(searchText.getText(), replaceText.getText()),
+                        new Dimension(115, 25), UICreator.DEFAULT_INSETS));
 
         if (replaceUI)
             add(replacePanel);
@@ -121,11 +134,10 @@ public class FindWindow extends JFrame {
         while (true) {
             int[] indexes = findInText(beginIndex, app.getText(), oldText, matchCase, wholeWord, true);
 
-            if (indexes[0] != indexes[1]) {
+            if (indexes[0] != -1) {
                 app.replace(newText, indexes[0], indexes[1]);
-                beginIndex += newText.length();
-            }
-            else
+                beginIndex = indexes[1];
+            } else
                 break;
         }
 
@@ -133,38 +145,38 @@ public class FindWindow extends JFrame {
     }
 
     /**
-     * @return the begin index of the word we are looking for which is used by the replace all method
+     * @return the begin index of the word we are looking for which is used by the
+     *         replace all method
      * @param startIndex the index to start searching from
      * @param searchText the text we are searching for
-     * @param forward weather we are searching after or before the startIndex
+     * @param forward    weather we are searching after or before the startIndex
      */
-    private int findAndSelect(int startIndex, String searchText, boolean forward) {
+    private void findAndSelect(int startIndex, String searchText, boolean forward) {
         int[] indexes = findInText(startIndex, app.getText(), searchText, matchCase, wholeWord, forward);
 
-        if (indexes[0] != indexes[1]) {
+        if (indexes[0] != -1) {
             app.selectText(indexes[0], indexes[1]);
             selectedIndex = indexes[0];
-            return indexes[0];
         }
-        else
-            return -1;
     }
 
     /**
-     * @return an array with two integers, one for the begin index, the other for the end index
+     * @return an array with two integers, one for the begin index, the other for
+     *         the end index
      * @param startIndex the index to start searching from
-     * @param text the text we are searching in
+     * @param text       the text we are searching in
      * @param searchText the text are searching for
-     * @param matchCase weather to care about case when searching
-     * @param wholeWord weather the search text is part of a word or an entire word
-     * @param forward weather to search after or before the begin index
+     * @param matchCase  weather to care about case when searching
+     * @param wholeWord  weather the search text is part of a word or an entire word
+     * @param forward    weather to search after or before the begin index
      */
-    public static int[] findInText(int startIndex, String text, String searchText, boolean matchCase, boolean wholeWord, boolean forward) {
+    public static int[] findInText(int startIndex, String text, String searchText, boolean matchCase, boolean wholeWord,
+            boolean forward) {
         int[] indexes = new int[2]; // The array that will be returned at the end
-        int beginIndex = -1; // The index at which the seatchText starts (-1 means not found)
 
         // Make sure the startIndex isn't outOfBounds
-        // Used mostly because next and previous buttons can make send values bigger than text.length() or
+        // Used mostly because next and previous buttons can make send values bigger
+        // than text.length() or
         // smaller than zero
         if (startIndex >= text.length() || startIndex < 0)
             startIndex = 0;
@@ -175,27 +187,25 @@ public class FindWindow extends JFrame {
             searchText = searchText.toLowerCase();
         }
 
-        // If we are going forward, find the first occurnce of searchText in text (strating from startIndex)
+        // If we are going forward, find the first occurnce of searchText in text
+        // (strating from startIndex)
         if (forward) {
-            beginIndex = text.indexOf(searchText, startIndex);
-            indexes[0] = beginIndex;
-            indexes[1] = beginIndex + searchText.length();
+            indexes[0] = text.indexOf(searchText, startIndex);
+            indexes[1] = indexes[0] + searchText.length();
         }
-        // Otherwise, find the last occurnce in the text, start from the first index to the startIndex
+        // Otherwise, find the last occurnce in the text, start from the first index to
+        // the startIndex
         else {
-            beginIndex = text.lastIndexOf(searchText, startIndex);
-            indexes[0] = beginIndex;
-            indexes[1] = beginIndex + searchText.length();
+            indexes[0] = text.lastIndexOf(searchText, startIndex);
+            indexes[1] = indexes[0] + searchText.length();
         }
 
-        // If beginIndex is set to -1 (or is still -1) it means we didn't find the word
-        if (beginIndex == -1)
-            return new int[2];
-
-        // If we are looking for a wholeWord, check if the we found the index after the word has a letter or
-        // not. If so, it means what we found wasn't the a whole word and we need to check again
-        if (beginIndex + searchText.length() < text.length() && wholeWord && Character.isAlphabetic(text.charAt(beginIndex + searchText.length())))
-            return findInText(beginIndex + (forward ? 1 : -1), text, searchText, matchCase, wholeWord, forward);
+        // If we are looking for a wholeWord, check if the we found the index after the
+        // word has a letter or
+        // not. If so, it means what we found wasn't the a whole word and we need to
+        // check again
+        if (indexes[1] < text.length() && wholeWord && Character.isAlphabetic(text.charAt(indexes[1])))
+            return findInText(indexes[0] + (forward ? 1 : -1), text, searchText, matchCase, wholeWord, forward);
 
         return indexes;
     }
