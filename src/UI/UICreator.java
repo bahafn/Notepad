@@ -326,8 +326,7 @@ public class UICreator {
      * they don't go under one.
      * <p>
      * This is used because the <code>Dimension</code>'s constructer allows you to
-     * set width
-     * and height under 1 but creates problems if you do so.
+     * set width and height under 1 but creates problems if you do so.
      * 
      * @throws IllegalArgumentException
      * @see Dimension
