@@ -303,12 +303,10 @@ public class UICreator {
      *                    <code>JFrame.defaultCloseOperation</code> to
      *                    <code>JFrame.EXIT_ON_CLOSE</code> or not
      * @param pack        weather to call <code>JFrame.pack()</code> or not (NOTE:
-     *                    if you want to call
-     *                    <code>JFrame.pack()</code>, make sure to add the
-     *                    components before calling this function
+     *                    if you want to call <code>JFrame.pack()</code>, make sure
+     *                    to add the components before calling this function
      * @param parent      the parent of the <code>JFrame</code>. This is also passed
-     *                    to
-     *                    <code>JFrame.setLocationRelativeTo()</code> method
+     *                    to <code>JFrame.setLocationRelativeTo()</code> method
      */
     public static void initJFrame(JFrame frame, boolean decorated, boolean alwaysOnTop, boolean mainFrame, boolean pack,
             Container parent) {
