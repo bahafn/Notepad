@@ -15,11 +15,11 @@ import javax.swing.undo.UndoManager;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Color;
 import java.util.ArrayList;
 
 import UI.Tap;
 import UI.UICreator;
+import UI.TapButton;
 
 /**
  * This class is the main window of the program.
@@ -31,7 +31,7 @@ import UI.UICreator;
  * @see JFrame
  */
 public class App extends JFrame {
-    private ArrayList<Tap> taps = new ArrayList<>();
+    private ArrayList<TapButton> tapButtons = new ArrayList<>();
     private int activeTap = 0;
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
@@ -54,7 +54,7 @@ public class App extends JFrame {
             @Override
             public void stateChanged(ChangeEvent e) {
                 updateStatusBar();
-            };
+            }
         });
     }
 
@@ -63,7 +63,7 @@ public class App extends JFrame {
         JPanel southPanel = new JPanel(new BorderLayout());
         southPanel.add(UICreator.createJScrollPane(new Dimension(1000, 600), textArea), BorderLayout.NORTH);
         southPanel.add(statusBar, BorderLayout.CENTER);
-        southPanel.setBackground(Color.WHITE);
+        southPanel.setBackground(textArea.getBackground());
         add(southPanel, BorderLayout.SOUTH);
 
         // Add undo manger to textArea
@@ -79,8 +79,8 @@ public class App extends JFrame {
                 UICreator.createJMenuItem("New tap", e -> newTap()),
                 UICreator.createJMenuItem("New window", e -> newWindow()),
                 UICreator.createJMenuItem("Open", e -> open()),
-                UICreator.createJMenuItem("Save", e -> taps.get(activeTap).save()),
-                UICreator.createJMenuItem("Save as", e -> taps.get(activeTap).save()),
+                UICreator.createJMenuItem("Save", e -> tapButtons.get(activeTap).getTap().save()),
+                UICreator.createJMenuItem("Save as", e -> tapButtons.get(activeTap).getTap().save()),
                 UICreator.createJMenuItem("Save all", e -> saveAll())
         });
 
@@ -126,23 +126,6 @@ public class App extends JFrame {
         add(tapsPanel);
     }
 
-    /**
-     * Updates <code>taps</code> <code>ArrayList</code> (removing them, adding them,
-     * or renaming them).
-     */
-    public void updateTapsPanel() {
-        tapsPanel.removeAll();
-
-        for (int i = 0; i < taps.size(); i++) {
-            final int index = i; // Used beccause non-final values can't be used in lambda
-            tapsPanel.add(UICreator.createJButton(taps.get(i).getName(), e -> changeTap(index), UICreator.DEFAULT_SIZE,
-                    UICreator.NO_INSETS));
-        }
-
-        tapsPanel.revalidate();
-        tapsPanel.repaint();
-    }
-
     /** Selects the texts between two indexes from the <code>textArea</code>. */
     public void selectText(int beginIndex, int endIndex) {
         textArea.requestFocus();
@@ -178,12 +161,43 @@ public class App extends JFrame {
         return textArea.getText();
     }
 
+    /**
+     * Updates <code>taps</code> <code>ArrayList</code> (removing them, adding them,
+     * or renaming them).
+     */
+    public void updateTapsPanel() {
+        tapsPanel.revalidate();
+        tapsPanel.repaint();
+    }
+
     /** Creates a new <code>Tap</code> and adds it to <code>taps</code>. */
     private void newTap() {
-        taps.add(new Tap());
-        changeTap(taps.size() - 1);
+        TapButton tapButton = new TapButton(this, new Tap(), tapButtons.size(), "Untitled", UICreator.DEFAULT_SIZE,
+                UICreator.DEFAULT_INSETS);
+        tapButtons.add(tapButton);
+        tapsPanel.add(tapButton);
+        changeTap(tapButtons.size() - 1);
 
         updateTapsPanel();
+    }
+
+    /** @return the index of the active tap */
+    public int getActiveTap() {
+        return activeTap;
+    }
+
+    /** Changes the active tap and updates the <code>textArea</code>'s text. */
+    public void changeTap(int newTap) {
+        // Update text in tap object
+        tapButtons.get(activeTap).getTap().setText(textArea.getText());
+
+        // Change active tap
+        activeTap = newTap;
+        textArea.setText(tapButtons.get(activeTap).getTap().getText());
+    }
+
+    public ArrayList<TapButton> getTapButtons() {
+        return tapButtons;
     }
 
     /** Creates new <code>App</code>. */
@@ -192,7 +206,7 @@ public class App extends JFrame {
     }
 
     private void open() {
-        taps.get(activeTap).open();
+        tapButtons.get(activeTap).getTap().open();
         updateTapsPanel();
     }
 
@@ -212,16 +226,6 @@ public class App extends JFrame {
 
     private void newFontWindow() {
         // TODO: write function
-    }
-
-    /** Changes the active tap and updates the <code>textArea</code>'s text. */
-    private void changeTap(int newTap) {
-        // Update text in tap object
-        taps.get(activeTap).setText(textArea.getText());
-
-        // Change active tap
-        activeTap = newTap;
-        textArea.setText(taps.get(activeTap).getText());
     }
 
     /** Calculates the index of the selected line and colume. */
