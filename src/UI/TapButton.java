@@ -9,12 +9,20 @@ import java.awt.Insets;
 
 import WindowClasses.App;
 
+/**
+ * <code>JButtons</code> with added feature to work as tap buttons. Added
+ * features include changing background color when clicked and having a refreance
+ * to the <code>Tap</code> they represent.
+ * 
+ * @see JButton
+ */
 public class TapButton extends JButton {
     private Tap tap;
 
     public static final Color DEFAULT_BUTTON_COLOR = new Color(240, 240, 240);
     public static final Color SELECTED_BUTTON_COLOR = new Color(10, 10, 200, 100);
 
+    /** Creates <code>TapButton</code>. */
     public TapButton(App app, Tap tap, int tapIndex, String text, Dimension size, Insets margins) {
         setOpaque(false);
         setBackground(DEFAULT_BUTTON_COLOR);
@@ -41,6 +49,14 @@ public class TapButton extends JButton {
         return tap;
     }
 
+    /**
+     * Changes the <code>TapButtons</code>'s background depending on its state
+     * (selected or not).
+     * 
+     * @param selected weather to select the <code>TapButton</code> or unselect it
+     * @param app      the parent of the <code>TapButton</code> that has an array
+     *                 with all other <code>TapButtons</code>
+     */
     public void setSelected(boolean selected, App app) {
         setBackground(selected ? SELECTED_BUTTON_COLOR : DEFAULT_BUTTON_COLOR);
 
