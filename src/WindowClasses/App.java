@@ -4,7 +4,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
@@ -115,8 +114,8 @@ public class App extends MemorySafeWindow {
         });
 
         // Create view menu items
-        menus[2] = UICreator.createJMenu("View", new JMenuItem[] {
-                UICreator.createJMenu("Zoom", new JMenuItem[] {
+        menus[2] = UICreator.createJMenu("View", new JComponent[] {
+                UICreator.createJMenu("Zoom", new JComponent[] {
                         UICreator.createJMenuItem("Zoom in", e -> {
                             textArea.setFont(textArea.getFont().deriveFont(textArea.getFont().getSize() * 1.3f));
                         }),
