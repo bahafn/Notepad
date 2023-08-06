@@ -20,7 +20,7 @@ import UI.UICreator;
  * 
  * @see JFrame
  */
-public class FindWindow extends JFrame {
+public class FindWindow extends MemorySafeWindow {
     /** The app object that created this object */
     private App app;
 
@@ -208,5 +208,11 @@ public class FindWindow extends JFrame {
             return findInText(indexes[0] + (forward ? 1 : -1), text, searchText, matchCase, wholeWord, forward);
 
         return indexes;
+    }
+
+    @Override
+    public void dispose() {
+        app.setFindWindow(false);
+        super.dispose();
     }
 }

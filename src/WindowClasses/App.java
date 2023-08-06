@@ -1,6 +1,6 @@
 package WindowClasses;
 
-import javax.swing.JFrame;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -30,7 +30,7 @@ import UI.TapButton;
  * 
  * @see JFrame
  */
-public class App extends JFrame {
+public class App extends MemorySafeWindow {
     private ArrayList<TapButton> tapButtons = new ArrayList<>();
     private int activeTap = 0;
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -41,14 +41,17 @@ public class App extends JFrame {
     private final float DEFAULT_ZOOM = textArea.getFont().getSize();
     private boolean replacing = false;
 
+    /** <code>boolean</code> used to make sure we don't open two on the same window */
+    private boolean findWindow, goToWindow;
+
     private UndoManager undoManager = new UndoManager();
 
-    public App() {
+    public App(boolean mainFrame) {
         super("Notepad");
 
         UICreator.setLookAndFeel(UICreator.SYSTEM_LOOK_AND_FEEL);
         showGUI();
-        UICreator.initJFrame(this, true, false, true, true, null);
+        UICreator.initJFrame(this, true, false, mainFrame, true, null);
 
         textArea.getCaret().addChangeListener(new ChangeListener() {
             @Override
@@ -75,9 +78,10 @@ public class App extends JFrame {
         JMenu[] menus = new JMenu[3];
 
         // Create File menu
-        menus[0] = UICreator.createJMenu("File", new JMenuItem[] {
+        menus[0] = UICreator.createJMenu("File", new JComponent[] {
                 UICreator.createJMenuItem("New tap", e -> newTap()),
                 UICreator.createJMenuItem("New window", e -> newWindow()),
+                UICreator.createJSeparator(),
                 UICreator.createJMenuItem("Open", e -> open()),
                 UICreator.createJMenuItem("Save", e -> tapButtons.get(activeTap).getTap().save()),
                 UICreator.createJMenuItem("Save as", e -> tapButtons.get(activeTap).getTap().save()),
@@ -85,18 +89,28 @@ public class App extends JFrame {
         });
 
         // Create edit menu
-        menus[1] = UICreator.createJMenu("Edit", new JMenuItem[] {
+        menus[1] = UICreator.createJMenu("Edit", new JComponent[] {
                 UICreator.createJMenuItem("Undo", e -> undo()),
                 UICreator.createJMenuItem("Redo", e -> redo()),
+                UICreator.createJSeparator(),
                 UICreator.createJMenuItem("Find", e -> {
                     new FindWindow(this, false);
                 }),
                 UICreator.createJMenuItem("Replace", e -> {
+                    if (findWindow)
+                        return;
+
+                    findWindow = true;
                     new FindWindow(this, true);
                 }),
                 UICreator.createJMenuItem("Go to", e -> {
+                    if (goToWindow)
+                        return;
+
+                    goToWindow = true;
                     new GoToWindow(this);
                 }),
+                UICreator.createJSeparator(),
                 UICreator.createJMenuItem("Font", e -> newFontWindow())
         });
 
@@ -202,7 +216,8 @@ public class App extends JFrame {
 
     /** Creates new <code>App</code>. */
     private void newWindow() {
-        new App();
+        new App(false);
+        setDefaultCloseOperation(MemorySafeWindow.DISPOSE_ON_CLOSE);
     }
 
     private void open() {
@@ -265,7 +280,15 @@ public class App extends JFrame {
         this.replacing = replacing;
     }
 
+    public void setFindWindow(boolean findWindow) {
+        this.findWindow = findWindow;
+    }
+
+    public void setGoToWindow(boolean goToWindow) {
+        this.goToWindow = goToWindow;
+    }
+
     public static void main(String[] args) {
-        new App();
+        new App(true);
     }
 }

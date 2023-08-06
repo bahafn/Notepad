@@ -18,7 +18,7 @@ import UI.UICreator;
  * 
  * @see JFrame
  */
-public class GoToWindow extends JFrame {
+public class GoToWindow extends MemorySafeWindow {
     /** The <code>App</code> that created this object. */
     private App app;
 
@@ -76,5 +76,11 @@ public class GoToWindow extends JFrame {
         app.selectText(selectIndex, selectIndex);
 
         dispose();
+    }
+
+    @Override
+    public void dispose() {
+        app.setGoToWindow(false);
+        super.dispose();
     }
 }

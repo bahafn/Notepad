@@ -3,6 +3,7 @@ package UI;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -256,7 +257,7 @@ public class UICreator {
      * @return new <code>JMenu</code> with specified values
      * @see JMenu
      */
-    public static JMenu createJMenu(String text, JMenuItem[] items) {
+    public static JMenu createJMenu(String text, JComponent[] items) {
         JMenu menu = new JMenu(text);
         addItems(menu, items);
 
@@ -276,6 +277,10 @@ public class UICreator {
         addItems(menuBar, items);
 
         return menuBar;
+    }
+
+    public static JSeparator createJSeparator() {
+        return new JSeparator(0);
     }
 
     /**
