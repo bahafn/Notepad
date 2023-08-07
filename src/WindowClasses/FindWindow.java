@@ -173,39 +173,46 @@ public class FindWindow extends MemorySafeWindow {
     public static int[] findInText(int startIndex, String text, String searchText, boolean matchCase, boolean wholeWord,
             boolean forward) {
         int[] indexes = new int[2]; // The array that will be returned at the end
+        boolean repeat = false; // This is used to repeat the do while loop if we are looking for a whole word
+                                // and didn't find it
 
-        // Make sure the startIndex isn't outOfBounds
-        // Used mostly because next and previous buttons can make send values bigger
-        // than text.length() or
-        // smaller than zero
-        if (startIndex >= text.length() || startIndex < 0)
-            startIndex = 0;
+        // Do while loop used to make sure we found a whole word if we are searching for one
+        do {
+            repeat = false; // Set it to false so we don't enter an endless loop
 
-        // Make everything lower case if we don't care about case
-        if (!matchCase) {
-            text = text.toLowerCase();
-            searchText = searchText.toLowerCase();
-        }
+            // Make sure the startIndex isn't outOfBounds
+            // Used mostly because next and previous buttons can send values bigger
+            // than text.length() or smaller than zero
+            if (startIndex >= text.length() || startIndex < 0)
+                startIndex = 0;
 
-        // If we are going forward, find the first occurnce of searchText in text
-        // (strating from startIndex)
-        if (forward) {
-            indexes[0] = text.indexOf(searchText, startIndex);
-            indexes[1] = indexes[0] + searchText.length();
-        }
-        // Otherwise, find the last occurnce in the text, start from the first index to
-        // the startIndex
-        else {
-            indexes[0] = text.lastIndexOf(searchText, startIndex);
-            indexes[1] = indexes[0] + searchText.length();
-        }
+            // Make everything lower case if we don't care about case
+            if (!matchCase) {
+                text = text.toLowerCase();
+                searchText = searchText.toLowerCase();
+            }
 
-        // If we are looking for a wholeWord, check if the we found the index after the
-        // word has a letter or
-        // not. If so, it means what we found wasn't the a whole word and we need to
-        // check again
-        if (indexes[1] < text.length() && wholeWord && Character.isAlphabetic(text.charAt(indexes[1])))
-            return findInText(indexes[0] + (forward ? 1 : -1), text, searchText, matchCase, wholeWord, forward);
+            // If we are going forward, find the first occurnce of searchText in text
+            // (strating from startIndex)
+            if (forward) {
+                indexes[0] = text.indexOf(searchText, startIndex);
+                indexes[1] = indexes[0] + searchText.length();
+            }
+            // Otherwise, find the last occurnce in the text, start from the first index to
+            // the startIndex
+            else {
+                indexes[0] = text.lastIndexOf(searchText, startIndex);
+                indexes[1] = indexes[0] + searchText.length();
+            }
+
+            if (wholeWord && indexes[1] < text.length() && Character.isAlphabetic(text.charAt(indexes[1]))) {
+                repeat = true;
+                startIndex = indexes[0] + (forward ? 1 : -1);
+
+                if (startIndex >= text.length() || startIndex < 0)
+                    break;
+            }
+        } while (repeat);
 
         return indexes;
     }
