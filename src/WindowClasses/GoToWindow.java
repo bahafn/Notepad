@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import UI.NumericalTextArea;
@@ -16,7 +15,7 @@ import UI.UICreator;
  * <p>
  * This extends <code>JFrame</code> so the UI is added directly to it.
  * 
- * @see JFrame
+ * @see MemorySafeWindow
  */
 public class GoToWindow extends MemorySafeWindow {
     /** The <code>App</code> that created this object. */
@@ -35,9 +34,9 @@ public class GoToWindow extends MemorySafeWindow {
     private void showGUI() {
         JPanel labelPanel = new JPanel(new BorderLayout());
         labelPanel.setPreferredSize(new Dimension(200, 80));
-        labelPanel.add(UICreator.creatJLabel("Go to line.", new Dimension(200, 50), UICreator.DEFAULT_FONT, 25),
+        labelPanel.add(UICreator.createJLabel("Go to line.", new Dimension(200, 50), UICreator.DEFAULT_FONT, 25),
                 BorderLayout.NORTH);
-        labelPanel.add(UICreator.creatJLabel("Line number: ", UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT),
+        labelPanel.add(UICreator.createJLabel("Line number: ", UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT),
                 BorderLayout.SOUTH);
         add(labelPanel, BorderLayout.NORTH);
 

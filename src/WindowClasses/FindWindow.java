@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JPanel;
 
@@ -18,7 +17,7 @@ import UI.UICreator;
  * <p>
  * This extends <code>JFrame</code> so it the UI is added directly to it.
  * 
- * @see JFrame
+ * @see MemorySafeWindow
  */
 public class FindWindow extends MemorySafeWindow {
     /** The app object that created this object */

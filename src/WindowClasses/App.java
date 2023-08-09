@@ -14,6 +14,7 @@ import javax.swing.undo.UndoManager;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.util.ArrayList;
 
 import UI.Tap;
@@ -27,7 +28,7 @@ import UI.TapButton;
  * like opening other windows (<code>FindWindow</code>,
  * <code>GoToWindow</code>), undo and redo, and changing taps.
  * 
- * @see JFrame
+ * @see MemorySafeWindow
  */
 public class App extends MemorySafeWindow {
     private ArrayList<TapButton> tapButtons = new ArrayList<>();
@@ -35,13 +36,15 @@ public class App extends MemorySafeWindow {
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
     private JTextArea textArea = UICreator.createJTextArea("", true);
-    private JLabel statusBar = UICreator.creatJLabel("Ln: 1, Col: 1", UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT,
+    private JLabel statusBar = UICreator.createJLabel("Ln: 1, Col: 1", UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT,
             14);
     private final float DEFAULT_ZOOM = textArea.getFont().getSize();
     private boolean replacing = false;
 
-    /** <code>boolean</code> used to make sure we don't open two on the same window */
-    private boolean findWindow, goToWindow;
+    /**
+     * <code>boolean</code> used to make sure we don't open two on the same window
+     */
+    private boolean findWindow, goToWindow, fontWindow;
 
     private UndoManager undoManager = new UndoManager();
 
@@ -92,23 +95,9 @@ public class App extends MemorySafeWindow {
                 UICreator.createJMenuItem("Undo", e -> undo()),
                 UICreator.createJMenuItem("Redo", e -> redo()),
                 UICreator.createJSeparator(),
-                UICreator.createJMenuItem("Find", e -> {
-                    new FindWindow(this, false);
-                }),
-                UICreator.createJMenuItem("Replace", e -> {
-                    if (findWindow)
-                        return;
-
-                    findWindow = true;
-                    new FindWindow(this, true);
-                }),
-                UICreator.createJMenuItem("Go to", e -> {
-                    if (goToWindow)
-                        return;
-
-                    goToWindow = true;
-                    new GoToWindow(this);
-                }),
+                UICreator.createJMenuItem("Find", e -> newFindWindow(false)),
+                UICreator.createJMenuItem("Replace", e -> newFindWindow(true)),
+                UICreator.createJMenuItem("Go to", e -> newGoToWindow()),
                 UICreator.createJSeparator(),
                 UICreator.createJMenuItem("Font", e -> newFontWindow())
         });
@@ -172,6 +161,14 @@ public class App extends MemorySafeWindow {
     /** @return the text of the <code>textArea</code>. */
     public String getText() {
         return textArea.getText();
+    }
+
+    public Font getFont() {
+        return textArea.getFont();
+    }
+
+    public void setFont(Font font) {
+        textArea.setFont(font);
     }
 
     /**
@@ -238,8 +235,28 @@ public class App extends MemorySafeWindow {
             undoManager.redo();
     }
 
+    private void newFindWindow(boolean replace) {
+        if (findWindow)
+            return;
+
+        findWindow = true;
+        new FindWindow(this, replace);
+    }
+
     private void newFontWindow() {
-        // TODO: write function
+        if (fontWindow)
+            return;
+
+        fontWindow = true;
+        new FontWindow(this);
+    }
+
+    private void newGoToWindow() {
+        if (goToWindow)
+            return;
+
+        goToWindow = true;
+        new GoToWindow(this);
     }
 
     /** Calculates the index of the selected line and colume. */
@@ -285,6 +302,10 @@ public class App extends MemorySafeWindow {
 
     public void setGoToWindow(boolean goToWindow) {
         this.goToWindow = goToWindow;
+    }
+
+    public void setFontWindow(boolean fontWindow) {
+        this.fontWindow = fontWindow;
     }
 
     public static void main(String[] args) {

@@ -12,6 +12,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
@@ -124,7 +125,7 @@ public class UICreator {
      * @see JLabel
      * @see <code>checkDimension</code>
      */
-    public static JLabel creatJLabel(String text, Dimension size, Font font) {
+    public static JLabel createJLabel(String text, Dimension size, Font font) {
         checkDimension(size);
 
         JLabel label = new JLabel(text);
@@ -144,12 +145,20 @@ public class UICreator {
      * @see JLabel
      * @see <code>createJLabel(String , Dimension , Font)</code>
      */
-    public static JLabel creatJLabel(String text, Dimension size, Font font, float fontSize) {
+    public static JLabel createJLabel(String text, Dimension size, Font font, float fontSize) {
         checkDimension(size);
 
-        JLabel label = new JLabel(text);
+        JLabel label = UICreator.createJLabel(text, size, font);
         label.setFont(font.deriveFont(fontSize));
-        label.setPreferredSize(size);
+
+        return label;
+    }
+
+    public static JLabel createJLabel(String text, Dimension size, int alignment, Font font) {
+        checkDimension(size);
+
+        JLabel label = UICreator.createJLabel(text, size, font);
+        label.setHorizontalAlignment(alignment);
 
         return label;
     }
@@ -281,6 +290,13 @@ public class UICreator {
 
     public static JSeparator createJSeparator() {
         return new JSeparator(0);
+    }
+
+    public static <type> JComboBox<type> createJComboBox(type[] elements, type selectedOption) {
+        JComboBox<type> comboBox = new JComboBox<>(elements);
+        comboBox.setSelectedItem(selectedOption);
+
+        return comboBox;
     }
 
     /**

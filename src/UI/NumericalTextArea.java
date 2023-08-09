@@ -121,11 +121,19 @@ public class NumericalTextArea extends JTextArea {
 
     /** @return the integer value of the text */
     public int getIntValue() {
-        return (int) getDoubleValue();
+        try {
+            return Integer.parseInt(getText());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     /** @return the double value of the text */
     public double getDoubleValue() {
-        return Double.parseDouble(getText());
+        try {
+            return Double.parseDouble(getText());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 }
