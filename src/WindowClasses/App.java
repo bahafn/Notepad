@@ -199,11 +199,15 @@ public class App extends MemorySafeWindow {
     /** Changes the active tap and updates the <code>textArea</code>'s text. */
     public void changeTap(int newTap) {
         // Update text in tap object
-        tapButtons.get(activeTap).getTap().setText(textArea.getText());
+        Tap currentTap = tapButtons.get(activeTap).getTap();
+        currentTap.setText(textArea.getText());
+        currentTap.setFont(textArea.getFont());
 
         // Change active tap
         activeTap = newTap;
-        textArea.setText(tapButtons.get(activeTap).getTap().getText());
+        currentTap = tapButtons.get(activeTap).getTap();
+        textArea.setText(currentTap.getText());
+        textArea.setFont(currentTap.getFont());
     }
 
     public ArrayList<TapButton> getTapButtons() {
