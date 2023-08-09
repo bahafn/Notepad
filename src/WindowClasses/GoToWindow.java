@@ -13,7 +13,7 @@ import UI.UICreator;
 /**
  * This class creates the go to UI and selects the line the user chooses.
  * <p>
- * This extends <code>JFrame</code> so the UI is added directly to it.
+ * This extends <code>MemorySafeWindow</code> so the UI is added directly to it.
  * 
  * @see MemorySafeWindow
  */

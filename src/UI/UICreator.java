@@ -154,6 +154,15 @@ public class UICreator {
         return label;
     }
 
+    /**
+     * Creates new <code>JLabel</code>
+     * 
+     * @param alignment where the text starts from (right, left, or middle)
+     * @return new <code>JLabel</code> with specified values
+     * @throws IllegalArgumentException
+     * @see JLabel
+     * @see <code>createJLabel(String , Dimension , Font)</code>
+     */
     public static JLabel createJLabel(String text, Dimension size, int alignment, Font font) {
         checkDimension(size);
 
