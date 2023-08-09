@@ -42,8 +42,17 @@ public class FontWindow extends MemorySafeWindow {
                 GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames(),
                 app.getFont().getFamily());
 
-        fontFamilyBox.addActionListener(e -> changeFont((String) fontFamilyBox.getSelectedItem()));
+        fontFamilyBox.addActionListener(e -> app.setFont(
+                new Font((String) fontFamilyBox.getSelectedItem(), app.getFont().getStyle(), app.getFont().getSize())));
         add(fontFamilyBox);
+
+        add(UICreator.createJLabel("Style:", UICreator.DEFAULT_TEXT_SIZE, 2, UICreator.DEFAULT_FONT));
+
+        // Create change style option
+        JComboBox<String> fontStyleBox = UICreator.createJComboBox(new String[] { "Regular", "Bold", "Italic" },
+                "Regular");
+        fontStyleBox.addActionListener(e -> app.setFont(app.getFont().deriveFont(fontStyleBox.getSelectedIndex())));
+        add(fontStyleBox);
 
         add(UICreator.createJLabel("Size:", UICreator.DEFAULT_TEXT_SIZE, 2, UICreator.DEFAULT_FONT));
 
@@ -68,25 +77,9 @@ public class FontWindow extends MemorySafeWindow {
             }
         });
         add(textArea);
-
-        add(UICreator.createJLabel("Style:", UICreator.DEFAULT_TEXT_SIZE, 2, UICreator.DEFAULT_FONT));
-
-        // Create change style option
-        JComboBox<String> fontStyleBox = UICreator.createJComboBox(new String[] { "Regular", "Bold", "Italic" },
-                "Regular");
-        fontStyleBox.addActionListener(e -> changeStyle(fontStyleBox.getSelectedIndex()));
-        add(fontStyleBox);
     }
 
     private void changeSize(float size) {
         app.setFont(app.getFont().deriveFont(size));
-    }
-
-    private void changeFont(String fontName) {
-        app.setFont(new Font(fontName, app.getFont().getStyle(), app.getFont().getSize()));
-    }
-
-    private void changeStyle(int style) {
-        app.setFont(new Font(app.getFont().getFamily(), style, app.getFont().getSize()));
     }
 }

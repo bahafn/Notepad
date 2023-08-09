@@ -42,7 +42,7 @@ public class App extends MemorySafeWindow {
     private boolean replacing = false;
 
     /**
-     * <code>boolean</code> used to make sure we don't open two on the same window
+     * <code>boolean</code> used to make sure we don't open two of the same window.
      */
     private boolean findWindow, goToWindow, fontWindow;
 
