@@ -11,6 +11,15 @@ import javax.swing.event.DocumentListener;
 import UI.NumericalTextArea;
 import UI.UICreator;
 
+/**
+ * This class creates the change font UI and changes the font depending on the
+ * user changes.
+ * <p>
+ * This class extends <code>MemorySafeWindow</code> so the UI is added directly
+ * to it.
+ * 
+ * @see MemorySafeWindow
+ */
 public class FontWindow extends MemorySafeWindow {
     private App app;
 
