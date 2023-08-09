@@ -301,6 +301,16 @@ public class UICreator {
         return new JSeparator(0);
     }
 
+    /**
+     * Creates new <code>JComboBox</code>.
+     * 
+     * @param <type>         the type of each element of the <code>JComboBox</code>
+     * @param elements       the elements of the <code>JComboBox</codE>
+     * @param selectedOption the selected option (this is an <code>type</code>
+     *                       <code>Object</code> and not the index of the selected
+     *                       <code>Object</code>)
+     * @return new <code>JComboBox</code> with specified values
+     */
     public static <type> JComboBox<type> createJComboBox(type[] elements, type selectedOption) {
         JComboBox<type> comboBox = new JComboBox<>(elements);
         comboBox.setSelectedItem(selectedOption);
@@ -346,8 +356,7 @@ public class UICreator {
         if (pack)
             frame.pack();
         frame.setLocationRelativeTo(parent);
-        if (mainFrame)
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(mainFrame ? JFrame.EXIT_ON_CLOSE : JFrame.DISPOSE_ON_CLOSE);
         frame.requestFocus();
     }
 

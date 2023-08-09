@@ -82,4 +82,10 @@ public class FontWindow extends MemorySafeWindow {
     private void changeSize(float size) {
         app.setFont(app.getFont().deriveFont(size));
     }
+
+    @Override
+    public void dispose() {
+        app.setFontWindow(false);
+        super.dispose();
+    }
 }
