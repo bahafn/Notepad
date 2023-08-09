@@ -349,10 +349,11 @@ public class UICreator {
      *                    to <code>JFrame.setLocationRelativeTo()</code> method
      */
     public static void initJFrame(JFrame frame, boolean decorated, boolean alwaysOnTop, boolean mainFrame, boolean pack,
-            Container parent) {
+            boolean resizeable, Container parent) {
         frame.setUndecorated(!decorated);
         frame.setAlwaysOnTop(alwaysOnTop);
         frame.setVisible(true);
+        frame.setResizable(resizeable);
         if (pack)
             frame.pack();
         frame.setLocationRelativeTo(parent);

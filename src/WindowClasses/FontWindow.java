@@ -29,7 +29,7 @@ public class FontWindow extends MemorySafeWindow {
         this.app = app;
 
         showGUI();
-        UICreator.initJFrame(this, true, true, false, true, app);
+        UICreator.initJFrame(this, true, true, false, true, false, app);
     }
 
     private void showGUI() {
@@ -57,8 +57,8 @@ public class FontWindow extends MemorySafeWindow {
         add(UICreator.createJLabel("Size:", UICreator.DEFAULT_TEXT_SIZE, 2, UICreator.DEFAULT_FONT));
 
         // Create change size option
-        NumericalTextArea textArea = UICreator.createNumericalTextArea(String.valueOf(app.getFont().getSize()),
-                UICreator.DEFAULT_SIZE, false, true, false);
+        NumericalTextArea textArea = UICreator.createNumericalTextArea(String.valueOf(app.getDefualtFontSize()),
+                UICreator.DEFAULT_SIZE, true, true, false);
         // Document listener so the user sees the changes the moment he changes them
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override

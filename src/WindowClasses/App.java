@@ -38,8 +38,11 @@ public class App extends MemorySafeWindow {
     private JTextArea textArea = UICreator.createJTextArea("", true);
     private JLabel statusBar = UICreator.createJLabel("Ln: 1, Col: 1", UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT,
             14);
-    private final float DEFAULT_ZOOM = textArea.getFont().getSize();
     private boolean replacing = false;
+
+    private float zoom = 1;
+    /** The size of the textArea's font without zoom */
+    private float defaultFontSize = textArea.getFont().getSize();
 
     /**
      * <code>boolean</code> used to make sure we don't open two of the same window.
@@ -53,7 +56,7 @@ public class App extends MemorySafeWindow {
 
         UICreator.setLookAndFeel(UICreator.SYSTEM_LOOK_AND_FEEL);
         showGUI();
-        UICreator.initJFrame(this, true, false, mainFrame, true, null);
+        UICreator.initJFrame(this, true, false, mainFrame, true, true, null);
 
         textArea.getCaret().addChangeListener(new ChangeListener() {
             @Override
@@ -106,13 +109,16 @@ public class App extends MemorySafeWindow {
         menus[2] = UICreator.createJMenu("View", new JComponent[] {
                 UICreator.createJMenu("Zoom", new JComponent[] {
                         UICreator.createJMenuItem("Zoom in", e -> {
-                            textArea.setFont(textArea.getFont().deriveFont(textArea.getFont().getSize() * 1.3f));
+                            zoom += 0.5;
+                            textArea.setFont(textArea.getFont().deriveFont(defaultFontSize * zoom));
                         }),
                         UICreator.createJMenuItem("Zoom out", e -> {
-                            textArea.setFont(textArea.getFont().deriveFont(textArea.getFont().getSize() / 1.3f));
+                            zoom -= 0.5;
+                            textArea.setFont(textArea.getFont().deriveFont(defaultFontSize / zoom));
                         }),
                         UICreator.createJMenuItem("Reset zoom", e -> {
-                            textArea.setFont(textArea.getFont().deriveFont(DEFAULT_ZOOM));
+                            zoom = 1;
+                            textArea.setFont(textArea.getFont().deriveFont(defaultFontSize));
                         })
                 }),
                 UICreator.createJCheckBoxMenuItem("Status bar", true, e -> {
@@ -168,7 +174,8 @@ public class App extends MemorySafeWindow {
     }
 
     public void setFont(Font font) {
-        textArea.setFont(font);
+        textArea.setFont(font.deriveFont(font.getSize() * zoom));
+        defaultFontSize = font.getSize();
     }
 
     /**
@@ -310,6 +317,10 @@ public class App extends MemorySafeWindow {
 
     public void setFontWindow(boolean fontWindow) {
         this.fontWindow = fontWindow;
+    }
+
+    public int getDefualtFontSize() {
+        return (int) defaultFontSize;
     }
 
     public static void main(String[] args) {

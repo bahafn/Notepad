@@ -43,7 +43,7 @@ public class FindWindow extends MemorySafeWindow {
         this.replaceUI = replaceUI;
 
         showGUI();
-        UICreator.initJFrame(this, false, true, false, true, getParent());
+        UICreator.initJFrame(this, false, true, false, true, false, getParent());
     }
 
     private void showGUI() {

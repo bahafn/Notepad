@@ -27,7 +27,7 @@ public class GoToWindow extends MemorySafeWindow {
 
         showGUI();
 
-        UICreator.initJFrame(this, false, true, false, true, getParent());
+        UICreator.initJFrame(this, false, true, false, true, false, getParent());
         getRootPane().setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
     }
 
