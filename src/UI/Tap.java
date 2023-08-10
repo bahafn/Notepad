@@ -10,7 +10,7 @@ public class Tap {
     private File file;
     private String name = "Untitled";
     private String text = "";
-    private Font font;
+    private Font font = UICreator.DEFAULT_FONT;
 
     public void open() {
         file = chooseFile();
