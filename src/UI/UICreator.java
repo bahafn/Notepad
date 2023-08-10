@@ -319,6 +319,23 @@ public class UICreator {
     }
 
     /**
+     * Creates new <code>JComboBox</code>.
+     * 
+     * @param <type>         the type of each element of the <code>JComboBox</code>
+     * @param elements       the elements of the <code>JComboBox</codE>
+     * @param selectedOption the selected option (this is an <code>type</code>
+     *                       <code>Object</code> and not the index of the selected
+     *                       <code>Object</code>)
+     * @return new <code>JComboBox</code> with specified values
+     */
+    public static <type> JComboBox<type> createJComboBox(type[] elements, int selectedIndex) {
+        JComboBox<type> comboBox = new JComboBox<>(elements);
+        comboBox.setSelectedIndex(selectedIndex);
+
+        return comboBox;
+    }
+
+    /**
      * Adds an array of <code>JComponent</code>s to the another
      * <code>JComponent</code>.
      * 

@@ -50,7 +50,7 @@ public class FontWindow extends MemorySafeWindow {
 
         // Create change style option
         JComboBox<String> fontStyleBox = UICreator.createJComboBox(new String[] { "Regular", "Bold", "Italic" },
-                "Regular");
+                app.getFont().getStyle());
         fontStyleBox.addActionListener(e -> app.setFont(app.getFont().deriveFont(fontStyleBox.getSelectedIndex())));
         add(fontStyleBox);
 
