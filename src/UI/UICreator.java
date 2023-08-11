@@ -29,7 +29,7 @@ import java.awt.Insets;
  * is build in a way that you'll need to use the constants if you don't want to
  * set some values.
  */
-public class UICreator {
+public final class UICreator {
     public static final Dimension DEFAULT_SIZE = new Dimension(100, 25);
     public static final Dimension DEFAULT_TEXT_SIZE = new Dimension(200, 25);
     public static final Dimension SQUARE_SIZE = new Dimension(25, 25);

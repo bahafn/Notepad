@@ -15,8 +15,7 @@ public class Tests {
 
         try {
             Save.save(tap, "C:\\Users\\HP\\Desktop\\text.txt");
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -24,11 +23,9 @@ public class Tests {
             Tap tap2 = Save.load("C:\\Users\\HP\\Desktop\\text.txt");
             System.out.println(tap2.getText());
             System.out.println(tap2.getFont());
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             System.out.println("file not found.");
-        }
-        catch (ClassNotFoundException cnfe) {
+        } catch (ClassNotFoundException cnfe) {
             System.out.println("class not found.");
         }
     }
