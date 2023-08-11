@@ -5,8 +5,9 @@ import javax.swing.JFileChooser;
 import java.awt.Font;
 
 import java.io.File;
+import java.io.Serializable;
 
-public class Tap {
+public class Tap implements Serializable {
     private File file;
     private String name = "Untitled";
     private String text = "";
