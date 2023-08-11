@@ -10,7 +10,7 @@ import javax.swing.JFrame;
  * 
  * @see JFrame
  */
-public abstract class MemorySafeWindow extends JFrame {
+public class MemorySafeWindow extends JFrame {
     /** Defualt constructor mostly used by sun classes. */
     protected MemorySafeWindow() {
     }

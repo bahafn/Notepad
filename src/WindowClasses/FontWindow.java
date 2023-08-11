@@ -23,6 +23,7 @@ import UI.UICreator;
 public class FontWindow extends MemorySafeWindow {
     private App app;
 
+    /** Creates <code>FontWindow</code> */
     public FontWindow(App app) {
         super("Font");
 
