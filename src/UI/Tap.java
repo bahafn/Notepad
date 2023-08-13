@@ -5,28 +5,42 @@ import javax.swing.JFileChooser;
 import java.awt.Font;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 
+import Saving.Save;
+
 public class Tap implements Serializable {
-    private File file;
-    private String name = "Untitled";
-    private String text = "";
+    private String name = "Untitled", text = "", directory = null;
     private Font font = UICreator.DEFAULT_FONT;
 
-    public void open() {
-        file = chooseFile();
+    public void open() throws IOException, ClassNotFoundException {
+        File file = chooseFile();
+        if (file == null)
+            return;
+
         name = file.getName();
+        directory = file.getAbsolutePath();
+
+        Tap newTap = Save.load(directory);
+        text = newTap.getText();
+        font = newTap.getFont();
     }
 
-    public void save() {
-        // TODO: write function
+    public void save() throws IOException {
+        if (directory == null) {
+            File file = chooseFile();
+            directory = file.getAbsolutePath();
+        }
+
+        Save.save(this, directory);
     }
 
     private File chooseFile() {
         JFileChooser fileChooser = new JFileChooser();
         return (fileChooser.showOpenDialog(fileChooser.getParent()) == JFileChooser.APPROVE_OPTION
                 ? fileChooser.getSelectedFile()
-                : new File(""));
+                : null);
     }
 
     public String getName() {
@@ -47,5 +61,5 @@ public class Tap implements Serializable {
 
     public void setFont(Font font) {
         this.font = font;
-    } 
+    }
 }

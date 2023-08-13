@@ -14,7 +14,7 @@ public class Tests {
         tap.setFont(UICreator.DEFAULT_FONT.deriveFont(2f));
 
         try {
-            Save.save(tap, "C:\\Users\\HP\\Desktop\\text.txt");
+            Save.save(tap, "\\Projects");
         } catch (IOException e) {
             e.printStackTrace();
         }

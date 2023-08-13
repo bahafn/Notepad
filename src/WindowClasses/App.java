@@ -15,6 +15,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import UI.Tap;
@@ -88,8 +90,8 @@ public class App extends MemorySafeWindow {
                 UICreator.createJMenuItem("New window", e -> newWindow()),
                 UICreator.createJSeparator(),
                 UICreator.createJMenuItem("Open", e -> open()),
-                UICreator.createJMenuItem("Save", e -> tapButtons.get(activeTap).getTap().save()),
-                UICreator.createJMenuItem("Save as", e -> tapButtons.get(activeTap).getTap().save()),
+                UICreator.createJMenuItem("Save", e -> save()),
+                UICreator.createJMenuItem("Save as", e -> save()),
                 UICreator.createJMenuItem("Save all", e -> saveAll())
         });
 
@@ -183,6 +185,9 @@ public class App extends MemorySafeWindow {
      * or renaming them).
      */
     public void updateTapsPanel() {
+        for (TapButton tapButton : tapButtons)
+            tapButton.setText(tapButton.getTap().getName());
+
         tapsPanel.revalidate();
         tapsPanel.repaint();
     }
@@ -205,17 +210,21 @@ public class App extends MemorySafeWindow {
 
     /** Changes the active tap and updates the <code>textArea</code>'s text. */
     public void changeTap(int newTap) {
-        // Update text in the current tap object
-        Tap currentTap = tapButtons.get(activeTap).getTap();
-        currentTap.setText(textArea.getText());
-        currentTap.setFont(textArea.getFont());
+        updateTap();
 
         // Change active tap to new tap
         activeTap = newTap;
-        currentTap = tapButtons.get(activeTap).getTap();
+        Tap currentTap = tapButtons.get(activeTap).getTap();
         textArea.setText(currentTap.getText());
         textArea.setFont(currentTap.getFont());
         defaultFontSize = currentTap.getFont().getSize();
+    }
+
+    /** Updates the information of the active tap to it's object. */
+    private void updateTap() {
+        Tap currentTap = tapButtons.get(activeTap).getTap();
+        currentTap.setText(textArea.getText());
+        currentTap.setFont(textArea.getFont());
     }
 
     public ArrayList<TapButton> getTapButtons() {
@@ -229,8 +238,35 @@ public class App extends MemorySafeWindow {
     }
 
     private void open() {
-        tapButtons.get(activeTap).getTap().open();
+        newTap();
+        Tap currentTap = tapButtons.get(activeTap).getTap();
+
+        try {
+            currentTap.open();
+        } catch (FileNotFoundException fnfe) {
+            UICreator.showErrorMessage(this, "File not found.", "File error", 0);
+        } catch (IOException ioe) {
+            UICreator.showErrorMessage(this, "Make sure the file you are trying is compotiable with this software.",
+                    "Couldn't open file.", 0);
+        } catch (ClassNotFoundException cnfe) {
+            UICreator.showErrorMessage(this, "Make sure the file you are trying is compotiable with this software.",
+                    "Couldn't open file.", 0);
+        }
+
+        textArea.setText(currentTap.getText());
+        textArea.setFont(currentTap.getFont());
         updateTapsPanel();
+    }
+
+    private void save() {
+        updateTap();
+
+        try {
+            tapButtons.get(activeTap).getTap().save();
+        } catch (IOException e) {
+            UICreator.showErrorMessage(this, "Make sure you aren't losing any data before closing the program.",
+                    "Problem while saving", 0);
+        }
     }
 
     private void saveAll() {
