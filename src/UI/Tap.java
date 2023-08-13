@@ -1,7 +1,5 @@
 package UI;
 
-import javax.swing.JFileChooser;
-
 import java.awt.Font;
 
 import java.io.File;
@@ -14,8 +12,8 @@ public class Tap implements Serializable {
     private String name = "Untitled", text = "", directory = null;
     private Font font = UICreator.DEFAULT_FONT;
 
-    public void open() throws IOException, ClassNotFoundException {
-        File file = chooseFile();
+    public void open(File file) throws IOException, ClassNotFoundException {
+        // This checks if the user choose a file or not
         if (file == null)
             return;
 
@@ -27,20 +25,13 @@ public class Tap implements Serializable {
         font = newTap.getFont();
     }
 
-    public void save() throws IOException {
-        if (directory == null) {
-            File file = chooseFile();
-            directory = file.getAbsolutePath();
-        }
+    public void save(File file) throws IOException {
+        if (file == null)
+            return;
 
+        directory = file.getAbsolutePath();
+        name = file.getName();
         Save.save(this, directory);
-    }
-
-    private File chooseFile() {
-        JFileChooser fileChooser = new JFileChooser();
-        return (fileChooser.showOpenDialog(fileChooser.getParent()) == JFileChooser.APPROVE_OPTION
-                ? fileChooser.getSelectedFile()
-                : null);
     }
 
     public String getName() {
@@ -61,5 +52,9 @@ public class Tap implements Serializable {
 
     public void setFont(Font font) {
         this.font = font;
+    }
+
+    public String getDirectory() {
+        return directory;
     }
 }

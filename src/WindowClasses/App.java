@@ -15,6 +15,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -90,8 +91,8 @@ public class App extends MemorySafeWindow {
                 UICreator.createJMenuItem("New window", e -> newWindow()),
                 UICreator.createJSeparator(),
                 UICreator.createJMenuItem("Open", e -> open()),
-                UICreator.createJMenuItem("Save", e -> save()),
-                UICreator.createJMenuItem("Save as", e -> save()),
+                UICreator.createJMenuItem("Save", e -> save(false)),
+                UICreator.createJMenuItem("Save as", e -> save(true)),
                 UICreator.createJMenuItem("Save all", e -> saveAll())
         });
 
@@ -242,7 +243,7 @@ public class App extends MemorySafeWindow {
         Tap currentTap = tapButtons.get(activeTap).getTap();
 
         try {
-            currentTap.open();
+            currentTap.open(UICreator.chooseFile("Open"));
         } catch (FileNotFoundException fnfe) {
             UICreator.showErrorMessage(this, "File not found.", "File error", 0);
         } catch (IOException ioe) {
@@ -258,15 +259,18 @@ public class App extends MemorySafeWindow {
         updateTapsPanel();
     }
 
-    private void save() {
+    private void save(boolean saveAs) {
         updateTap();
 
         try {
-            tapButtons.get(activeTap).getTap().save();
+            Tap tap = tapButtons.get(activeTap).getTap();
+            tap.save(tap.getDirectory() == null || saveAs ? UICreator.chooseFile("Save") : new java.io.File(tap.getDirectory()));
         } catch (IOException e) {
             UICreator.showErrorMessage(this, "Make sure you aren't losing any data before closing the program.",
                     "Problem while saving", 0);
         }
+
+        updateTapsPanel();
     }
 
     private void saveAll() {

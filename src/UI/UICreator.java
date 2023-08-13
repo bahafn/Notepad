@@ -15,8 +15,10 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
+import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -335,6 +337,15 @@ public final class UICreator {
         return comboBox;
     }
 
+    public static File chooseFile(String openButtonText) {
+        UIManager.put("FileChooser.openButtonText", openButtonText);
+        JFileChooser fileChooser = new JFileChooser();
+
+        return (fileChooser.showOpenDialog(fileChooser.getParent()) == JFileChooser.APPROVE_OPTION
+                ? fileChooser.getSelectedFile()
+                : null);
+    }
+
     /**
      * Adds an array of <code>JComponent</code>s to the another
      * <code>JComponent</code>.
@@ -390,6 +401,6 @@ public final class UICreator {
      */
     private static void checkDimension(Dimension dimension) {
         if (dimension.getWidth() <= 0 || dimension.getHeight() <= 0)
-            throw new IllegalArgumentException("Dimensions width and height can't be zero or lower.");
+            throw new IllegalArgumentException("Dimensions' width and height can't be zero or lower.");
     }
 }
