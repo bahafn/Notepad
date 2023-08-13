@@ -93,6 +93,7 @@ public class App extends MemorySafeWindow {
                 UICreator.createJMenuItem("Open", e -> open()),
                 UICreator.createJMenuItem("Save", e -> save(false)),
                 UICreator.createJMenuItem("Save as", e -> save(true)),
+                UICreator.createJMenuItem("Save plain text", null),
                 UICreator.createJMenuItem("Save all", e -> saveAll())
         });
 

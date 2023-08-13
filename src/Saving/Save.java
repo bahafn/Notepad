@@ -1,6 +1,7 @@
 package Saving;
 
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -21,9 +22,10 @@ public final class Save {
      * This method takes an <code>Object</code> of an type that implements
      * <code>Serializable</code> and writes on a file in a spcified directory.
      * 
-     * @param <type> the type of the <code>Object</code> we want to write (must implement Serializable)
+     * @param <type>       the type of the <code>Object</code> we want to write
+     *                     (must implement Serializable)
      * @param objectToSave the <code>Object</code> we want to save
-     * @param directory the directory we want to write to
+     * @param directory    the directory we want to write to
      * @throws IOException if the file wasn't found
      */
     public static <type extends Serializable> void save(type objectToSave, String directory) throws IOException {
@@ -42,14 +44,17 @@ public final class Save {
     }
 
     /**
-     * This method reads from and a file and writes the infromation to an <code>Object</code>.
+     * This method reads from and a file and writes the infromation to an
+     * <code>Object</code>.
      * 
-     * @param <type> the type of the <code>Object</code> we want to read
+     * @param <type>    the type of the <code>Object</code> we want to read
      * @param directory the directory of the file we want to read from
-     * @return an <code>Object</code> of type <code>type</code> with information stored in the file
-     * @throws IOException if the file wasn't found
+     * @return an <code>Object</code> of type <code>type</code> with information
+     *         stored in the file
+     * @throws IOException            if the file wasn't found
      * @throws ClassNotFoundException
-     * @throws ClassCastException if we couldn't cast from <code>Object</code> to the wanted type
+     * @throws ClassCastException     if we couldn't cast from <code>Object</code>
+     *                                to the wanted type
      */
     public static <type extends Serializable> type load(String directory)
             throws IOException, ClassNotFoundException, ClassCastException {
@@ -63,6 +68,12 @@ public final class Save {
         ois.close();
 
         return returnValue;
+    }
+
+    public static void savePlainText(String text, String directory) throws IOException {
+        FileWriter writer = new FileWriter(directory);
+        writer.write(text);
+        writer.close();
     }
 
     private static boolean checkDirectory(String directory) {
