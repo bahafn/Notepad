@@ -24,6 +24,8 @@ import UI.Tap;
 import UI.UICreator;
 import UI.TapButton;
 
+import Saving.Save;
+
 /**
  * This class is the main window of the program.
  * <p>
@@ -93,7 +95,7 @@ public class App extends MemorySafeWindow {
                 UICreator.createJMenuItem("Open", e -> open()),
                 UICreator.createJMenuItem("Save", e -> save(false)),
                 UICreator.createJMenuItem("Save as", e -> save(true)),
-                UICreator.createJMenuItem("Save plain text", null),
+                UICreator.createJMenuItem("Save plain text", e -> savePlainText()),
                 UICreator.createJMenuItem("Save all", e -> saveAll())
         });
 
@@ -265,13 +267,29 @@ public class App extends MemorySafeWindow {
 
         try {
             Tap tap = tapButtons.get(activeTap).getTap();
-            tap.save(tap.getDirectory() == null || saveAs ? UICreator.chooseFile("Save") : new java.io.File(tap.getDirectory()));
+            tap.save(tap.getDirectory() == null || saveAs ? UICreator.chooseFile("Save")
+                    : new java.io.File(tap.getDirectory()));
         } catch (IOException e) {
             UICreator.showErrorMessage(this, "Make sure you aren't losing any data before closing the program.",
                     "Problem while saving", 0);
         }
 
         updateTapsPanel();
+    }
+
+    private void savePlainText() {
+        updateTap();
+        Tap tap = tapButtons.get(activeTap).getTap();
+
+        try {
+            System.out.printf("%s %s", tap.getText(), tap.getDirectory());
+            Save.savePlainText(tap.getText(),
+                    (tap.getDirectory() == null ? UICreator.chooseFile("Save").getAbsolutePath()
+                            : new java.io.File(tap.getDirectory()).getAbsolutePath()) + ".txt");
+        } catch (IOException e) {
+            UICreator.showErrorMessage(this, "Make sure you aren't losing any data before closing the program.",
+                    "Problem while saving", 0);
+        }
     }
 
     private void saveAll() {
