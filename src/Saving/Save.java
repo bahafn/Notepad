@@ -59,7 +59,7 @@ public final class Save {
     public static <type extends Serializable> type load(String directory)
             throws IOException, ClassNotFoundException, ClassCastException {
         if (!checkDirectory(directory))
-            throw new FileNotFoundException("Couldn't find a file at " + directory + " directory.");
+            throw new FileNotFoundException("Couldn't find a file at " + directory);
 
         FileInputStream fis = new FileInputStream(directory);
         ObjectInputStream ois = new ObjectInputStream(fis);
@@ -70,6 +70,13 @@ public final class Save {
         return returnValue;
     }
 
+    /**
+     * This method writes a <code>String</code> to a file.
+     * 
+     * @param text the <code>String</code> to be written
+     * @param directory the directory to write on
+     * @throws IOException
+     */
     public static void savePlainText(String text, String directory) throws IOException {
         FileWriter writer = new FileWriter(directory);
         writer.write(text);
