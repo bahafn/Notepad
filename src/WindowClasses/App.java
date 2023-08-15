@@ -56,12 +56,14 @@ public class App extends MemorySafeWindow {
 
     private UndoManager undoManager = new UndoManager();
 
-    public App(boolean mainFrame) {
+    private int NumberOfWindows = 0;
+
+    public App() {
         super("Notepad");
 
         UICreator.setLookAndFeel(UICreator.SYSTEM_LOOK_AND_FEEL);
         showGUI();
-        UICreator.initJFrame(this, true, false, mainFrame, true, true, null);
+        UICreator.initJFrame(this, true, false, false, true, true, null);
 
         textArea.getCaret().addChangeListener(new ChangeListener() {
             @Override
@@ -69,6 +71,8 @@ public class App extends MemorySafeWindow {
                 updateStatusBar();
             }
         });
+
+        NumberOfWindows++;
     }
 
     private void showGUI() {
@@ -237,7 +241,7 @@ public class App extends MemorySafeWindow {
 
     /** Creates new <code>App</code>. */
     private void newWindow() {
-        new App(false);
+        new App();
         setDefaultCloseOperation(MemorySafeWindow.DISPOSE_ON_CLOSE);
     }
 
@@ -247,12 +251,10 @@ public class App extends MemorySafeWindow {
 
         try {
             currentTap.open(UICreator.chooseFile("Open"));
+            defaultFontSize = currentTap.getFont().getSize();
         } catch (FileNotFoundException fnfe) {
             UICreator.showErrorMessage(this, "File not found.", "File error", 0);
-        } catch (IOException ioe) {
-            UICreator.showErrorMessage(this, "Make sure the file you are trying is compotiable with this software.",
-                    "Couldn't open file.", 0);
-        } catch (ClassNotFoundException cnfe) {
+        } catch (IOException | ClassNotFoundException e) {
             UICreator.showErrorMessage(this, "Make sure the file you are trying is compotiable with this software.",
                     "Couldn't open file.", 0);
         }
@@ -263,6 +265,7 @@ public class App extends MemorySafeWindow {
     }
 
     private void save(boolean saveAs) {
+        System.out.println(true);
         updateTap();
 
         try {
@@ -383,7 +386,31 @@ public class App extends MemorySafeWindow {
         return (int) defaultFontSize;
     }
 
+    @Override
+    public void dispose() {
+        // Check if any changes were made to the file
+        try {
+            updateTap();
+            Tap currentTap = tapButtons.get(activeTap).getTap();
+
+            if ((currentTap.getDirectory() == null && !currentTap.equals(Tap.DEFAULT_TAP)) || !currentTap.equals(Save.load(currentTap.getDirectory())))
+                if (javax.swing.JOptionPane.showConfirmDialog(this, "Do you want to save changes?", "Unsaved chagnes.",
+                    0) == 0)
+                    save(false);
+        } catch (ClassNotFoundException | ClassCastException | IOException ignored) {
+            System.out.println(true);
+        } finally {
+            // If no other App window exists, stop the program
+            // This is used because the dispose method isn't called if we change the
+            // JFrame's defaultCloseOperation to JFrame.EXIST_ON_CLOSE
+            if (NumberOfWindows == 1)
+                System.exit(0);
+
+            super.dispose();
+        }
+    }
+
     public static void main(String[] args) {
-        new App(true);
+        new App();
     }
 }

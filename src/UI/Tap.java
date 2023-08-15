@@ -9,8 +9,11 @@ import java.io.Serializable;
 import Saving.Save;
 
 public class Tap implements Serializable {
-    private String name = "Untitled", text = "", directory = null;
+    private transient String name = "Untitled"; 
+    private String text = "", directory = null;
     private Font font = UICreator.DEFAULT_FONT;
+
+    public static final transient Tap DEFAULT_TAP = new Tap();
 
     public void open(File file) throws IOException, ClassNotFoundException {
         // This checks if the user choose a file or not
@@ -56,5 +59,13 @@ public class Tap implements Serializable {
 
     public String getDirectory() {
         return directory;
+    }
+
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Tap))
+            return false;
+
+        Tap tap = (Tap) obj;
+        return font.equals(tap.font) && text.equals(tap.text);
     }
 }
