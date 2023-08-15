@@ -255,7 +255,8 @@ public class App extends MemorySafeWindow {
         } catch (FileNotFoundException fnfe) {
             UICreator.showErrorMessage(this, "File not found.", "File error", 0);
         } catch (IOException | ClassNotFoundException e) {
-            UICreator.showErrorMessage(this, "Make sure the file you are trying is compotiable with this software.",
+            UICreator.showErrorMessage(this,
+                    "Make sure the file you are trying to open is compotiable with this software.",
                     "Couldn't open file.", 0);
         }
 
@@ -265,12 +266,11 @@ public class App extends MemorySafeWindow {
     }
 
     private void save(boolean saveAs) {
-        System.out.println(true);
         updateTap();
 
         try {
             Tap tap = tapButtons.get(activeTap).getTap();
-            tap.save(tap.getDirectory() == null || saveAs ? UICreator.chooseFile("Save")
+            tap.save(saveAs || tap.getDirectory() == null ? UICreator.chooseFile("Save")
                     : new java.io.File(tap.getDirectory()));
         } catch (IOException e) {
             UICreator.showErrorMessage(this, "Make sure you aren't losing any data before closing the program.",
@@ -285,7 +285,6 @@ public class App extends MemorySafeWindow {
         Tap tap = tapButtons.get(activeTap).getTap();
 
         try {
-            System.out.printf("%s %s", tap.getText(), tap.getDirectory());
             Save.savePlainText(tap.getText(),
                     (tap.getDirectory() == null ? UICreator.chooseFile("Save").getAbsolutePath()
                             : new java.io.File(tap.getDirectory()).getAbsolutePath()) + ".txt");
@@ -391,14 +390,19 @@ public class App extends MemorySafeWindow {
         // Check if any changes were made to the file
         try {
             updateTap();
-            Tap currentTap = tapButtons.get(activeTap).getTap();
 
-            if ((currentTap.getDirectory() == null && !currentTap.equals(Tap.DEFAULT_TAP)) || !currentTap.equals(Save.load(currentTap.getDirectory())))
-                if (javax.swing.JOptionPane.showConfirmDialog(this, "Do you want to save changes?", "Unsaved chagnes.",
-                    0) == 0)
+            for (int i = tapButtons.size() - 1; i >= 0; i--) {
+                changeTap(i);
+                Tap currentTap = tapButtons.get(i).getTap();
+
+                if (((currentTap.getDirectory() == null && !currentTap.equals(Tap.DEFAULT_TAP))
+                        || !currentTap.equals(Save.load(currentTap.getDirectory())))
+                        && javax.swing.JOptionPane.showConfirmDialog(this,
+                                "Do you want to save changes to " + currentTap.getName() + "?",
+                                "Unsaved chagnes.", 0) == 0)
                     save(false);
+            }
         } catch (ClassNotFoundException | ClassCastException | IOException ignored) {
-            System.out.println(true);
         } finally {
             // If no other App window exists, stop the program
             // This is used because the dispose method isn't called if we change the
