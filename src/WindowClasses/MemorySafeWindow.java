@@ -1,7 +1,5 @@
 package WindowClasses;
 
-import javax.swing.JFrame;
-
 /**
  * This class extends <code>JFrame</code> class but changes the dispose method
  * so we are sure the <code>Garbage Collector</code> removes the
@@ -10,8 +8,8 @@ import javax.swing.JFrame;
  * 
  * @see JFrame
  */
-public class MemorySafeWindow extends JFrame {
-    /** Defualt constructor mostly used by sun classes. */
+public class MemorySafeWindow extends javax.swing.JFrame {
+    /** Defualt constructor mostly used by sub classes. */
     protected MemorySafeWindow() {
     }
 

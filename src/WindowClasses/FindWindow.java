@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
-import javax.swing.BorderFactory;
 import javax.swing.JTextArea;
 import javax.swing.JPanel;
 
@@ -48,7 +47,7 @@ public class FindWindow extends MemorySafeWindow {
 
     private void showGUI() {
         // Create border
-        getRootPane().setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
+        getRootPane().setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 1, true));
 
         // Create find options UI
         JPanel findPanel = new JPanel();

@@ -1,14 +1,8 @@
 package WindowClasses;
 
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.text.BadLocationException;
 import javax.swing.undo.UndoManager;
 
 import java.awt.BorderLayout;
@@ -40,8 +34,8 @@ public class App extends MemorySafeWindow {
     private int activeTap = 0;
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-    private JTextArea textArea = UICreator.createJTextArea("", true);
-    private JLabel statusBar = UICreator.createJLabel("Ln: 1, Col: 1", UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT,
+    private javax.swing.JTextArea textArea = UICreator.createJTextArea("", true);
+    private javax.swing.JLabel statusBar = UICreator.createJLabel("Ln: 1, Col: 1", UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT,
             14);
     private boolean replacing = false;
 
@@ -65,9 +59,9 @@ public class App extends MemorySafeWindow {
         showGUI();
         UICreator.initJFrame(this, true, false, false, true, true, null);
 
-        textArea.getCaret().addChangeListener(new ChangeListener() {
+        textArea.getCaret().addChangeListener(new javax.swing.event.ChangeListener() {
             @Override
-            public void stateChanged(ChangeEvent e) {
+            public void stateChanged(javax.swing.event.ChangeEvent e) {
                 updateStatusBar();
             }
         });
@@ -137,7 +131,7 @@ public class App extends MemorySafeWindow {
                 UICreator.createJCheckBoxMenuItem("Word wrap", true, e -> textArea.setLineWrap(!textArea.getLineWrap()))
         });
 
-        JMenuBar menuBar = UICreator.createJMenuBar(menus); // Create menu bar
+        javax.swing.JMenuBar menuBar = UICreator.createJMenuBar(menus); // Create menu bar
 
         add(menuBar, BorderLayout.NORTH);
 
@@ -356,7 +350,7 @@ public class App extends MemorySafeWindow {
             col = textArea.getSelectionEnd() - textArea.getLineStartOffset(ln - 1) + 1;
 
             statusBar.setText("Ln: " + ln + ", Col: " + col);
-        } catch (BadLocationException ble) {
+        } catch (javax.swing.text.BadLocationException ble) {
             UICreator.showErrorMessage(this, "This error isn't supposed to happen", "You win.", 0);
         }
     }

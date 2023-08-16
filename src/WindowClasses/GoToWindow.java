@@ -4,10 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import UI.NumericalTextArea;
 import UI.UICreator;
 
 /**
@@ -28,7 +26,7 @@ public class GoToWindow extends MemorySafeWindow {
         showGUI();
 
         UICreator.initJFrame(this, false, true, false, true, false, getParent());
-        getRootPane().setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
+        getRootPane().setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 1, true));
     }
 
     private void showGUI() {
@@ -40,7 +38,7 @@ public class GoToWindow extends MemorySafeWindow {
                 BorderLayout.SOUTH);
         add(labelPanel, BorderLayout.NORTH);
 
-        NumericalTextArea lineArea = UICreator.createNumericalTextArea("1", UICreator.DEFAULT_TEXT_SIZE, true, true,
+        UI.NumericalTextArea lineArea = UICreator.createNumericalTextArea("1", UICreator.DEFAULT_TEXT_SIZE, true, true,
                 true);
         add(lineArea, BorderLayout.CENTER);
 

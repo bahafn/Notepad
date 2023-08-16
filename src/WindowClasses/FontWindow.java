@@ -6,9 +6,7 @@ import java.awt.Font;
 
 import javax.swing.JComboBox;
 import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
-import UI.NumericalTextArea;
 import UI.UICreator;
 
 /**
@@ -58,10 +56,10 @@ public class FontWindow extends MemorySafeWindow {
         add(UICreator.createJLabel("Size:", UICreator.DEFAULT_TEXT_SIZE, 2, UICreator.DEFAULT_FONT));
 
         // Create change size option
-        NumericalTextArea textArea = UICreator.createNumericalTextArea(String.valueOf(app.getDefualtFontSize()),
+        UI.NumericalTextArea textArea = UICreator.createNumericalTextArea(String.valueOf(app.getDefualtFontSize()),
                 UICreator.DEFAULT_SIZE, true, true, false);
         // Document listener so the user sees the changes the moment he changes them
-        textArea.getDocument().addDocumentListener(new DocumentListener() {
+        textArea.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 changeSize(textArea.getIntValue());
