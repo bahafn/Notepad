@@ -36,7 +36,8 @@ public class App extends MemorySafeWindow {
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
     private javax.swing.JTextArea textArea = UICreator.createJTextArea("", true);
-    private javax.swing.JLabel statusBar = UICreator.createJLabel("Ln: 1, Col: 1", UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT,
+    private javax.swing.JLabel statusBar = UICreator.createJLabel("Ln: 1, Col: 1", UICreator.DEFAULT_SIZE,
+            UICreator.DEFAULT_FONT,
             14);
     private boolean replacing = false;
 
@@ -194,7 +195,8 @@ public class App extends MemorySafeWindow {
 
     /** Creates a new <code>Tap</code> and adds it to <code>taps</code>. */
     private void newTap() {
-        Tap tap = new Tap("Untitled" + (taps.size() + 1), this, taps.size(), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS);
+        Tap tap = new Tap("Untitled" + (taps.size() + 1), this, taps.size(), UICreator.DEFAULT_SIZE,
+                UICreator.DEFAULT_INSETS);
         taps.add(tap);
         tapButtons.add(tap.getTapButton());
         tapsPanel.add(tap.getTapButton());
@@ -218,6 +220,22 @@ public class App extends MemorySafeWindow {
         textArea.setText(currentTap.getText());
         textArea.setFont(currentTap.getFont());
         defaultFontSize = currentTap.getFont().getSize();
+    }
+
+    /** Removes a tap depending on its index */
+    public void removeTap(int tapIndex) {
+        // End the program if the user removes all taps
+        if (taps.size() == 1)
+            dispose();
+
+        changeTap(activeTap - 1);
+
+        taps.remove(tapIndex);
+        tapButtons.remove(tapIndex);
+        tapsPanel.remove(tapIndex);
+
+        tapButtons.get(activeTap).setSelected(true);
+        updateTapsPanel();
     }
 
     /** Updates the information of the active tap to it's object. */
@@ -387,11 +405,13 @@ public class App extends MemorySafeWindow {
                 changeTap(i);
                 Tap currentTap = taps.get(i);
 
-                // If the current tap doesn't have a directory, check if it is the same as the default tap
+                // If the current tap doesn't have a directory, check if it is the same as the
+                // default tap
                 if (((currentTap.getDirectory() == null && !currentTap.equals(Tap.DEFAULT_TAP))
                         // Otherwise, check if it's different from the tap saved in the directory
                         || !currentTap.equals(Save.load(currentTap.getDirectory())))
-                        // And if any of the above cases are true, ask the user if they want to save changes
+                        // And if any of the above cases are true, ask the user if they want to save
+                        // changes
                         && javax.swing.JOptionPane.showConfirmDialog(this,
                                 "Do you want to save changes to " + currentTap.getName() + "?",
                                 "Unsaved chagnes.", 0) == 0)

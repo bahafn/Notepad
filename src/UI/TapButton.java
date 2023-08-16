@@ -11,17 +11,22 @@ import WindowClasses.App;
 
 /**
  * <code>JButtons</code> with added feature to work as tap buttons. Added
- * features include changing background color when clicked and having a refreance
+ * features include changing background color when clicked and having a
+ * refreance
  * to the <code>Tap</code> they represent.
  * 
  * @see JButton
  */
 public class TapButton extends JButton {
+    private App app;
+
     public static final Color DEFAULT_BUTTON_COLOR = new Color(240, 240, 240);
     public static final Color SELECTED_BUTTON_COLOR = new Color(10, 10, 200, 100);
 
     /** Creates <code>TapButton</code>. */
     public TapButton(App app, int tapIndex, String text, Dimension size, Insets margins) {
+        this.app = app;
+
         setOpaque(false);
         setBackground(DEFAULT_BUTTON_COLOR);
 
@@ -31,12 +36,16 @@ public class TapButton extends JButton {
         setPreferredSize(size);
         setMargin(margins);
 
-        setSelected(true, app);
+        setSelected(true);
 
         addActionListener(e -> {
-            setSelected(true, app);
+            setSelected(true);
             app.changeTap(tapIndex);
         });
+
+        // Add remove button
+        add(UICreator.createJButton("X", e -> app.removeTap(tapIndex), new Dimension(25, 25), UICreator.NO_INSETS),
+                "East");
     }
 
     /**
@@ -47,7 +56,7 @@ public class TapButton extends JButton {
      * @param app      the parent of the <code>TapButton</code> that has an array
      *                 with all other <code>TapButtons</code>
      */
-    public void setSelected(boolean selected, App app) {
+    public void setSelected(boolean selected) {
         setBackground(selected ? SELECTED_BUTTON_COLOR : DEFAULT_BUTTON_COLOR);
 
         if (!selected)
@@ -56,7 +65,7 @@ public class TapButton extends JButton {
         // Change all other buttons to unselected
         for (TapButton button : app.getTapButtons())
             if (button != this)
-                button.setSelected(false, app);
+                button.setSelected(false);
     }
 
     protected void paintComponent(Graphics g) {

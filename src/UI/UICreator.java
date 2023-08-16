@@ -82,8 +82,8 @@ public final class UICreator {
      * @param size the size of the component
      * @return new <code>JTextArea</code> with specified values
      * @throws IllegalArgumentException
-     * @see <code>createJTextArea(String , boolean)</code>
-     * @see <code>checkDimension</code>
+     * @see {@link #createJTextArea(String , boolean)}
+     * @see {@link #checkDimension(Dimension)}
      */
     public static JTextArea createJTextArea(String text, Dimension size, boolean lineWarp) {
         checkDimension(size);
@@ -125,7 +125,7 @@ public final class UICreator {
      * @return new <code>JLabel</code> with specified values
      * @throws IllegalArgumentException
      * @see JLabel
-     * @see <code>checkDimension</code>
+     * @see {@link #checkDimension(Dimension)}
      */
     public static JLabel createJLabel(String text, Dimension size, Font font) {
         checkDimension(size);
@@ -145,7 +145,7 @@ public final class UICreator {
      * @return new <code>JLabel</code> with specified values
      * @throws IllegalArgumentException
      * @see JLabel
-     * @see <code>createJLabel(String , Dimension , Font)</code>
+     * @see {@link #createJLabel(String , Dimension , Font)}
      */
     public static JLabel createJLabel(String text, Dimension size, Font font, float fontSize) {
         checkDimension(size);
@@ -163,7 +163,7 @@ public final class UICreator {
      * @return new <code>JLabel</code> with specified values
      * @throws IllegalArgumentException
      * @see JLabel
-     * @see <code>createJLabel(String , Dimension , Font)</code>
+     * @see {@link #createJLabel(String , Dimension , Font)}
      */
     public static JLabel createJLabel(String text, Dimension size, int alignment, Font font) {
         checkDimension(size);
@@ -185,8 +185,7 @@ public final class UICreator {
      *                       <code>JButton</code> can't continue
      * @return new <code>JButton</code> with specified values
      * @throws IllegalArgumentException
-     * @see <code>checkDimension</code>
-     * @see JButton
+     * @see {@link #checkDimension(Dimension)}
      */
     public static JButton createJButton(String text, ActionListener actionListener, Dimension size, Insets margins) {
         checkDimension(size);
@@ -241,7 +240,7 @@ public final class UICreator {
      * @return new <code>JScrollPane</code> with specified values
      * @throws IllegalArgumentException
      * @see JScrollPane
-     * @see <code>checkDimension</code>
+     * @see {@link #checkDimension(Dimension)}
      */
     public static JScrollPane createJScrollPane(Dimension size, JTextArea component) {
         checkDimension(size);
