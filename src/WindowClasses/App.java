@@ -395,8 +395,11 @@ public class App extends MemorySafeWindow {
                 changeTap(i);
                 Tap currentTap = tapButtons.get(i).getTap();
 
+                // If the current tap doesn't have a directory, check if it is the same as the default tap
                 if (((currentTap.getDirectory() == null && !currentTap.equals(Tap.DEFAULT_TAP))
+                        // Otherwise, check if it's different from the tap saved in the directory
                         || !currentTap.equals(Save.load(currentTap.getDirectory())))
+                        // And if any of the above cases are true, ask the user if they want to save changes
                         && javax.swing.JOptionPane.showConfirmDialog(this,
                                 "Do you want to save changes to " + currentTap.getName() + "?",
                                 "Unsaved chagnes.", 0) == 0)

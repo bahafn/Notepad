@@ -73,7 +73,7 @@ public final class Save {
     /**
      * This method writes a <code>String</code> to a file.
      * 
-     * @param text the <code>String</code> to be written
+     * @param text      the <code>String</code> to be written
      * @param directory the directory to write on
      * @throws IOException
      */
