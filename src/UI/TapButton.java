@@ -17,13 +17,11 @@ import WindowClasses.App;
  * @see JButton
  */
 public class TapButton extends JButton {
-    private Tap tap;
-
     public static final Color DEFAULT_BUTTON_COLOR = new Color(240, 240, 240);
     public static final Color SELECTED_BUTTON_COLOR = new Color(10, 10, 200, 100);
 
     /** Creates <code>TapButton</code>. */
-    public TapButton(App app, Tap tap, int tapIndex, String text, Dimension size, Insets margins) {
+    public TapButton(App app, int tapIndex, String text, Dimension size, Insets margins) {
         setOpaque(false);
         setBackground(DEFAULT_BUTTON_COLOR);
 
@@ -39,14 +37,6 @@ public class TapButton extends JButton {
             setSelected(true, app);
             app.changeTap(tapIndex);
         });
-
-        app.getTapButtons().add(this);
-
-        this.tap = tap;
-    }
-
-    public Tap getTap() {
-        return tap;
     }
 
     /**

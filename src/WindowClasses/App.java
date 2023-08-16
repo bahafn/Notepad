@@ -30,6 +30,7 @@ import Saving.Save;
  * @see MemorySafeWindow
  */
 public class App extends MemorySafeWindow {
+    private ArrayList<Tap> taps = new ArrayList<>();
     private ArrayList<TapButton> tapButtons = new ArrayList<>();
     private int activeTap = 0;
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -187,20 +188,17 @@ public class App extends MemorySafeWindow {
      * or renaming them).
      */
     public void updateTapsPanel() {
-        for (TapButton tapButton : tapButtons)
-            tapButton.setText(tapButton.getTap().getName());
-
         tapsPanel.revalidate();
         tapsPanel.repaint();
     }
 
     /** Creates a new <code>Tap</code> and adds it to <code>taps</code>. */
     private void newTap() {
-        TapButton tapButton = new TapButton(this, new Tap(), tapButtons.size(), "Untitled", UICreator.DEFAULT_SIZE,
-                UICreator.DEFAULT_INSETS);
-        tapButtons.add(tapButton);
-        tapsPanel.add(tapButton);
-        changeTap(tapButtons.size() - 1);
+        Tap tap = new Tap("Untitled" + (taps.size() + 1), this, taps.size(), UICreator.DEFAULT_SIZE, UICreator.DEFAULT_INSETS);
+        taps.add(tap);
+        tapButtons.add(tap.getTapButton());
+        tapsPanel.add(tap.getTapButton());
+        changeTap(taps.size() - 1);
 
         updateTapsPanel();
     }
@@ -216,7 +214,7 @@ public class App extends MemorySafeWindow {
 
         // Change active tap to new tap
         activeTap = newTap;
-        Tap currentTap = tapButtons.get(activeTap).getTap();
+        Tap currentTap = taps.get(activeTap);
         textArea.setText(currentTap.getText());
         textArea.setFont(currentTap.getFont());
         defaultFontSize = currentTap.getFont().getSize();
@@ -224,13 +222,9 @@ public class App extends MemorySafeWindow {
 
     /** Updates the information of the active tap to it's object. */
     private void updateTap() {
-        Tap currentTap = tapButtons.get(activeTap).getTap();
+        Tap currentTap = taps.get(activeTap);
         currentTap.setText(textArea.getText());
         currentTap.setFont(textArea.getFont());
-    }
-
-    public ArrayList<TapButton> getTapButtons() {
-        return tapButtons;
     }
 
     /** Creates new <code>App</code>. */
@@ -241,7 +235,7 @@ public class App extends MemorySafeWindow {
 
     private void open() {
         newTap();
-        Tap currentTap = tapButtons.get(activeTap).getTap();
+        Tap currentTap = taps.get(activeTap);
 
         try {
             currentTap.open(UICreator.chooseFile("Open"));
@@ -263,7 +257,7 @@ public class App extends MemorySafeWindow {
         updateTap();
 
         try {
-            Tap tap = tapButtons.get(activeTap).getTap();
+            Tap tap = taps.get(activeTap);
             tap.save(saveAs || tap.getDirectory() == null ? UICreator.chooseFile("Save")
                     : new java.io.File(tap.getDirectory()));
         } catch (IOException e) {
@@ -276,7 +270,7 @@ public class App extends MemorySafeWindow {
 
     private void savePlainText() {
         updateTap();
-        Tap tap = tapButtons.get(activeTap).getTap();
+        Tap tap = taps.get(activeTap);
 
         try {
             Save.savePlainText(tap.getText(),
@@ -379,15 +373,19 @@ public class App extends MemorySafeWindow {
         return (int) defaultFontSize;
     }
 
+    public ArrayList<TapButton> getTapButtons() {
+        return tapButtons;
+    }
+
     @Override
     public void dispose() {
         // Check if any changes were made to the file
         try {
             updateTap();
 
-            for (int i = tapButtons.size() - 1; i >= 0; i--) {
+            for (int i = taps.size() - 1; i >= 0; i--) {
                 changeTap(i);
-                Tap currentTap = tapButtons.get(i).getTap();
+                Tap currentTap = taps.get(i);
 
                 // If the current tap doesn't have a directory, check if it is the same as the default tap
                 if (((currentTap.getDirectory() == null && !currentTap.equals(Tap.DEFAULT_TAP))
