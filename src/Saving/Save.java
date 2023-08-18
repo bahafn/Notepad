@@ -84,6 +84,9 @@ public final class Save {
     }
 
     private static boolean checkDirectory(String directory) {
+        if (directory == null)
+            return false;
+
         File file = new File(directory);
         return file.exists();
     }

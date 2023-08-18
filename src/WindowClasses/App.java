@@ -93,8 +93,8 @@ public class App extends MemorySafeWindow {
                 UICreator.createJMenuItem("New window", e -> newWindow()),
                 UICreator.createJSeparator(),
                 UICreator.createJMenuItem("Open", e -> open()),
-                UICreator.createJMenuItem("Save", e -> save(false)),
-                UICreator.createJMenuItem("Save as", e -> save(true)),
+                UICreator.createJMenuItem("Save", e -> save(false, activeTap)),
+                UICreator.createJMenuItem("Save as", e -> save(true, activeTap)),
                 UICreator.createJMenuItem("Save plain text", e -> savePlainText()),
                 UICreator.createJMenuItem("Save all", e -> saveAll())
         });
@@ -195,7 +195,7 @@ public class App extends MemorySafeWindow {
 
     /** Creates a new <code>Tap</code> and adds it to <code>taps</code>. */
     private void newTap() {
-        Tap tap = new Tap("Untitled" + (taps.size() + 1), this, taps.size(), UICreator.DEFAULT_SIZE,
+        Tap tap = new Tap("Untitled " + (taps.size() + 1), this, taps.size(), UICreator.DEFAULT_SIZE,
                 UICreator.DEFAULT_INSETS);
         taps.add(tap);
         tapButtons.add(tap.getTapButton());
@@ -228,13 +228,19 @@ public class App extends MemorySafeWindow {
         if (taps.size() == 1)
             dispose();
 
-        changeTap(activeTap - 1);
+        try {
+            checkUnsavedChanges(tapIndex);
+        } catch (IOException | ClassCastException | ClassNotFoundException ignored) {
+        }
+
+        int changeOnTap = activeTap == 0 ? 1 : -1; // Saves the chagne from the current tap index to the new tap index
+        changeTap(activeTap + changeOnTap);
+        tapButtons.get(activeTap).setSelected(true);
 
         taps.remove(tapIndex);
         tapButtons.remove(tapIndex);
         tapsPanel.remove(tapIndex);
 
-        tapButtons.get(activeTap).setSelected(true);
         updateTapsPanel();
     }
 
@@ -271,11 +277,11 @@ public class App extends MemorySafeWindow {
         updateTapsPanel();
     }
 
-    private void save(boolean saveAs) {
+    private void save(boolean saveAs, int tapToSave) {
         updateTap();
 
         try {
-            Tap tap = taps.get(activeTap);
+            Tap tap = taps.get(tapToSave);
             tap.save(saveAs || tap.getDirectory() == null ? UICreator.chooseFile("Save")
                     : new java.io.File(tap.getDirectory()));
         } catch (IOException e) {
@@ -395,28 +401,30 @@ public class App extends MemorySafeWindow {
         return tapButtons;
     }
 
+    private void checkUnsavedChanges(int tapIndex) throws IOException, ClassNotFoundException, ClassCastException {
+        updateTap();
+
+        Tap currentTap = taps.get(tapIndex);
+
+        // If the current tap doesn't have a directory, check if it is the same as the
+        // default tap
+        if (((currentTap.getDirectory() == null && !currentTap.equals(Tap.DEFAULT_TAP))
+                // Otherwise, check if it's different from the tap saved in the directory
+                || !currentTap.equals(Save.load(currentTap.getDirectory())))
+                // And if any of the above cases are true, ask the user if they want to save
+                // changes
+                && javax.swing.JOptionPane.showConfirmDialog(this,
+                        "Do you want to save changes to " + currentTap.getName() + "?",
+                        "Unsaved chagnes.", 0) == 0)
+            save(false, tapIndex);
+    }
+
     @Override
     public void dispose() {
         // Check if any changes were made to the file
         try {
-            updateTap();
-
-            for (int i = taps.size() - 1; i >= 0; i--) {
-                changeTap(i);
-                Tap currentTap = taps.get(i);
-
-                // If the current tap doesn't have a directory, check if it is the same as the
-                // default tap
-                if (((currentTap.getDirectory() == null && !currentTap.equals(Tap.DEFAULT_TAP))
-                        // Otherwise, check if it's different from the tap saved in the directory
-                        || !currentTap.equals(Save.load(currentTap.getDirectory())))
-                        // And if any of the above cases are true, ask the user if they want to save
-                        // changes
-                        && javax.swing.JOptionPane.showConfirmDialog(this,
-                                "Do you want to save changes to " + currentTap.getName() + "?",
-                                "Unsaved chagnes.", 0) == 0)
-                    save(false);
-            }
+            for (int i = taps.size() - 1; i >= 0; i--)
+                checkUnsavedChanges(i);
         } catch (ClassNotFoundException | ClassCastException | IOException ignored) {
         } finally {
             // If no other App window exists, stop the program

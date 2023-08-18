@@ -19,6 +19,7 @@ import WindowClasses.App;
  */
 public class TapButton extends JButton {
     private App app;
+    private int tapIndex;
 
     public static final Color DEFAULT_BUTTON_COLOR = new Color(240, 240, 240);
     public static final Color SELECTED_BUTTON_COLOR = new Color(10, 10, 200, 100);
@@ -26,6 +27,7 @@ public class TapButton extends JButton {
     /** Creates <code>TapButton</code>. */
     public TapButton(App app, int tapIndex, String text, Dimension size, Insets margins) {
         this.app = app;
+        this.tapIndex = tapIndex;
 
         setOpaque(false);
         setBackground(DEFAULT_BUTTON_COLOR);
@@ -40,12 +42,11 @@ public class TapButton extends JButton {
 
         addActionListener(e -> {
             setSelected(true);
-            app.changeTap(tapIndex);
+            app.changeTap(this.tapIndex);
         });
 
         // Add remove button
-        add(UICreator.createJButton("X", e -> app.removeTap(tapIndex), new Dimension(25, 25), UICreator.NO_INSETS),
-                "East");
+        add(UICreator.createJButton("X", e -> removeTap(), UICreator.DEFAULT_SIZE, UICreator.NO_INSETS));
     }
 
     /**
@@ -53,8 +54,6 @@ public class TapButton extends JButton {
      * (selected or not).
      * 
      * @param selected weather to select the <code>TapButton</code> or unselect it
-     * @param app      the parent of the <code>TapButton</code> that has an array
-     *                 with all other <code>TapButtons</code>
      */
     public void setSelected(boolean selected) {
         setBackground(selected ? SELECTED_BUTTON_COLOR : DEFAULT_BUTTON_COLOR);
@@ -66,6 +65,13 @@ public class TapButton extends JButton {
         for (TapButton button : app.getTapButtons())
             if (button != this)
                 button.setSelected(false);
+    }
+
+    private void removeTap() {
+        for (int i = tapIndex + 1; i < app.getTapButtons().size(); i++)
+            app.getTapButtons().get(i).tapIndex -= 1;
+
+        app.removeTap(tapIndex);
     }
 
     protected void paintComponent(Graphics g) {
