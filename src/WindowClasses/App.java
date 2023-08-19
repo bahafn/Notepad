@@ -31,8 +31,14 @@ import Saving.Save;
 public class App extends MemorySafeWindow {
     private ArrayList<Tap> taps = new ArrayList<>();
     private ArrayList<TapButton> tapButtons = new ArrayList<>();
-    private int activeTap = 0;
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+    /**
+     * The index of the tap the user is on.
+     * <p>
+     * NOTE: Don't change this value if you want to change the tap, use the changeTap method
+     */
+    private int activeTap = 0;
 
     private javax.swing.JTextArea textArea = UICreator.createJTextArea("", true);
     private javax.swing.JLabel statusBar = UICreator.createJLabel("Ln: 1, Col: 1", UICreator.DEFAULT_SIZE,
@@ -60,6 +66,7 @@ public class App extends MemorySafeWindow {
         showGUI();
         UICreator.initJFrame(this, true, false, false, true, true, null);
 
+        // Add caret (pointer) change listener to textArea so we can update the status bar
         textArea.getCaret().addChangeListener(new javax.swing.event.ChangeListener() {
             @Override
             public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -68,7 +75,6 @@ public class App extends MemorySafeWindow {
         });
 
         NumberOfWindows++;
-        System.out.println(NumberOfWindows);
     }
 
     private void showGUI() {
