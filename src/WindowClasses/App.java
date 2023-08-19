@@ -146,11 +146,7 @@ public class App extends MemorySafeWindow {
         textArea.select(beginIndex, endIndex);
     }
 
-    /**
-     * Replaces the text between the two indexes.
-     * <p>
-     * Used by <code>FindWindow</code>.
-     */
+    /** Replaces the text between the two indexes */
     public void replace(String newText, int beginIndex, int endIndex) {
         textArea.replaceRange(newText, beginIndex, endIndex);
     }
@@ -175,19 +171,18 @@ public class App extends MemorySafeWindow {
         return textArea.getText();
     }
 
+    /** @return the font of the <code>textArea</code> */
     public Font getFont() {
         return textArea.getFont();
     }
 
+    /** Changes the font of the <code>textArea</code> */
     public void setFont(Font font) {
         textArea.setFont(font.deriveFont(font.getSize() * zoom));
         defaultFontSize = font.getSize();
     }
 
-    /**
-     * Updates <code>taps</code> <code>ArrayList</code> (removing them, adding them,
-     * or renaming them).
-     */
+    /** Updates tapsPanel so it repaints correctly. */
     public void updateTapsPanel() {
         tapsPanel.revalidate();
         tapsPanel.repaint();
@@ -251,6 +246,7 @@ public class App extends MemorySafeWindow {
         currentTap.setFont(textArea.getFont());
     }
 
+    /** Opens a file and creates a <code>Tap</code> with the opened info. */
     private void open() {
         newTap();
         Tap currentTap = taps.get(activeTap);
@@ -271,6 +267,12 @@ public class App extends MemorySafeWindow {
         updateTapsPanel();
     }
 
+    /**
+     * Saves a file with info from an opened <code>Tap</code>
+     * 
+     * @param saveAs    whether to ask the user to choose a file
+     * @param tapToSave the index of the <code>tap</code> we want to save
+     */
     private void save(boolean saveAs, int tapToSave) {
         updateTap();
 
@@ -286,6 +288,7 @@ public class App extends MemorySafeWindow {
         updateTapsPanel();
     }
 
+    /** Saves the text of the <code>activeTap</code> */
     private void savePlainText() {
         updateTap();
         Tap tap = taps.get(activeTap);
@@ -396,6 +399,10 @@ public class App extends MemorySafeWindow {
         return tapButtons;
     }
 
+    /**
+     * Compares the <code>Tap</code> to the one saved in the file and saves if it's
+     * not the same.
+     */
     private void checkUnsavedChanges(int tapIndex) throws IOException, ClassNotFoundException, ClassCastException {
         updateTap();
 
