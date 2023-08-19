@@ -307,7 +307,8 @@ public class App extends MemorySafeWindow {
     }
 
     private void saveAll() {
-        // TODO: write function
+        for (int i = 0; i < taps.size(); i++)
+            save(false, i);
     }
 
     private void undo() {
