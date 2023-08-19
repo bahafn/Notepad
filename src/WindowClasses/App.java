@@ -9,7 +9,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,7 +51,7 @@ public class App extends MemorySafeWindow {
 
     private UndoManager undoManager = new UndoManager();
 
-    private int NumberOfWindows = 0;
+    private static int NumberOfWindows = 0;
 
     public App() {
         super("Notepad");
@@ -69,6 +68,7 @@ public class App extends MemorySafeWindow {
         });
 
         NumberOfWindows++;
+        System.out.println(NumberOfWindows);
     }
 
     private void showGUI() {
@@ -90,7 +90,7 @@ public class App extends MemorySafeWindow {
         // Create File menu
         menus[0] = UICreator.createJMenu("File", new JComponent[] {
                 UICreator.createJMenuItem("New tap", e -> newTap()),
-                UICreator.createJMenuItem("New window", e -> newWindow()),
+                UICreator.createJMenuItem("New window", e -> new App()),
                 UICreator.createJSeparator(),
                 UICreator.createJMenuItem("Open", e -> open()),
                 UICreator.createJMenuItem("Save", e -> save(false, activeTap)),
@@ -249,12 +249,6 @@ public class App extends MemorySafeWindow {
         Tap currentTap = taps.get(activeTap);
         currentTap.setText(textArea.getText());
         currentTap.setFont(textArea.getFont());
-    }
-
-    /** Creates new <code>App</code>. */
-    private void newWindow() {
-        new App();
-        setDefaultCloseOperation(MemorySafeWindow.DISPOSE_ON_CLOSE);
     }
 
     private void open() {
@@ -434,6 +428,7 @@ public class App extends MemorySafeWindow {
             if (NumberOfWindows == 1)
                 System.exit(0);
 
+            NumberOfWindows--;
             super.dispose();
         }
     }
