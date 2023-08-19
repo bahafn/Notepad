@@ -242,7 +242,7 @@ public final class UICreator {
      * @see JScrollPane
      * @see {@link #checkDimension(Dimension)}
      */
-    public static JScrollPane createJScrollPane(Dimension size, JTextArea component) {
+    public static JScrollPane createJScrollPane(Dimension size, JComponent component) {
         checkDimension(size);
 
         JScrollPane scrollPane = new JScrollPane(component);

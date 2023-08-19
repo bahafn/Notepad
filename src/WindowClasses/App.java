@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import UI.StatusBar;
 import UI.Tap;
 import UI.UICreator;
 import UI.TapButton;
@@ -41,10 +42,7 @@ public class App extends MemorySafeWindow {
     private int activeTap = 0;
 
     private javax.swing.JTextArea textArea = UICreator.createJTextArea("", true);
-    private javax.swing.JLabel statusBar = UICreator.createJLabel("Ln: 1, Col: 1", UICreator.DEFAULT_SIZE,
-            UICreator.DEFAULT_FONT,
-            14);
-    private boolean replacing = false;
+    private UI.StatusBar statusBar = new StatusBar(textArea, UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT);
 
     private float zoom = 1;
     /** The size of the textArea's font without zoom */
@@ -65,14 +63,6 @@ public class App extends MemorySafeWindow {
         UICreator.setLookAndFeel(UICreator.SYSTEM_LOOK_AND_FEEL);
         showGUI();
         UICreator.initJFrame(this, true, false, false, true, true, null);
-
-        // Add caret (pointer) change listener to textArea so we can update the status bar
-        textArea.getCaret().addChangeListener(new javax.swing.event.ChangeListener() {
-            @Override
-            public void stateChanged(javax.swing.event.ChangeEvent e) {
-                updateStatusBar();
-            }
-        });
 
         NumberOfWindows++;
     }
@@ -348,41 +338,12 @@ public class App extends MemorySafeWindow {
         new GoToWindow(this);
     }
 
-    /** Calculates the index of the selected line and colume. */
-    private void updateStatusBar() {
-        // This is used because the JTextArea.replaceSelected and JTextArea.replaceRange
-        // methods select the text they are replacing, and we don't need to be updating
-        // the status bar while replaing all occurnces of word because the user wouldn't
-        // see it
-        if (replacing)
-            return;
-
-        int ln = 1, col;
-
-        try {
-            // Calculate the line number from the selected index.
-            // The textArea.getLineEndOffset method gets us the index at which the line ends
-            // and while that index is lower than the selected index, it means that we are
-            // on a lower line
-            while (ln < textArea.getLineCount() && textArea.getLineEndOffset(ln - 1) - 1 < textArea.getSelectionEnd())
-                ln++;
-
-            // The selected colume's index is the index of the selected character minus
-            // the index of the index of the start of the selected line
-            col = textArea.getSelectionEnd() - textArea.getLineStartOffset(ln - 1) + 1;
-
-            statusBar.setText("Ln: " + ln + ", Col: " + col);
-        } catch (javax.swing.text.BadLocationException ble) {
-            UICreator.showErrorMessage(this, "This error isn't supposed to happen", "You win.", 0);
-        }
-    }
-
     /**
      * This is used so we can stop calculating the selected line and colume when the
      * <code>FindWindow.replaceAll()</code> is called.
      */
     public void setReplacing(boolean replacing) {
-        this.replacing = replacing;
+        statusBar.setReplacing(replacing);
     }
 
     public void setFindWindow(boolean findWindow) {
