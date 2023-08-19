@@ -336,6 +336,12 @@ public final class UICreator {
         return comboBox;
     }
 
+    /**
+     * Opens a <code>JFileChooser</code> so the user can choose a file.
+     * 
+     * @param openButtonText the text of the "OK" button
+     * @return the <code>File</code> the user choose
+     */
     public static File chooseFile(String openButtonText) {
         UIManager.put("FileChooser.openButtonText", openButtonText);
         JFileChooser fileChooser = new JFileChooser();
