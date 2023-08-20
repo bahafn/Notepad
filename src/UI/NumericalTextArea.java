@@ -1,8 +1,5 @@
 package UI;
 
-import javax.swing.JTextArea;
-
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Dimension;
 
@@ -17,7 +14,7 @@ import java.awt.Dimension;
  * 
  * @see JTextArea
  */
-public class NumericalTextArea extends JTextArea {
+public class NumericalTextArea extends javax.swing.JTextArea {
     /** Saves the the character that are allowed to be used. */
     private String regex;
 
@@ -39,33 +36,36 @@ public class NumericalTextArea extends JTextArea {
         else
             regex = positive ? "^[1234567890.]+$" : "^[-1234567890.]+$";
 
-        addKeyListener(new KeyAdapter() {
+        addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                char keyChar = e.getKeyChar();
-                boolean backSpace = keyChar == KeyEvent.VK_BACK_SPACE;
-
-                if (!String.valueOf(keyChar).matches(regex) && !backSpace)
-                    return;
-
-                if (getSelectionStart() != getSelectionEnd())
-                    replaceRange("", getSelectionStart(), getSelectionEnd());
-
-                if (!backSpace) {
-                    if (checkChange(String.valueOf(e.getKeyChar())))
-                        setText(getText() + e.getKeyChar());
-                    return;
-                }
-
-                try {
-                    setText(getText(0, getCaretPosition() - 1));
-                } catch (javax.swing.text.BadLocationException ignored) {
-                }
+                handleInput(e.getKeyChar());
             }
         });
 
         setText(text);
         super.setPreferredSize(size);
+    }
+
+    private void handleInput(char keyChar) {
+        boolean backSpace = keyChar == KeyEvent.VK_BACK_SPACE;
+
+        if (!String.valueOf(keyChar).matches(regex) && !backSpace)
+            return;
+
+        if (getSelectionStart() != getSelectionEnd())
+            replaceRange("", getSelectionStart(), getSelectionEnd());
+
+        if (!backSpace) {
+            if (checkChange(String.valueOf(keyChar)))
+                super.setText(getText() + keyChar);
+            return;
+        }
+
+        try {
+            super.setText(getText(0, getCaretPosition() - 1));
+        } catch (javax.swing.text.BadLocationException ignored) {
+        }
     }
 
     /**
@@ -76,7 +76,10 @@ public class NumericalTextArea extends JTextArea {
         if (getText().length() == 0)
             return true;
 
-        boolean hasDot = getText().charAt(0) == '.';
+        if (change.contains("-") && getCaretPosition() != 0)
+            return false;
+
+        boolean hasDot = getText().charAt(0) == '.' || change.contains(".");
 
         for (int i = 1; i < getText().length(); i++) {
             if (getText().charAt(i) == '.') {
@@ -85,9 +88,6 @@ public class NumericalTextArea extends JTextArea {
 
                 hasDot = true;
             }
-
-            if (getText().charAt(i) == '-')
-                return false;
         }
 
         return change.matches(regex);
