@@ -1,28 +1,25 @@
 package UI;
 
 import javax.swing.JTextArea;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
-import java.awt.Graphics;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.Dimension;
 
 /**
  * Extends <code>JTextArea</code> but can only have numerical value.
  * <p>
  * This class checks every change the user (or program) makes to the text of the
- * <code>JTextArea</code> and removes any changes that are non-numerical.
+ * <code>JTextArea</code> and stops any changes that are non-numerical.
  * <p>
  * The point of this class is have a way to only take numerical input without
  * needing to use complex classes like <code>JFormattedTextArea</code>
  * 
  * @see JTextArea
- * @implNote Even though this extends JTextArea, it takes more space and time to
- *           make operations. Make sure this class fits your needs before using
  */
 public class NumericalTextArea extends JTextArea {
-    private String regex; // Saves the the character that are allowed to be used
-    private int[] removeStringIndex = null; // The string to remove in the next call to paintComponent
+    /** Saves the the character that are allowed to be used. */
+    private String regex;
 
     /**
      * Constructs a <code>NumericalTextArea</code> and sets the text, size, and
@@ -34,36 +31,41 @@ public class NumericalTextArea extends JTextArea {
      * @param positive weather to take neagtive values or not
      */
     public NumericalTextArea(String text, Dimension size, boolean integer, boolean positive) {
+        setEditable(false);
+
         // Set the regex (allowed characters)
         if (integer)
             regex = positive ? "^[1234567890]+$" : "^[-1234567890]+$";
         else
             regex = positive ? "^[1234567890.]+$" : "^[-1234567890.]+$";
 
-        // Add document listener to keep track of all changes that happen to text
-        getDocument().addDocumentListener(new DocumentListener() {
+        addKeyListener(new KeyAdapter() {
             @Override
-            public void changedUpdate(DocumentEvent e) {
-                handleUserChange(e.getOffset(), e.getLength());
-            }
+            public void keyPressed(KeyEvent e) {
+                char keyChar = e.getKeyChar();
+                boolean backSpace = keyChar == KeyEvent.VK_BACK_SPACE;
 
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                handleUserChange(e.getOffset(), e.getLength());
-            }
+                if (!String.valueOf(keyChar).matches(regex) && !backSpace)
+                    return;
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {
+                if (getSelectionStart() != getSelectionEnd())
+                    replaceRange("", getSelectionStart(), getSelectionEnd());
+
+                if (!backSpace) {
+                    if (checkChange(String.valueOf(e.getKeyChar())))
+                        setText(getText() + e.getKeyChar());
+                    return;
+                }
+
+                try {
+                    setText(getText(0, getCaretPosition() - 1));
+                } catch (javax.swing.text.BadLocationException ignored) {
+                }
             }
         });
 
         setText(text);
         super.setPreferredSize(size);
-    }
-
-    private void handleUserChange(int changeIndex, int changeLength) {
-        if (!checkChange(getText().substring(changeIndex, changeIndex + changeLength)))
-            removeStringIndex = new int[] { changeIndex, changeIndex + changeLength };
     }
 
     /**
@@ -88,7 +90,7 @@ public class NumericalTextArea extends JTextArea {
                 return false;
         }
 
-        return change.matches(regex.toString());
+        return change.matches(regex);
     }
 
     /**
@@ -103,20 +105,10 @@ public class NumericalTextArea extends JTextArea {
      */
     @Override
     public void setText(String text) {
-        if (!checkChange(text))
+        if (!checkChange(text) && !text.equals(""))
             throw new IllegalArgumentException("NumericalTextArea can't have non-numerical string.");
 
         super.setText(text);
-    }
-
-    public void paintComponent(Graphics g) {
-        // Remove any unwanted string (string that are in removeString)
-        if (removeStringIndex != null) {
-            replaceRange(null, removeStringIndex[0], removeStringIndex[1]);
-            removeStringIndex = null;
-        }
-
-        super.paintComponent(g);
     }
 
     /** @return the integer value of the text */
