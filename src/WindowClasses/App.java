@@ -35,14 +35,14 @@ public class App extends MemorySafeWindow {
     private JPanel tapsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
     /**
-     * The index of the tap the user is on.
+     * The index of the <code>Tap</code> the user is on.
      * <p>
      * NOTE: Don't change this value if you want to change the tap, use the changeTap method
      */
     private int activeTap = 0;
 
     private javax.swing.JTextArea textArea = UICreator.createJTextArea("", true);
-    private UI.StatusBar statusBar = new StatusBar(textArea, UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT);
+    private StatusBar statusBar = new StatusBar(textArea, UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT);
 
     private float zoom = 1;
     /** The size of the textArea's font without zoom */
@@ -246,16 +246,15 @@ public class App extends MemorySafeWindow {
     private void open() {
         newTap();
         Tap currentTap = taps.get(activeTap);
+        java.io.File file = UICreator.chooseFile("Open");
 
         try {
-            currentTap.open(UICreator.chooseFile("Open"));
+            currentTap.open(file);
             defaultFontSize = currentTap.getFont().getSize();
         } catch (FileNotFoundException fnfe) {
             UICreator.showErrorMessage(this, "File not found.", "File error", 0);
         } catch (IOException | ClassNotFoundException e) {
-            UICreator.showErrorMessage(this,
-                    "Make sure the file you are trying to open is compotiable with this software.",
-                    "Couldn't open file.", 0);
+            currentTap.openPlainText(file);
         }
 
         textArea.setText(currentTap.getText());

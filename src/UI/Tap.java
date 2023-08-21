@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import Saving.Save;
 
@@ -49,6 +50,16 @@ public class Tap implements java.io.Serializable {
         name = file.getName();
         tapButton.setText(name);
         Save.save(this, directory);
+    }
+
+    public void openPlainText(File file) {
+        if (file == null)
+            return;
+
+        try {
+            text = new String(Files.readString(file.toPath()));
+        } catch (IOException e) {
+        }
     }
 
     /** @return <code>true</code> if the <code>obj</code> equals the tap. */
