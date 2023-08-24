@@ -80,12 +80,17 @@ public final class Save {
      * @throws IOException
      */
     public static void savePlainText(String text, String directory) throws IOException {
+        if (!checkDirectory(directory)) {
+            File file = new File(directory);
+            file.createNewFile();
+        }
+
         FileWriter writer = new FileWriter(directory);
         writer.write(text);
         writer.close();
     }
 
-    public static String openPlainText(String directory) throws IOException {
+    public static String loadPlainText(String directory) throws IOException {
         if (directory == null)
             return null;
 

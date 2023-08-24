@@ -43,7 +43,7 @@ public class Tap implements java.io.Serializable {
     }
 
     public void openPlainText(File file) throws IOException {
-        text = Save.openPlainText(file.getAbsolutePath());
+        text = Save.loadPlainText(file.getAbsolutePath());
         directory = file.getAbsolutePath();
         plainText = true;
         setName(name);
@@ -60,9 +60,10 @@ public class Tap implements java.io.Serializable {
         Save.save(this, directory);
     }
 
-    public void savePlainText(String directory) throws IOException {
-        Save.savePlainText(text, directory);
-        this.directory = directory;
+    public void savePlainText(File file) throws IOException {
+        Save.savePlainText(text, file.getAbsolutePath());
+        directory = file.getAbsolutePath();
+        setName(file.getName());
         plainText = true;
     }
 

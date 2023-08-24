@@ -250,17 +250,18 @@ public class App extends MemorySafeWindow {
         java.io.File file = UICreator.chooseFile("Open");
 
         try {
-            if (currentTap.getPlainText()) {
-                currentTap.open(file);
-                defaultFontSize = currentTap.getFont().getSize();
-            } else
-                currentTap.openPlainText(file);
+            currentTap.open(file);
+            defaultFontSize = currentTap.getFont().getSize();
         } catch (FileNotFoundException fnfe) {
             UICreator.showErrorMessage(this, "File not found.", "File error", 0);
         } catch (IOException | ClassNotFoundException e) {
-            UICreator.showErrorMessage(this,
-                    "Make sure the file you are trying to open is compatiable with this software.",
-                    "Couldn't open file", 0);
+            try {
+                currentTap.openPlainText(file);
+            } catch (IOException ioe) {
+                UICreator.showErrorMessage(this,
+                        "Make sure the file you are trying to open is compatiable with this software.",
+                        "Couldn't open file", 0);
+            }
         }
 
         textArea.setText(currentTap.getText());
@@ -295,10 +296,10 @@ public class App extends MemorySafeWindow {
         Tap tap = taps.get(tapToSave);
 
         try {
-            String directory = tap.getDirectory() == null ? UICreator.chooseFile("Save").getAbsolutePath() + ".txt"
+            String directory = tap.getDirectory() == null ? UICreator.chooseFile("Save").getAbsolutePath()
                     : tap.getDirectory();
 
-            tap.savePlainText(directory);
+            tap.savePlainText(new java.io.File(directory));
         } catch (IOException e) {
             UICreator.showErrorMessage(this, "Make sure you aren't losing any data before closing the program.",
                     "Problem while saving", 0);
@@ -384,7 +385,7 @@ public class App extends MemorySafeWindow {
         // If the current tap has only text, check if it is the same as the saved text
         // and save it if it's not
         if (currentTap.getPlainText()) {
-            if (currentTap.getText() != Save.openPlainText(currentTap.getDirectory()) && saveUnsavedChanges(currentTap))
+            if (!currentTap.getText().equals(Save.loadPlainText(currentTap.getDirectory())) && saveUnsavedChanges(currentTap))
                 savePlainText(tapIndex);
             return; // Return so we don't go through the checks for the not plain text tap
         }
