@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -81,6 +83,13 @@ public final class Save {
         FileWriter writer = new FileWriter(directory);
         writer.write(text);
         writer.close();
+    }
+
+    public static String openPlainText(String directory) throws IOException {
+        if (directory == null)
+            return null;
+
+        return new String(Files.readString(Path.of(directory)));
     }
 
     private static boolean checkDirectory(String directory) {

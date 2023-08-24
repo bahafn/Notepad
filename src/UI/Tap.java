@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 import Saving.Save;
 
@@ -16,6 +15,8 @@ public class Tap implements java.io.Serializable {
     private Font font = UICreator.DEFAULT_FONT;
 
     private transient TapButton tapButton;
+
+    private transient boolean plainText = false;
 
     public static final transient Tap DEFAULT_TAP = new Tap();
 
@@ -41,25 +42,28 @@ public class Tap implements java.io.Serializable {
         font = newTap.getFont();
     }
 
+    public void openPlainText(File file) throws IOException {
+        text = Save.openPlainText(file.getAbsolutePath());
+        directory = file.getAbsolutePath();
+        plainText = true;
+        setName(name);
+    }
+
     /** Saves the info of the <code>Tap</code> to a file. */
     public void save(File file) throws IOException {
         if (file == null)
             return;
 
         directory = file.getAbsolutePath();
-        name = file.getName();
-        tapButton.setText(name);
+        setName(name);
+        plainText = false;
         Save.save(this, directory);
     }
 
-    public void openPlainText(File file) {
-        if (file == null)
-            return;
-
-        try {
-            text = new String(Files.readString(file.toPath()));
-        } catch (IOException e) {
-        }
+    public void savePlainText(String directory) throws IOException {
+        Save.savePlainText(text, directory);
+        this.directory = directory;
+        plainText = true;
     }
 
     /** @return <code>true</code> if the <code>obj</code> equals the tap. */
@@ -69,6 +73,11 @@ public class Tap implements java.io.Serializable {
 
         Tap tap = (Tap) obj;
         return font.equals(tap.font) && text.equals(tap.text);
+    }
+
+    private void setName(String name) {
+        this.name = name;
+        tapButton.setText(name);
     }
 
     public String getName() {
@@ -97,5 +106,9 @@ public class Tap implements java.io.Serializable {
 
     public TapButton getTapButton() {
         return tapButton;
+    }
+
+    public boolean getPlainText() {
+        return plainText;
     }
 }

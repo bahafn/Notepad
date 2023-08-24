@@ -37,7 +37,8 @@ public class App extends MemorySafeWindow {
     /**
      * The index of the <code>Tap</code> the user is on.
      * <p>
-     * NOTE: Don't change this value if you want to change the tap, use the changeTap method
+     * NOTE: Don't change this value if you want to change the tap, use the
+     * changeTap method
      */
     private int activeTap = 0;
 
@@ -91,7 +92,7 @@ public class App extends MemorySafeWindow {
                 UICreator.createJMenuItem("Open", e -> open()),
                 UICreator.createJMenuItem("Save", e -> save(false, activeTap)),
                 UICreator.createJMenuItem("Save as", e -> save(true, activeTap)),
-                UICreator.createJMenuItem("Save plain text", e -> savePlainText()),
+                UICreator.createJMenuItem("Save plain text", e -> savePlainText(activeTap)),
                 UICreator.createJMenuItem("Save all", e -> saveAll())
         });
 
@@ -249,12 +250,17 @@ public class App extends MemorySafeWindow {
         java.io.File file = UICreator.chooseFile("Open");
 
         try {
-            currentTap.open(file);
-            defaultFontSize = currentTap.getFont().getSize();
+            if (currentTap.getPlainText()) {
+                currentTap.open(file);
+                defaultFontSize = currentTap.getFont().getSize();
+            } else
+                currentTap.openPlainText(file);
         } catch (FileNotFoundException fnfe) {
             UICreator.showErrorMessage(this, "File not found.", "File error", 0);
         } catch (IOException | ClassNotFoundException e) {
-            currentTap.openPlainText(file);
+            UICreator.showErrorMessage(this,
+                    "Make sure the file you are trying to open is compatiable with this software.",
+                    "Couldn't open file", 0);
         }
 
         textArea.setText(currentTap.getText());
@@ -284,14 +290,15 @@ public class App extends MemorySafeWindow {
     }
 
     /** Saves the text of the <code>activeTap</code> */
-    private void savePlainText() {
+    private void savePlainText(int tapToSave) {
         updateTap();
-        Tap tap = taps.get(activeTap);
+        Tap tap = taps.get(tapToSave);
 
         try {
-            Save.savePlainText(tap.getText(),
-                    (tap.getDirectory() == null ? UICreator.chooseFile("Save").getAbsolutePath()
-                            : new java.io.File(tap.getDirectory()).getAbsolutePath()) + ".txt");
+            String directory = tap.getDirectory() == null ? UICreator.chooseFile("Save").getAbsolutePath() + ".txt"
+                    : tap.getDirectory();
+
+            tap.savePlainText(directory);
         } catch (IOException e) {
             UICreator.showErrorMessage(this, "Make sure you aren't losing any data before closing the program.",
                     "Problem while saving", 0);
@@ -374,17 +381,35 @@ public class App extends MemorySafeWindow {
 
         Tap currentTap = taps.get(tapIndex);
 
+        // If the current tap has only text, check if it is the same as the saved text
+        // and save it if it's not
+        if (currentTap.getPlainText()) {
+            if (currentTap.getText() != Save.openPlainText(currentTap.getDirectory()) && saveUnsavedChanges(currentTap))
+                savePlainText(tapIndex);
+            return; // Return so we don't go through the checks for the not plain text tap
+        }
+
+        Tap savedTap = currentTap.getDirectory() == null ? Tap.DEFAULT_TAP : Save.load(currentTap.getDirectory());
+
         // If the current tap doesn't have a directory, check if it is the same as the
         // default tap
         if (((currentTap.getDirectory() == null && !currentTap.equals(Tap.DEFAULT_TAP))
                 // Otherwise, check if it's different from the tap saved in the directory
-                || !currentTap.equals(Save.load(currentTap.getDirectory())))
+                || !currentTap.equals(savedTap))
                 // And if any of the above cases are true, ask the user if they want to save
                 // changes
-                && javax.swing.JOptionPane.showConfirmDialog(this,
-                        "Do you want to save changes to " + currentTap.getName() + "?",
-                        "Unsaved chagnes.", 0) == 0)
+                && saveUnsavedChanges(currentTap))
             save(false, tapIndex);
+    }
+
+    /**
+     * Shows a dialog box asking the user if he wants to save unsaved changes and
+     * returns true if the user chooses yes.
+     */
+    private boolean saveUnsavedChanges(Tap tap) {
+        return javax.swing.JOptionPane.showConfirmDialog(this,
+                "Do you want to save changes to " + tap.getName() + "?",
+                "Unsaved chagnes.", 0) == 0;
     }
 
     @Override
