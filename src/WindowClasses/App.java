@@ -181,6 +181,7 @@ public class App extends MemorySafeWindow {
 
     /** Updates tapsPanel so it repaints correctly. */
     public void updateTapsPanel() {
+        System.out.println(true);
         tapsPanel.revalidate();
         tapsPanel.repaint();
     }

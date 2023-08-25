@@ -34,7 +34,7 @@ public class Tap implements java.io.Serializable {
         if (file == null)
             return;
 
-        name = file.getName();
+        setName(file.getName());
         directory = file.getAbsolutePath();
 
         Tap newTap = Save.load(directory);
@@ -46,7 +46,7 @@ public class Tap implements java.io.Serializable {
         text = Save.loadPlainText(file.getAbsolutePath());
         directory = file.getAbsolutePath();
         plainText = true;
-        setName(name);
+        setName(file.getName());
     }
 
     /** Saves the info of the <code>Tap</code> to a file. */
@@ -55,7 +55,7 @@ public class Tap implements java.io.Serializable {
             return;
 
         directory = file.getAbsolutePath();
-        setName(name);
+        setName(file.getName());
         plainText = false;
         Save.save(this, directory);
     }
@@ -69,6 +69,9 @@ public class Tap implements java.io.Serializable {
 
     /** @return <code>true</code> if the <code>obj</code> equals the tap. */
     public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+
         if (!(obj instanceof Tap))
             return false;
 
@@ -77,6 +80,7 @@ public class Tap implements java.io.Serializable {
     }
 
     private void setName(String name) {
+        System.out.println(name);
         this.name = name;
         tapButton.setText(name);
     }
