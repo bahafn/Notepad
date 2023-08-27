@@ -80,7 +80,6 @@ public class Tap implements java.io.Serializable {
     }
 
     private void setName(String name) {
-        System.out.println(name);
         this.name = name;
         tapButton.setText(name);
     }

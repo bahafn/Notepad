@@ -13,7 +13,7 @@ public class StatusBar extends javax.swing.JLabel {
     public StatusBar(JTextArea textArea, java.awt.Dimension size, java.awt.Font font) {
         this.textArea = textArea;
         
-        setSize(size);
+        setPreferredSize(size);
         setFont(font);
         setText("Ln: 1, Col: 1");
 

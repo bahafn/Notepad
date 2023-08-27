@@ -1,5 +1,6 @@
 package WindowClasses;
 
+import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -69,12 +70,14 @@ public class App extends MemorySafeWindow {
     }
 
     private void showGUI() {
+        getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
+
         // Add JTextArea and status bar
         JPanel southPanel = new JPanel(new BorderLayout());
-        southPanel.add(UICreator.createJScrollPane(new Dimension(1000, 600), textArea), BorderLayout.NORTH);
+        javax.swing.JScrollPane scrollPane = UICreator.createJScrollPane(new Dimension(1000, 600), textArea);
+        southPanel.add(scrollPane, BorderLayout.NORTH);
         southPanel.add(statusBar, BorderLayout.CENTER);
         southPanel.setBackground(textArea.getBackground());
-        add(southPanel, BorderLayout.SOUTH);
 
         // Add undo manger to textArea
         textArea.getDocument().addUndoableEditListener(undoManager);
@@ -130,11 +133,16 @@ public class App extends MemorySafeWindow {
                 UICreator.createJCheckBoxMenuItem("Word wrap", true, e -> textArea.setLineWrap(!textArea.getLineWrap()))
         });
 
+        // This JPanel is used because it's hard to deal with BoxLayout and JMenuBar
+        JPanel menuBarPanel = new JPanel(new BorderLayout());
+        menuBarPanel.setPreferredSize(new Dimension(getWidth(), 20));
         javax.swing.JMenuBar menuBar = UICreator.createJMenuBar(menus); // Create menu bar
+        menuBarPanel.setBackground(menuBar.getBackground());
+        menuBarPanel.add(menuBar, BorderLayout.WEST);
 
-        add(menuBar, BorderLayout.NORTH);
-
+        add(menuBarPanel);
         add(tapsPanel);
+        add(southPanel);
     }
 
     /** Selects the texts between two indexes from the <code>textArea</code>. */
@@ -181,7 +189,6 @@ public class App extends MemorySafeWindow {
 
     /** Updates tapsPanel so it repaints correctly. */
     public void updateTapsPanel() {
-        System.out.println(true);
         tapsPanel.revalidate();
         tapsPanel.repaint();
     }
@@ -386,7 +393,8 @@ public class App extends MemorySafeWindow {
         // If the current tap has only text, check if it is the same as the saved text
         // and save it if it's not
         if (currentTap.getPlainText()) {
-            if (!currentTap.getText().equals(Save.loadPlainText(currentTap.getDirectory())) && saveUnsavedChanges(currentTap))
+            if (!currentTap.getText().equals(Save.loadPlainText(currentTap.getDirectory()))
+                    && saveUnsavedChanges(currentTap))
                 savePlainText(tapIndex);
             return; // Return so we don't go through the checks for the not plain text tap
         }
