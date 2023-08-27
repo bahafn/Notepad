@@ -4,6 +4,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.undo.UndoManager;
 
 import java.awt.BorderLayout;
@@ -135,10 +136,13 @@ public class App extends MemorySafeWindow {
 
         // This JPanel is used because it's hard to deal with BoxLayout and JMenuBar
         JPanel menuBarPanel = new JPanel(new BorderLayout());
+        menuBarPanel.setBorder(new javax.swing.border.MatteBorder(0, 0, 1, 0, java.awt.Color.GRAY));
         menuBarPanel.setPreferredSize(new Dimension(getWidth(), 20));
         javax.swing.JMenuBar menuBar = UICreator.createJMenuBar(menus); // Create menu bar
-        menuBarPanel.setBackground(menuBar.getBackground());
+        menuBar.setBorder(null);
+        menuBarPanel.setBackground(java.awt.Color.WHITE);
         menuBarPanel.add(menuBar, BorderLayout.WEST);
+        menuBarPanel.setMaximumSize(new Dimension(5000, 20));
 
         add(menuBarPanel);
         add(tapsPanel);
