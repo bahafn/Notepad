@@ -4,13 +4,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 import javax.swing.undo.UndoManager;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class App extends MemorySafeWindow {
     private int activeTap = 0;
 
     private javax.swing.JTextArea textArea = UICreator.createJTextArea("", true);
-    private StatusBar statusBar = new StatusBar(textArea, UICreator.DEFAULT_SIZE, UICreator.DEFAULT_FONT);
+    private StatusBar statusBar = new StatusBar(textArea, new Dimension(getWidth(), 20), UICreator.DEFAULT_FONT);
 
     private float zoom = 1;
     /** The size of the textArea's font without zoom */
@@ -74,11 +74,10 @@ public class App extends MemorySafeWindow {
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
 
         // Add JTextArea and status bar
-        JPanel southPanel = new JPanel(new BorderLayout());
-        javax.swing.JScrollPane scrollPane = UICreator.createJScrollPane(new Dimension(1000, 600), textArea);
-        southPanel.add(scrollPane, BorderLayout.NORTH);
-        southPanel.add(statusBar, BorderLayout.CENTER);
-        southPanel.setBackground(textArea.getBackground());
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.add(UICreator.createJScrollPane(new Dimension(1000, 600), textArea), BorderLayout.CENTER);
+        centerPanel.add(tapsPanel, BorderLayout.NORTH);
+        centerPanel.setBackground(textArea.getBackground());
 
         // Add undo manger to textArea
         textArea.getDocument().addUndoableEditListener(undoManager);
@@ -140,13 +139,20 @@ public class App extends MemorySafeWindow {
         menuBarPanel.setPreferredSize(new Dimension(getWidth(), 20));
         javax.swing.JMenuBar menuBar = UICreator.createJMenuBar(menus); // Create menu bar
         menuBar.setBorder(null);
-        menuBarPanel.setBackground(java.awt.Color.WHITE);
+        menuBarPanel.setBackground(Color.WHITE);
         menuBarPanel.add(menuBar, BorderLayout.WEST);
         menuBarPanel.setMaximumSize(new Dimension(5000, 20));
 
+        // Add status bar to a JPanel so it is resized correctly
+        JPanel statusBarPanel = new JPanel(new BorderLayout());
+        statusBarPanel.setPreferredSize(statusBar.getPreferredSize());
+        statusBarPanel.setBackground(Color.WHITE);
+        statusBarPanel.add(statusBar);
+        statusBarPanel.setMaximumSize(new Dimension(5000, 20));
+
         add(menuBarPanel);
-        add(tapsPanel);
-        add(southPanel);
+        add(centerPanel);
+        add(statusBarPanel);
     }
 
     /** Selects the texts between two indexes from the <code>textArea</code>. */
