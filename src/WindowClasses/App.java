@@ -143,7 +143,7 @@ public class App extends MemorySafeWindow {
                         }, zoomIn),
                         UICreator.createJMenuItem("Zoom out", e -> {
                             zoom /= 2;
-                            textArea.setFont(textArea.getFont().deriveFont(defaultFontSize / zoom));
+                            textArea.setFont(textArea.getFont().deriveFont(defaultFontSize * zoom));
                         }, zoomOut),
                         UICreator.createJMenuItem("Reset zoom", e -> {
                             zoom = 1;
