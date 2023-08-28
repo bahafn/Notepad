@@ -4,12 +4,14 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.undo.UndoManager;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -60,6 +62,26 @@ public class App extends MemorySafeWindow {
 
     private static int NumberOfWindows = 0;
 
+    /** <code>KeyStroke</code> containing a shortcut. */
+    // File menu short cuts
+    private KeyStroke newTap = KeyStroke.getKeyStroke(KeyEvent.VK_T, KeyEvent.CTRL_DOWN_MASK),
+            newWindow = KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK),
+            open = KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK),
+            save = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK),
+            saveAll = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK),
+            savePlainText = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK),
+            // Edit menu short cuts
+            undo = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK),
+            redo = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK),
+            find = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK),
+            replace = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK),
+            goTo = KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK),
+            // View menu shortcuts
+            zoomIn = KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK),
+            zoomOut = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK),
+            resetZoom = KeyStroke.getKeyStroke(KeyEvent.VK_0, KeyEvent.CTRL_DOWN_MASK);
+
+
     public App() {
         super("Notepad");
 
@@ -89,24 +111,24 @@ public class App extends MemorySafeWindow {
 
         // Create File menu
         menus[0] = UICreator.createJMenu("File", new JComponent[] {
-                UICreator.createJMenuItem("New tap", e -> newTap()),
-                UICreator.createJMenuItem("New window", e -> new App()),
+                UICreator.createJMenuItem("New tap", e -> newTap(), newTap),
+                UICreator.createJMenuItem("New window", e -> new App(), newWindow),
                 UICreator.createJSeparator(),
-                UICreator.createJMenuItem("Open", e -> open()),
-                UICreator.createJMenuItem("Save", e -> save(false, activeTap)),
+                UICreator.createJMenuItem("Open", e -> open(), open),
+                UICreator.createJMenuItem("Save", e -> save(false, activeTap), save),
                 UICreator.createJMenuItem("Save as", e -> save(true, activeTap)),
-                UICreator.createJMenuItem("Save plain text", e -> savePlainText(activeTap)),
-                UICreator.createJMenuItem("Save all", e -> saveAll())
+                UICreator.createJMenuItem("Save plain text", e -> savePlainText(activeTap), savePlainText),
+                UICreator.createJMenuItem("Save all", e -> saveAll(), saveAll)
         });
 
         // Create edit menu
         menus[1] = UICreator.createJMenu("Edit", new JComponent[] {
-                UICreator.createJMenuItem("Undo", e -> undo()),
-                UICreator.createJMenuItem("Redo", e -> redo()),
+                UICreator.createJMenuItem("Undo", e -> undo(), undo),
+                UICreator.createJMenuItem("Redo", e -> redo(), redo),
                 UICreator.createJSeparator(),
-                UICreator.createJMenuItem("Find", e -> newFindWindow(false)),
-                UICreator.createJMenuItem("Replace", e -> newFindWindow(true)),
-                UICreator.createJMenuItem("Go to", e -> newGoToWindow()),
+                UICreator.createJMenuItem("Find", e -> newFindWindow(false), find),
+                UICreator.createJMenuItem("Replace", e -> newFindWindow(true), replace),
+                UICreator.createJMenuItem("Go to", e -> newGoToWindow(), goTo),
                 UICreator.createJSeparator(),
                 UICreator.createJMenuItem("Font", e -> newFontWindow())
         });
@@ -115,17 +137,17 @@ public class App extends MemorySafeWindow {
         menus[2] = UICreator.createJMenu("View", new JComponent[] {
                 UICreator.createJMenu("Zoom", new JComponent[] {
                         UICreator.createJMenuItem("Zoom in", e -> {
-                            zoom += 0.5;
+                            zoom *= 2;
                             textArea.setFont(textArea.getFont().deriveFont(defaultFontSize * zoom));
-                        }),
+                        }, zoomIn),
                         UICreator.createJMenuItem("Zoom out", e -> {
-                            zoom -= 0.5;
+                            zoom /= 2;
                             textArea.setFont(textArea.getFont().deriveFont(defaultFontSize / zoom));
-                        }),
+                        }, zoomOut),
                         UICreator.createJMenuItem("Reset zoom", e -> {
                             zoom = 1;
                             textArea.setFont(textArea.getFont().deriveFont(defaultFontSize));
-                        })
+                        }, resetZoom)
                 }),
                 UICreator.createJCheckBoxMenuItem("Status bar", true, e -> {
                     statusBar.setVisible(!statusBar.isVisible());

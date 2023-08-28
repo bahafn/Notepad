@@ -268,6 +268,26 @@ public final class UICreator {
     }
 
     /**
+     * Creates new <code>JMenuItem</code>.
+     * 
+     * @param text           the text to be set
+     * @param actionListener an <code>ActionListner</code> to be added to the
+     *                       <code>JMenuItem</code>
+     * @param keyStroke      a <code>KeyStroke</code> defining the shortcut for this
+     *                       <code>JMenuItem</code>
+     * @return new <code>JMenuItem</code> with specified values
+     * @see JMenuItem
+     */
+    public static JMenuItem createJMenuItem(String text, ActionListener actionListener,
+            javax.swing.KeyStroke keyStroke) {
+        JMenuItem item = new JMenuItem(text);
+        item.addActionListener(actionListener);
+        item.setAccelerator(keyStroke);
+
+        return item;
+    }
+
+    /**
      * Creates new <code>JMenu</code>.
      * 
      * @param text  the text to be set
