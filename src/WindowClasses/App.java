@@ -13,6 +13,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.Color;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -336,10 +337,8 @@ public class App extends MemorySafeWindow {
         Tap tap = taps.get(tapToSave);
 
         try {
-            String directory = tap.getDirectory() == null ? UICreator.chooseFile("Save").getAbsolutePath()
-                    : tap.getDirectory();
-
-            tap.savePlainText(new java.io.File(directory));
+            File file = tap.getDirectory() != null ? new File(tap.getDirectory()) : UICreator.chooseFile("Save");
+            tap.savePlainText(file);
         } catch (IOException e) {
             UICreator.showErrorMessage(this, "Make sure you aren't losing any data before closing the program.",
                     "Problem while saving", 0);

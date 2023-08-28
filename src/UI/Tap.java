@@ -61,6 +61,9 @@ public class Tap implements java.io.Serializable {
     }
 
     public void savePlainText(File file) throws IOException {
+        if (file == null)
+            return;
+
         Save.savePlainText(text, file.getAbsolutePath());
         directory = file.getAbsolutePath();
         setName(file.getName());
