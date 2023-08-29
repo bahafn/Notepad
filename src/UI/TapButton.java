@@ -1,11 +1,12 @@
 package UI;
 
-import javax.swing.JButton;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
+
+import javax.swing.JButton;
+import javax.swing.SpringLayout;
 
 import WindowClasses.App;
 
@@ -20,9 +21,10 @@ import WindowClasses.App;
 public class TapButton extends JButton {
     private App app;
     private int tapIndex;
+    private JButton closeButton = UICreator.createJButton("X", e -> removeTap(), new Dimension(10, 10), UICreator.NO_INSETS); 
 
     public static final Color DEFAULT_BUTTON_COLOR = new Color(240, 240, 240);
-    public static final Color SELECTED_BUTTON_COLOR = new Color(10, 10, 200, 100);
+    public static final Color SELECTED_BUTTON_COLOR = new Color(110, 110, 110, 100);
 
     /** Creates <code>TapButton</code>. */
     public TapButton(App app, int tapIndex, String text, Dimension size, Insets margins) {
@@ -31,7 +33,6 @@ public class TapButton extends JButton {
 
         setOpaque(false);
         setBackground(DEFAULT_BUTTON_COLOR);
-
         setBorderPainted(false);
 
         setText(text);
@@ -45,8 +46,16 @@ public class TapButton extends JButton {
             app.changeTap(this.tapIndex);
         });
 
-        // Add remove button
-        add(UICreator.createJButton("X", e -> removeTap(), UICreator.DEFAULT_SIZE, UICreator.NO_INSETS));
+        // Create close button
+        SpringLayout layout = new SpringLayout();
+
+        closeButton.setOpaque(false);
+        closeButton.setBorderPainted(false);
+        closeButton.setBackground(getBackground());
+
+        layout.putConstraint(SpringLayout.WEST, closeButton, 5, SpringLayout.EAST, this);
+        setLayout(layout);
+        add(closeButton);
     }
 
     /**
@@ -57,6 +66,7 @@ public class TapButton extends JButton {
      */
     public void setSelected(boolean selected) {
         setBackground(selected ? SELECTED_BUTTON_COLOR : DEFAULT_BUTTON_COLOR);
+        closeButton.setBackground(getBackground());
 
         if (!selected)
             return;
