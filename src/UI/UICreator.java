@@ -362,9 +362,10 @@ public final class UICreator {
      * @param openButtonText the text of the "OK" button
      * @return the <code>File</code> the user choose
      */
-    public static File chooseFile(String openButtonText) {
+    public static File chooseFile(String openButtonText, String title) {
         UIManager.put("FileChooser.openButtonText", openButtonText);
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle(title);
 
         return (fileChooser.showOpenDialog(fileChooser.getParent()) == JFileChooser.APPROVE_OPTION
                 ? fileChooser.getSelectedFile()

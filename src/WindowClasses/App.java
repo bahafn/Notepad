@@ -82,7 +82,6 @@ public class App extends MemorySafeWindow {
             zoomOut = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK),
             resetZoom = KeyStroke.getKeyStroke(KeyEvent.VK_0, KeyEvent.CTRL_DOWN_MASK);
 
-
     public App() {
         super("Notepad");
 
@@ -288,7 +287,7 @@ public class App extends MemorySafeWindow {
     private void open() {
         newTap();
         Tap currentTap = taps.get(activeTap);
-        java.io.File file = UICreator.chooseFile("Open");
+        java.io.File file = UICreator.chooseFile("Open", "Open");
 
         try {
             currentTap.open(file);
@@ -321,7 +320,7 @@ public class App extends MemorySafeWindow {
 
         try {
             Tap tap = taps.get(tapToSave);
-            tap.save(saveAs || tap.getDirectory() == null ? UICreator.chooseFile("Save")
+            tap.save(saveAs || tap.getDirectory() == null ? UICreator.chooseFile("Save", "Save " + tap.getName())
                     : new java.io.File(tap.getDirectory()));
         } catch (IOException e) {
             UICreator.showErrorMessage(this, "Make sure you aren't losing any data before closing the program.",
@@ -337,7 +336,8 @@ public class App extends MemorySafeWindow {
         Tap tap = taps.get(tapToSave);
 
         try {
-            File file = tap.getDirectory() != null ? new File(tap.getDirectory()) : UICreator.chooseFile("Save");
+            File file = tap.getDirectory() != null ? new File(tap.getDirectory())
+                    : UICreator.chooseFile("Save", "Save " + tap.getName());
             tap.savePlainText(file);
         } catch (IOException e) {
             UICreator.showErrorMessage(this, "Make sure you aren't losing any data before closing the program.",
