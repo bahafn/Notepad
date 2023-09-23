@@ -8,16 +8,23 @@ import javax.swing.JTextArea;
  */
 public class StatusBar extends javax.swing.JLabel {
     private JTextArea textArea;
+    /**
+     * This is used because the <code>JTextArea.replaceSelected</code> and
+     * <code>JTextArea.replaceRange</code> methods select the text they are
+     * replacing, and we don't need to be updating the status bar while replaing all
+     * occurnces of word because the user wouldn't see it
+     */
     private boolean replacing;
 
     public StatusBar(JTextArea textArea, java.awt.Dimension size, java.awt.Font font) {
         this.textArea = textArea;
-        
+
         setPreferredSize(size);
         setFont(font);
         setText("Ln: 1, Col: 1");
 
-        // Add caret (pointer) change listener to textArea so we can update the status bar
+        // Add caret (pointer) change listener to textArea so we can update the status
+        // bar
         textArea.getCaret().addChangeListener(new javax.swing.event.ChangeListener() {
             @Override
             public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -28,10 +35,6 @@ public class StatusBar extends javax.swing.JLabel {
 
     /** Calculates the index of the selected line and colume. */
     private void updateStatusBar() {
-        // This is used because the JTextArea.replaceSelected and JTextArea.replaceRange
-        // methods select the text they are replacing, and we don't need to be updating
-        // the status bar while replaing all occurnces of word because the user wouldn't
-        // see it
         if (replacing)
             return;
 

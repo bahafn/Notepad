@@ -174,7 +174,8 @@ public class FindWindow extends MemorySafeWindow {
         boolean repeat = false; // This is used to repeat the do while loop if we are looking for a whole word
                                 // and didn't find it
 
-        // Do while loop used to make sure we found a whole word if we are searching for one
+        // Do while loop used to make sure we found a whole word if we are searching for
+        // one
         do {
             repeat = false; // Set it to false so we don't enter an endless loop
 
@@ -203,7 +204,8 @@ public class FindWindow extends MemorySafeWindow {
                 indexes[1] = indexes[0] + searchText.length();
             }
 
-            if (wholeWord && indexes[1] < text.length() && Character.isAlphabetic(text.charAt(indexes[1]))) {
+            if (wholeWord && indexes[1] < text.length()
+                    && (Character.isAlphabetic(text.charAt(indexes[1])) || Character.isAlphabetic(indexes[0] - 1))) {
                 repeat = true;
                 startIndex = indexes[0] + (forward ? 1 : -1);
 
