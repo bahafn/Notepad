@@ -12,7 +12,7 @@ public class StatusBar extends javax.swing.JLabel {
      * This is used because the <code>JTextArea.replaceSelected</code> and
      * <code>JTextArea.replaceRange</code> methods select the text they are
      * replacing, and we don't need to be updating the status bar while replaing all
-     * occurnces of word because the user wouldn't see it
+     * occurnces of word because the user wouldn't see it.
      */
     private boolean replacing;
 
@@ -23,8 +23,7 @@ public class StatusBar extends javax.swing.JLabel {
         setFont(font);
         setText("Ln: 1, Col: 1");
 
-        // Add caret (pointer) change listener to textArea so we can update the status
-        // bar
+        // Add caret (pointer) ChangeListener to textArea so we can update the statusbar
         textArea.getCaret().addChangeListener(new javax.swing.event.ChangeListener() {
             @Override
             public void stateChanged(javax.swing.event.ChangeEvent e) {

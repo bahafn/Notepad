@@ -10,7 +10,7 @@ import java.awt.Dimension;
  * <code>JTextArea</code> and stops any changes that are non-numerical.
  * <p>
  * The point of this class is have a way to only take numerical input without
- * needing to use complex classes like <code>JFormattedTextArea</code>
+ * needing to use complex classes like <code>JFormattedTextArea</code>.
  * 
  * @see JTextArea
  */
@@ -53,15 +53,19 @@ public class NumericalTextArea extends javax.swing.JTextArea {
         if (!String.valueOf(keyChar).matches(regex) && !backSpace)
             return;
 
+        // If there are selected text, remove it
         if (getSelectionStart() != getSelectionEnd())
             replaceRange("", getSelectionStart(), getSelectionEnd());
 
+        // If the character we entered wasn't a backspace, we check if the change keeps
+        // the value numerical and add the change if it does
         if (!backSpace) {
             if (checkChange(String.valueOf(keyChar)))
                 super.setText(getText() + keyChar);
-            return;
+            return; // Return so we don't get to the backspace case below
         }
 
+        // If backspace was pressed, remove the character before the caret
         try {
             super.setText(getText(0, getCaretPosition() - 1));
         } catch (javax.swing.text.BadLocationException ignored) {
@@ -76,9 +80,11 @@ public class NumericalTextArea extends javax.swing.JTextArea {
         if (getText().length() == 0)
             return true;
 
+        // Check if the change puts a minus sign anywhere but at the start
         if (change.contains("-") && getCaretPosition() != 0)
             return false;
 
+        // Check if the text has more than one dot sign
         boolean hasDot = getText().charAt(0) == '.' || change.contains(".");
 
         for (int i = 1; i < getText().length(); i++) {
@@ -90,6 +96,8 @@ public class NumericalTextArea extends javax.swing.JTextArea {
             }
         }
 
+        // If none of the other returns were made, we just need to check if the change
+        // has any characters that are not in the regex
         return change.matches(regex);
     }
 

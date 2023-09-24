@@ -13,7 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 /**
- * This class has the <code>save</code> and <code>load</code> method which are
+ * This class has the <code>save</code> and <code>load</code> methods which are
  * used to write and read objects to and from files.
  */
 public final class Save {
@@ -22,7 +22,7 @@ public final class Save {
 
     /**
      * This method takes an <code>Object</code> of an type that implements
-     * <code>Serializable</code> and writes on a file in a spcified directory.
+     * <code>Serializable</code> and writes it in a file in a spcified directory.
      * 
      * @param <type>       the type of the <code>Object</code> we want to write
      *                     (must implement Serializable)
@@ -31,6 +31,7 @@ public final class Save {
      * @throws IOException if the file wasn't found
      */
     public static <type extends Serializable> void save(type objectToSave, String directory) throws IOException {
+        // Create the file if it doesn't exist
         if (!checkDirectory(directory)) {
             File file = new File(directory);
             file.createNewFile();
@@ -66,20 +67,16 @@ public final class Save {
         FileInputStream fis = new FileInputStream(directory);
         ObjectInputStream ois = new ObjectInputStream(fis);
 
+        @SuppressWarnings("unchecked")
         type returnValue = (type) ois.readObject();
         ois.close();
 
         return returnValue;
     }
 
-    /**
-     * This method writes a <code>String</code> to a file.
-     * 
-     * @param text      the <code>String</code> to be written
-     * @param directory the directory to write on
-     * @throws IOException
-     */
+    /** This method saves a string to a directory. */
     public static void savePlainText(String text, String directory) throws IOException {
+        // Create the file if it doesn't exist
         if (!checkDirectory(directory)) {
             File file = new File(directory);
             file.createNewFile();
@@ -90,6 +87,7 @@ public final class Save {
         writer.close();
     }
 
+    /** This method loads a string from a directory. */
     public static String loadPlainText(String directory) throws IOException {
         if (directory == null)
             return null;
@@ -97,6 +95,7 @@ public final class Save {
         return new String(Files.readString(Path.of(directory)));
     }
 
+    /** @return <code>true</code> if a file exists in the directory. */
     private static boolean checkDirectory(String directory) {
         if (directory == null)
             return false;

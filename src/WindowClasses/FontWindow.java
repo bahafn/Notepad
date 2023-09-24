@@ -1,7 +1,6 @@
 package WindowClasses;
 
 import java.awt.GraphicsEnvironment;
-import java.awt.GridLayout;
 import java.awt.Font;
 
 import javax.swing.JComboBox;
@@ -32,7 +31,7 @@ public class FontWindow extends MemorySafeWindow {
     }
 
     private void showGUI() {
-        setLayout(new GridLayout(3, 2));
+        setLayout(new java.awt.GridLayout(3, 2));
 
         add(UICreator.createJLabel("Font:", UICreator.DEFAULT_TEXT_SIZE, 2, UICreator.DEFAULT_FONT));
 

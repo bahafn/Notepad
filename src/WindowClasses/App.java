@@ -47,11 +47,12 @@ public class App extends MemorySafeWindow {
      */
     private int activeTap = 0;
 
+    /** Main text area of the notepad. */
     private javax.swing.JTextArea textArea = UICreator.createJTextArea("", true);
     private StatusBar statusBar = new StatusBar(textArea, new Dimension(getWidth(), 20), UICreator.DEFAULT_FONT);
 
     private float zoom = 1;
-    /** The size of the textArea's font without zoom */
+    /** The size of the textArea's font without zoom. */
     private float defaultFontSize = textArea.getFont().getSize();
 
     /**
@@ -61,7 +62,11 @@ public class App extends MemorySafeWindow {
 
     private UndoManager undoManager = new UndoManager();
 
-    private static int NumberOfWindows = 0;
+    /**
+     * Keeps track of the number of <code>App</code> objects so we know when to end
+     * the program
+     */
+    private static int numberOfWindows = 0;
 
     /** <code>KeyStroke</code> containing a shortcut. */
     // File menu short cuts
@@ -89,7 +94,7 @@ public class App extends MemorySafeWindow {
         showGUI();
         UICreator.initJFrame(this, true, false, false, true, true, null);
 
-        NumberOfWindows++;
+        numberOfWindows++;
     }
 
     private void showGUI() {
@@ -183,7 +188,7 @@ public class App extends MemorySafeWindow {
         textArea.select(beginIndex, endIndex);
     }
 
-    /** Replaces the text between the two indexes */
+    /** Replaces the text between the two indexes. */
     public void replace(String newText, int beginIndex, int endIndex) {
         textArea.replaceRange(newText, beginIndex, endIndex);
     }
@@ -208,12 +213,12 @@ public class App extends MemorySafeWindow {
         return textArea.getText();
     }
 
-    /** @return the font of the <code>textArea</code> */
+    /** @return the font of the <code>textArea</code>. */
     public Font getFont() {
         return textArea.getFont();
     }
 
-    /** Changes the font of the <code>textArea</code> */
+    /** Changes the font of the <code>textArea</code>. */
     public void setFont(Font font) {
         textArea.setFont(font.deriveFont(font.getSize() * zoom));
         defaultFontSize = font.getSize();
@@ -227,8 +232,7 @@ public class App extends MemorySafeWindow {
 
     /** Creates a new <code>Tap</code> and adds it to <code>taps</code>. */
     private void newTap() {
-        Tap tap = new Tap("Untitled " + (taps.size() + 1), this, taps.size(), UICreator.DEFAULT_SIZE,
-                UICreator.DEFAULT_INSETS);
+        Tap tap = new Tap("Untitled " + (taps.size() + 1), this, taps.size(), UICreator.DEFAULT_SIZE);
         taps.add(tap);
         tapButtons.add(tap.getTapButton());
         tapsPanel.add(tap.getTapButton());
@@ -256,7 +260,7 @@ public class App extends MemorySafeWindow {
 
     /** Removes a tap depending on its index */
     public void removeTap(int tapIndex) {
-        // End the program if the user removes all taps
+        // Dispose the window if the user removes all taps
         if (taps.size() == 1)
             dispose();
 
@@ -310,10 +314,10 @@ public class App extends MemorySafeWindow {
     }
 
     /**
-     * Saves a file with info from an opened <code>Tap</code>
+     * Saves a file with info from an opened <code>Tap</code>.
      * 
      * @param saveAs    whether to ask the user to choose a file
-     * @param tapToSave the index of the <code>tap</code> we want to save
+     * @param tapToSave the index of the <code>Tap</code> we want to save
      */
     private void save(boolean saveAs, int tapToSave) {
         updateTap();
@@ -425,7 +429,7 @@ public class App extends MemorySafeWindow {
         // and save it if it's not
         if (currentTap.getPlainText()) {
             if (!currentTap.getText().equals(Save.loadPlainText(currentTap.getDirectory()))
-                    && saveUnsavedChanges(currentTap))
+                    && saveUnsavedChanges(currentTap.getName()))
                 savePlainText(tapIndex);
             return; // Return so we don't go through the checks for the not plain text tap
         }
@@ -439,7 +443,7 @@ public class App extends MemorySafeWindow {
                 || !currentTap.equals(savedTap))
                 // And if any of the above cases are true, ask the user if they want to save
                 // changes
-                && saveUnsavedChanges(currentTap))
+                && saveUnsavedChanges(currentTap.getName()))
             save(false, tapIndex);
     }
 
@@ -447,9 +451,9 @@ public class App extends MemorySafeWindow {
      * Shows a dialog box asking the user if he wants to save unsaved changes and
      * returns true if the user chooses yes.
      */
-    private boolean saveUnsavedChanges(Tap tap) {
+    private boolean saveUnsavedChanges(String tapName) {
         return javax.swing.JOptionPane.showConfirmDialog(this,
-                "Do you want to save changes to " + tap.getName() + "?",
+                "Do you want to save changes to " + tapName + "?",
                 "Unsaved chagnes.", 0) == 0;
     }
 
@@ -464,10 +468,10 @@ public class App extends MemorySafeWindow {
             // If no other App window exists, stop the program
             // This is used because the dispose method isn't called if we change the
             // JFrame's defaultCloseOperation to JFrame.EXIST_ON_CLOSE
-            if (NumberOfWindows == 1)
+            if (numberOfWindows == 1)
                 System.exit(0);
 
-            NumberOfWindows--;
+            numberOfWindows--;
             super.dispose();
         }
     }

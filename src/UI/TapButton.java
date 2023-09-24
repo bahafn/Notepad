@@ -3,7 +3,6 @@ package UI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.SpringLayout;
@@ -27,7 +26,7 @@ public class TapButton extends JButton {
     public static final Color SELECTED_BUTTON_COLOR = new Color(110, 110, 110, 100);
 
     /** Creates <code>TapButton</code>. */
-    public TapButton(App app, int tapIndex, String text, Dimension size, Insets margins) {
+    public TapButton(App app, int tapIndex, String text, Dimension size) {
         this.app = app;
         this.tapIndex = tapIndex;
 
@@ -37,7 +36,6 @@ public class TapButton extends JButton {
 
         setText(text);
         setPreferredSize(size);
-        setMargin(margins);
 
         setSelected(true);
 
@@ -60,7 +58,7 @@ public class TapButton extends JButton {
 
     /**
      * Changes the <code>TapButtons</code>'s background depending on its state
-     * (selected or not).
+     * (selected or not) and unsellects all unsellectde buttons.
      * 
      * @param selected weather to select the <code>TapButton</code> or unselect it
      */

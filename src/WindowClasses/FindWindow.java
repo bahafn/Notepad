@@ -14,7 +14,7 @@ import UI.UICreator;
  * This class creates the find window UI and selects and replaces the words the
  * user is looking for.
  * <p>
- * This extends <code>JFrame</code> so it the UI is added directly to it.
+ * This extends <code>MemorySafeWindow</code> so it the UI is added directly to it.
  * 
  * @see MemorySafeWindow
  */
@@ -116,6 +116,10 @@ public class FindWindow extends MemorySafeWindow {
         pack();
     }
 
+    /**
+     * Replaces the selected text in <code>App</code>'s <code>textArea</code> or
+     * finds the word in the <code>searchText</code> if nothing is selected.
+     */
     private void replace(String newText) {
         if (!app.replace(newText))
             findAndSelect(selectedIndex, searchText.getText(), true);
@@ -123,7 +127,7 @@ public class FindWindow extends MemorySafeWindow {
             selectedIndex = 0;
     }
 
-    /** replaces all occurnes of a word */
+    /** Replaces all occurnes of a word. */
     private void replaceAll(String oldText, String newText) {
         app.setReplacing(true);
 
@@ -192,17 +196,10 @@ public class FindWindow extends MemorySafeWindow {
             }
 
             // If we are going forward, find the first occurnce of searchText in text
-            // (strating from startIndex)
-            if (forward) {
-                indexes[0] = text.indexOf(searchText, startIndex);
-                indexes[1] = indexes[0] + searchText.length();
-            }
-            // Otherwise, find the last occurnce in the text, start from the first index to
-            // the startIndex
-            else {
-                indexes[0] = text.lastIndexOf(searchText, startIndex);
-                indexes[1] = indexes[0] + searchText.length();
-            }
+            // (strating from startIndex), otherwise, find the last occurnce in the text,
+            // start from the first index tothe startIndex
+            indexes[0] = forward ? text.indexOf(searchText, startIndex) : text.lastIndexOf(searchText, startIndex);
+            indexes[1] = indexes[0] + searchText.length();
 
             if (wholeWord && indexes[1] < text.length()
                     && (Character.isAlphabetic(text.charAt(indexes[1])) || Character.isAlphabetic(indexes[0] - 1))) {

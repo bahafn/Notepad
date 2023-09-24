@@ -2,13 +2,12 @@ package UI;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
 
 import Saving.Save;
 
-/** Stores info about a tap (the text, name, font and directory of the tap) */
+/** Stores info about a tap (the text, name, font and directory of the tap). */
 public class Tap implements java.io.Serializable {
     private transient String name = "Untitled";
     private String text = "", directory = null;
@@ -23,9 +22,17 @@ public class Tap implements java.io.Serializable {
     public Tap() {
     }
 
-    public Tap(String name, WindowClasses.App app, int tapIndex, Dimension buttonSize, Insets buttonsMargins) {
+    /**
+     * Creates a new <code>Tap</code>
+     * 
+     * @param name the name of the tap
+     * @param app the <code>App</code> object containing the tap
+     * @param tapIndex the index of the tap in the <code>App</code> object's array
+     * @param buttonSize the size of the <code>TapButton</code> object for this tap
+     */
+    public Tap(String name, WindowClasses.App app, int tapIndex, Dimension buttonSize) {
         this.name = name;
-        tapButton = new TapButton(app, tapIndex, name, buttonSize, buttonsMargins);
+        tapButton = new TapButton(app, tapIndex, name, buttonSize);
     }
 
     /** Updates the info of the <code>Tap</code> with info from a file. */
@@ -42,6 +49,7 @@ public class Tap implements java.io.Serializable {
         font = newTap.getFont();
     }
 
+    /** Reads a string from a file and puts in <code>text</code>. */
     public void openPlainText(File file) throws IOException {
         text = Save.loadPlainText(file.getAbsolutePath());
         directory = file.getAbsolutePath();
@@ -60,6 +68,7 @@ public class Tap implements java.io.Serializable {
         Save.save(this, directory);
     }
 
+    /** Saves a <code>text</code> to a file. */
     public void savePlainText(File file) throws IOException {
         if (file == null)
             return;

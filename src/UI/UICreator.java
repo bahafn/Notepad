@@ -47,13 +47,11 @@ public final class UICreator {
     private UICreator() {
     }
 
-    // TODO: Remove System.exist from here and make it throw an exception instead
     public static void setLookAndFeel(String lookAndFeel) {
         try {
             UIManager.setLookAndFeel(lookAndFeel);
         } catch (Exception e) {
-            showErrorMessage(null, "Couldn't find look and feel", "Warning", 0);
-            System.exit(0);
+            showErrorMessage(null, "Couldn't find look and feel.", "Warning!", 0);
         }
     }
 
@@ -238,7 +236,7 @@ public final class UICreator {
      * @param size      the size of the component
      * @param component the component to be added to the <code>JScrollPane</code>
      * @return new <code>JScrollPane</code> with specified values
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the size's width or height is less than zero
      * @see JScrollPane
      * @see {@link #checkDimension(Dimension)}
      */
@@ -398,7 +396,7 @@ public final class UICreator {
      *                    <code>JFrame.EXIT_ON_CLOSE</code> or not
      * @param pack        weather to call <code>JFrame.pack()</code> or not (NOTE:
      *                    if you want to call <code>JFrame.pack()</code>, make sure
-     *                    to add the components before calling this function
+     *                    to add the components before calling this function)
      * @param parent      the parent of the <code>JFrame</code>. This is also passed
      *                    to <code>JFrame.setLocationRelativeTo()</code> method
      */
