@@ -36,6 +36,7 @@ public class TapButton extends JButton {
 
         setText(text);
         setPreferredSize(size);
+        setMargin(UICreator.DEFAULT_INSETS);
 
         setSelected(true);
 
