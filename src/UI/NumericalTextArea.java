@@ -28,7 +28,9 @@ public class NumericalTextArea extends javax.swing.JTextArea {
      * @param positive weather to take neagtive values or not
      */
     public NumericalTextArea(String text, Dimension size, boolean integer, boolean positive) {
+        // Stopping the input from the normal
         setEditable(false);
+        setActionMap(null);
 
         // Set the regex (allowed characters)
         if (integer)
