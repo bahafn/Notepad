@@ -138,8 +138,6 @@ public class FindWindow extends MemorySafeWindow {
         ex.execute(new Runnable() {
             @Override
             public void run() {
-                long startTime = System.nanoTime();
-
                 app.setReplacing(true);
 
                 int beginIndex = 0;
@@ -155,8 +153,6 @@ public class FindWindow extends MemorySafeWindow {
                 }
 
                 app.setReplacing(false);
-
-                System.out.println(System.nanoTime() - startTime);
             }
         });
     }
