@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.JTextArea;
 import javax.swing.JPanel;
@@ -14,7 +17,8 @@ import UI.UICreator;
  * This class creates the find window UI and selects and replaces the words the
  * user is looking for.
  * <p>
- * This extends <code>MemorySafeWindow</code> so it the UI is added directly to it.
+ * This extends <code>MemorySafeWindow</code> so it the UI is added directly to
+ * it.
  * 
  * @see MemorySafeWindow
  */
@@ -129,21 +133,32 @@ public class FindWindow extends MemorySafeWindow {
 
     /** Replaces all occurnes of a word. */
     private void replaceAll(String oldText, String newText) {
-        app.setReplacing(true);
+        ExecutorService ex = Executors.newFixedThreadPool(1);
 
-        int beginIndex = 0;
+        ex.execute(new Runnable() {
+            @Override
+            public void run() {
+                long startTime = System.nanoTime();
 
-        while (true) {
-            int[] indexes = findInText(beginIndex, app.getText(), oldText, matchCase, wholeWord, true);
+                app.setReplacing(true);
 
-            if (indexes[0] != -1) {
-                app.replace(newText, indexes[0], indexes[1]);
-                beginIndex = indexes[1];
-            } else
-                break;
-        }
+                int beginIndex = 0;
 
-        app.setReplacing(false);
+                while (true) {
+                    int[] indexes = findInText(beginIndex, app.getText(), oldText, matchCase, wholeWord, true);
+
+                    if (indexes[0] != -1) {
+                        app.replace(newText, indexes[0], indexes[1]);
+                        beginIndex = indexes[1];
+                    } else
+                        break;
+                }
+
+                app.setReplacing(false);
+
+                System.out.println(System.nanoTime() - startTime);
+            }
+        });
     }
 
     /**
@@ -202,7 +217,8 @@ public class FindWindow extends MemorySafeWindow {
             indexes[1] = indexes[0] + searchText.length();
 
             if (wholeWord && indexes[1] < text.length()
-                    && (Character.isAlphabetic(text.charAt(indexes[1])) || Character.isAlphabetic(indexes[0] - 1))) {
+                    && (Character.isAlphabetic(text.charAt(indexes[1]))
+                            || (indexes[0] > 0 && Character.isAlphabetic(text.charAt(indexes[0] - 1))))) {
                 repeat = true;
                 startIndex = indexes[0] + (forward ? 1 : -1);
 
