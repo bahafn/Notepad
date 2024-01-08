@@ -56,22 +56,21 @@ public class NumericalTextArea extends javax.swing.JTextArea {
             return;
 
         // If there are selected text, remove it
-        if (getSelectionStart() != getSelectionEnd())
+        if (getSelectionStart() != getSelectionEnd()) {
             replaceRange("", getSelectionStart(), getSelectionEnd());
+            return;
+        }
 
         // If the character we entered wasn't a backspace, we check if the change keeps
         // the value numerical and add the change if it does
         if (!backSpace) {
             if (checkChange(String.valueOf(keyChar)))
-                super.setText(getText() + keyChar);
+                super.insert(keyChar + "", getCaretPosition());
             return; // Return so we don't get to the backspace case below
         }
 
         // If backspace was pressed, remove the character before the caret
-        try {
-            super.setText(getText(0, getCaretPosition() - 1));
-        } catch (javax.swing.text.BadLocationException ignored) {
-        }
+        super.replaceRange("", getCaretPosition() - 1, getCaretPosition());
     }
 
     /**
